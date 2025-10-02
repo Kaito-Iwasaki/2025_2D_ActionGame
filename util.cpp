@@ -91,7 +91,14 @@ D3DXVECTOR3 Normalize(D3DXVECTOR3 vector)
 {
 	float fMagnitude = sqrtf(vector.x * vector.x + vector.y * vector.y);
 
-	return D3DXVECTOR3(vector.x / fMagnitude, vector.y / fMagnitude, vector.z / fMagnitude);
+	if (fMagnitude != 0)
+	{
+		return D3DXVECTOR3(vector.x / fMagnitude, vector.y / fMagnitude, vector.z / fMagnitude);
+	}
+	else
+	{
+		return D3DXVECTOR3_ZERO;
+	}
 }
 
 //=====================================================================

@@ -152,21 +152,21 @@ void SetVertexTexturePos(VERTEX_2D* pVtx, D3DXVECTOR2 leftTop, D3DXVECTOR2 right
 //=====================================================================
 // テクスチャ位置の設定処理（テクスチャアニメーション）
 //=====================================================================
-void SetVertexTexturePos(VERTEX_2D* pVtx, int nTexture, int nMaxTexture, bool bInversed)
+void SetVertexTexturePos(VERTEX_2D* pVtx, int nTextureX, int nTextureY, int nSizeX, int nSizeY, bool bInversed)
 {
 	if (bInversed)
 	{// 反転
-		pVtx[0].tex = D3DXVECTOR2((1.0f / nMaxTexture) * (nTexture + 1), 0.0f);
-		pVtx[1].tex = D3DXVECTOR2((1.0f / nMaxTexture) * nTexture, 0.0f);
-		pVtx[2].tex = D3DXVECTOR2((1.0f / nMaxTexture) * (nTexture + 1), 1.0f);
-		pVtx[3].tex = D3DXVECTOR2((1.0f / nMaxTexture) * nTexture, 1.0f);
+		pVtx[0].tex = D3DXVECTOR2((1.0f / nSizeX) * (nTextureX + 1), (1.0f / nSizeY) * nTextureY);
+		pVtx[1].tex = D3DXVECTOR2((1.0f / nSizeX) * nTextureX, (1.0f / nSizeY) * nTextureY);
+		pVtx[2].tex = D3DXVECTOR2((1.0f / nSizeX) * (nTextureX + 1), (1.0f / nSizeY) * (nTextureY + 1));
+		pVtx[3].tex = D3DXVECTOR2((1.0f / nSizeX) * nTextureX, (1.0f / nSizeY) * (nTextureY + 1));
 	}
 	else
 	{// 通常
-		pVtx[0].tex = D3DXVECTOR2((1.0f / nMaxTexture) * nTexture, 0.0f);
-		pVtx[1].tex = D3DXVECTOR2((1.0f / nMaxTexture) * (nTexture + 1), 0.0f);
-		pVtx[2].tex = D3DXVECTOR2((1.0f / nMaxTexture) * nTexture, 1.0f);
-		pVtx[3].tex = D3DXVECTOR2((1.0f / nMaxTexture) * (nTexture + 1), 1.0f);
+		pVtx[0].tex = D3DXVECTOR2((1.0f / nSizeX) * nTextureX, (1.0f / nSizeY) * nTextureY);
+		pVtx[1].tex = D3DXVECTOR2((1.0f / nSizeX) * (nTextureX + 1), (1.0f / nSizeY) * nTextureY);
+		pVtx[2].tex = D3DXVECTOR2((1.0f / nSizeX) * nTextureX, (1.0f / nSizeY) * (nTextureY + 1));
+		pVtx[3].tex = D3DXVECTOR2((1.0f / nSizeX) * (nTextureX + 1), (1.0f / nSizeY) * (nTextureY + 1));
 	}
 }
 

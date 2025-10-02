@@ -141,6 +141,10 @@
     <ClInclude Include="baseScene.h" />
     <ClInclude Include="collision.h" />
     <ClInclude Include="decal.h" />
+    <ClInclude Include="player.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="fade.h" />
     <ClInclude Include="font.h" />
     <ClInclude Include="Game.h">
@@ -169,6 +173,10 @@
     </ClCompile>
     <ClCompile Include="input.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="player.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="sound.cpp" />
     <ClCompile Include="Title.cpp">
       <SubType>
