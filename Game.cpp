@@ -12,6 +12,7 @@
 //*********************************************************************
 #include "Game.h"
 #include "player.h"
+#include "block.h"
 
 //*********************************************************************
 // 
@@ -40,6 +41,54 @@
 void InitGame(void)
 {
 	InitPlayer();
+	InitBlock();
+
+	SetBlock(
+		BLOCK_TYPE_000,
+		D3DXVECTOR3(SCREEN_CENTER + 200, 600, 0)
+	);
+
+	SetBlock(
+		BLOCK_TYPE_000,
+		D3DXVECTOR3(SCREEN_CENTER + 100, 500, 0)
+	);
+
+	SetBlock(
+		BLOCK_TYPE_000,
+		D3DXVECTOR3(SCREEN_CENTER, 400, 0)
+	);
+
+	SetBlock(
+		BLOCK_TYPE_000,
+		D3DXVECTOR3(SCREEN_CENTER - 100, 500, 0)
+	);
+
+	SetBlock(
+		BLOCK_TYPE_000,
+		D3DXVECTOR3(SCREEN_CENTER - 200, 600, 0)
+	);
+
+	for (int i = 0; i < SCREEN_WIDTH / 48; i++)
+	{
+		SetBlock(
+			BLOCK_TYPE_000,
+			D3DXVECTOR3(i * 48, SCREEN_HEIGHT, 0)
+		);
+	}
+	for (int i = 0; i < SCREEN_HEIGHT / 48; i++)
+	{
+		SetBlock(
+			BLOCK_TYPE_000,
+			D3DXVECTOR3(0 - 48 , SCREEN_HEIGHT - 48 * (i + 1), 0)
+		);
+	}
+	for (int i = 0; i < SCREEN_HEIGHT / 48; i++)
+	{
+		SetBlock(
+			BLOCK_TYPE_000,
+			D3DXVECTOR3(SCREEN_WIDTH, SCREEN_HEIGHT - 48 * (i + 1), 0)
+		);
+	}
 }
 
 //=====================================================================
@@ -48,6 +97,7 @@ void InitGame(void)
 void UninitGame(void)
 {
 	UninitPlayer();
+	UninitBlock();
 }
 
 //=====================================================================
@@ -56,6 +106,7 @@ void UninitGame(void)
 void UpdateGame(void)
 {
 	UpdatePlayer();
+	UpdateBlock();
 }
 
 //=====================================================================
@@ -63,5 +114,6 @@ void UpdateGame(void)
 //=====================================================================
 void DrawGame(void)
 {
+	DrawBlock();
 	DrawPlayer();
 }

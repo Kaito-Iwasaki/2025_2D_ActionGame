@@ -1,33 +1,40 @@
 //=====================================================================
-// 
-// player.cppのヘッダファイル [player.h]
-// Author:
 //
+// block.cppのヘッダファイル [block.h]
+// Author : Kaito Iwasaki
+// 
 //=====================================================================
-#ifndef _PLAYER_H_
-#define _PLAYER_H_		// 二重インクルード防止のマクロ
+#ifndef _BLOCK_H_
+#define _BLOCK_H_
 
 //*********************************************************************
 // 
 // ***** インクルードファイル *****
 // 
 //*********************************************************************
-#include "main.h"
 #include "baseObject.h"
+#include "main.h"
 
 //*********************************************************************
 // 
 // ***** マクロ定義 *****
 // 
 //*********************************************************************
-
+#define MAX_BLOCK		(1024)
 
 //*********************************************************************
 // 
 // ***** 列挙型 *****
 // 
 //*********************************************************************
-
+typedef enum
+{
+	BLOCK_TYPE_000 = 0,
+	BLOCK_TYPE_001,
+	BLOCK_TYPE_002,
+	BLOCK_TYPE_003,
+	BLOCK_TYPE_MAX
+}BLOCK_TYPE;
 
 //*********************************************************************
 // 
@@ -37,23 +44,27 @@
 typedef struct
 {
 	BASEOBJECT obj;
-	D3DXVECTOR3 posOld;
-	D3DXVECTOR3 move;
-	int nCounterAnim;
-	int nPatternAnimX;
-	int nPatternAnimY;
-	bool bIsJumping;
-	int nJumpLeft;
-}PLAYER;
+	bool bUsed;
+	BLOCK_TYPE type;
+	int nCounterState;
+}BLOCK;
 
 //*********************************************************************
 // 
 // ***** プロトタイプ宣言 *****
 // 
 //*********************************************************************
-void InitPlayer(void);
-void UninitPlayer(void);
-void UpdatePlayer(void);
-void DrawPlayer(void);
+void InitBlock(void);
+void UninitBlock(void);
+void UpdateBlock(void);
+void DrawBlock(void);
+BLOCK* GetBlock(void);
+bool SetBlock(BLOCK_TYPE type, D3DXVECTOR3 pos);
+bool CollisionBlock(
+	D3DXVECTOR3* pPos,
+	D3DXVECTOR3* pPosOld,
+	D3DXVECTOR3* pMove,
+	D3DXVECTOR3 size
+);
 
 #endif

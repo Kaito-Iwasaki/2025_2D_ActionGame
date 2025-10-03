@@ -8,6 +8,7 @@
 #include "input.h"
 #include "util.h"
 #include "Game.h"
+#include "block.h"
 
 //*********************************************************************
 // 
@@ -101,18 +102,20 @@ void UninitPlayer(void)
 //=====================================================================
 void UpdatePlayer(void)
 {
+	g_player.posOld = g_player.obj.pos;
+
 	if (GetKeyboardPress(DIK_A))
 	{
 		g_player.move.x -= 1;
-		g_player.obj.bInversed = true;
+		g_player.nPatternAnimY = 1;
 	}
 	else if (GetKeyboardPress(DIK_D))
 	{
 		g_player.move.x += 1;
-		g_player.obj.bInversed = false;
+		g_player.nPatternAnimY = 0;
 	}
 
-	if (GetKeyboardTrigger(DIK_SPACE))
+	if (GetKeyboardPress(DIK_SPACE))
 	{
 		if (g_player.bIsJumping == false)
 		{
@@ -125,23 +128,27 @@ void UpdatePlayer(void)
 	{
 		if (g_player.nCounterAnim % 10 == 0)
 		{
-			g_player.nPatternAnim = (g_player.nPatternAnim + 1) % 4;
+			g_player.nPatternAnimX = (g_player.nPatternAnimX + 1) % 4;
 		}
 		g_player.nCounterAnim++;
 	}
 	else
 	{
-		g_player.nPatternAnim = 0;
+		g_player.nPatternAnimX = 0;
 	}
 	g_player.obj.pos += g_player.move;
 
 	g_player.move.x += (0 - g_player.move.x) * 0.1f;
 	g_player.move.y += GAME_GRAVITY;
 
-	if (g_player.obj.pos.y > SCREEN_HEIGHT)
+	if (CollisionBlock(&g_player.obj.pos, &g_player.posOld, &g_player.move, g_player.obj.size))
 	{
 		g_player.bIsJumping = false;
-		g_player.obj.pos.y = SCREEN_HEIGHT;
+	}
+	else
+	{
+		g_player.bIsJumping = true;
+
 	}
 }
 
@@ -170,7 +177,7 @@ void DrawPlayer(void)
 	);
 	SetVertexRHW(pVtx, 1.0f);
 	SetVertexColor(pVtx, g_player.obj.color);
-	SetVertexTexturePos(pVtx, g_player.nPatternAnim, 0, 4, 2, g_player.obj.bInversed);
+	SetVertexTexturePos(pVtx, g_player.nPatternAnimX, g_player.nPatternAnimY, 4, 2, g_player.obj.bInversed);
 
 	// 頂点バッファをアンロック
 	g_pVtxBuffPlayer->Unlock();
