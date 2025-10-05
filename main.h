@@ -73,5 +73,7 @@ typedef struct
 // 
 //*********************************************************************
 LPDIRECT3DDEVICE9 GetDevice(void);
+LPDIRECTINPUT8 GetInput(void);
+HWND GetMainWindow(void);
 
 #endif

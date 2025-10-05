@@ -30,6 +30,7 @@
 typedef enum
 {
 	DECAL_LABEL_NULL = 0,
+	DECAL_LABEL_BG000,
 	DECAL_LABEL_MAX
 }DECAL_LABEL;
 
@@ -53,7 +54,6 @@ typedef struct
 //*********************************************************************
 void InitDecal(bool bPreload = false);
 void UninitDecal(void);
-void UpdateDecal(void);
 void DrawDecal(void);
 DECAL* GetDecal(void);
 DECAL* SetDecal(DECAL_LABEL label, D3DXVECTOR3 pos, D3DXVECTOR3 size, D3DXVECTOR3 rot, D3DXCOLOR col);

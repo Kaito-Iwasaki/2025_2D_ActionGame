@@ -59,7 +59,7 @@ void UninitBlock(void);
 void UpdateBlock(void);
 void DrawBlock(void);
 BLOCK* GetBlock(void);
-bool SetBlock(BLOCK_TYPE type, D3DXVECTOR3 pos);
+BLOCK* SetBlock(BLOCK_TYPE type, D3DXVECTOR3 pos);
 bool CollisionBlock(
 	D3DXVECTOR3* pPos,
 	D3DXVECTOR3* pPosOld,

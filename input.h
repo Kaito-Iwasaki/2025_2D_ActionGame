@@ -28,6 +28,20 @@
 // ***** 列挙型 *****
 // 
 //*********************************************************************
+//*********************************************************************
+// マウスボタン
+//*********************************************************************
+typedef enum
+{
+	MOUSE_LEFT = 0,
+	MOUSE_RIGHT,
+	MOUSE_MIDDLE,
+	MOUSE_MAX
+}MOUSE;
+
+//*********************************************************************
+// ジョイパッドボタン
+//*********************************************************************
 typedef enum
 {
 	JOYKEY_UP = 0,		// 十字キー上
@@ -47,11 +61,14 @@ typedef enum
 	JOYKEY_MAX
 }JOYKEY;
 
+//*********************************************************************
+// ジョイスティック
+//*********************************************************************
 typedef enum
 {
 	JOYSTICK_L_UP = 0,	// 左ジョイスティック上
-	JOYSTICK_L_DOWN,		// 左ジョイスティック下
-	JOYSTICK_L_LEFT,		// 左ジョイスティック左
+	JOYSTICK_L_DOWN,	// 左ジョイスティック下
+	JOYSTICK_L_LEFT,	// 左ジョイスティック左
 	JOYSTICK_L_RIGHT,	// 左ジョイスティック右
 	JOYSTICK_R_UP,		// 右ジョイスティック上
 	JOYSTICK_R_DOWN,	// 右ジョイスティック下
@@ -76,6 +93,17 @@ bool GetKeyboardTrigger(int nKey);
 bool GetKeyboardRelease(int nKey);
 bool GetKeyboardRepeat(int nKey);
 BYTE* GetKeyState(void);
+//*********************************************************************
+// マウス
+//*********************************************************************
+HRESULT InitMouse(HINSTANCE hInstance, HWND hWnd);
+void UninitMouse(void);
+void UpdateMouse(void);
+bool GetMousePress(MOUSE key);
+bool GetMouseTrigger(MOUSE key);
+bool GetMouseRelease(MOUSE key);
+DIMOUSESTATE GetMouse(void);
+D3DXVECTOR2 GetMousePos(void);
 //*********************************************************************
 // ジョイパッド
 //*********************************************************************

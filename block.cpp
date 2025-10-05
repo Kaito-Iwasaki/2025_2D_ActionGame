@@ -25,8 +25,8 @@
 // 
 //*********************************************************************
 #define INIT_POS						D3DXVECTOR3_ZERO
-#define INIT_SIZE						D3DXVECTOR3(48.0f, 48.0f, 0.0f)
-#define INIT_COLOR						D3DXCOLOR(1.0f, 1.0f, 1.0f,1.0f)
+#define INIT_SIZE						D3DXVECTOR3(30.0f, 30.0f, 0.0f)
+#define INIT_COLOR						D3DXCOLOR(0.5f, 0.3f, 0.0f, 1.0f)
 
 //*********************************************************************
 // 
@@ -176,7 +176,7 @@ BLOCK* GetBlock(void)
 //=====================================================================
 // 敵弾の設定処理
 //=====================================================================
-bool SetBlock(BLOCK_TYPE type, D3DXVECTOR3 pos)
+BLOCK* SetBlock(BLOCK_TYPE type, D3DXVECTOR3 pos)
 {
 	LPDIRECT3DDEVICE9 pDevice = GetDevice();
 	BLOCK* pBlock = &g_aBlock[0];
@@ -193,10 +193,10 @@ bool SetBlock(BLOCK_TYPE type, D3DXVECTOR3 pos)
 			pBlock->type = type;
 			pBlock->obj.bVisible = true;
 
-			return true; // ブロックの生成に成功
+			return pBlock; // ブロックの生成に成功
 		}
 	}
-	return false;	// ブロックの生成に失敗
+	return NULL;	// ブロックの生成に失敗
 }
 
 bool CollisionBlock(D3DXVECTOR3* pPos, D3DXVECTOR3* pPosOld, D3DXVECTOR3* pMove, D3DXVECTOR3 size)
@@ -208,12 +208,32 @@ bool CollisionBlock(D3DXVECTOR3* pPos, D3DXVECTOR3* pPosOld, D3DXVECTOR3* pMove,
 	{
 		if (pBlock->bUsed == false) continue;
 
+		if (
+			pPosOld->x <= pBlock->obj.pos.x - 10
+			&& pPos->x > pBlock->obj.pos.x - 10
+			&& pPos->y > pBlock->obj.pos.y
+			&& pPos->y < pBlock->obj.pos.y + pBlock->obj.size.y + size.y
+			)
+		{
+			pPos->x = pBlock->obj.pos.x - 10;
+			pMove->x = 0;
+		}// 左からの衝突判定
+		else if (
+			pPosOld->x >= pBlock->obj.pos.x + pBlock->obj.size.x + 10
+			&& pPos->x < pBlock->obj.pos.x + pBlock->obj.size.x + 10
+			&& pPos->y > pBlock->obj.pos.y
+			&& pPos->y < pBlock->obj.pos.y + pBlock->obj.size.y + size.y
+			)
+		{// 右からの衝突判定
+			pPos->x = pBlock->obj.pos.x + pBlock->obj.size.x + 10;
+			pMove->x = 0;
+		}
 
 		if (
 			pPosOld->y <= pBlock->obj.pos.y
 			&& pPos->y > pBlock->obj.pos.y
-			&& pPos->x > pBlock->obj.pos.x - 15 
-			&& pPos->x < pBlock->obj.pos.x + pBlock->obj.size.x + 15
+			&& pPos->x > pBlock->obj.pos.x - 10
+			&& pPos->x < pBlock->obj.pos.x + pBlock->obj.size.x + 10
 			)
 		{// 上からの衝突判定
 			bLand = true;
@@ -223,32 +243,15 @@ bool CollisionBlock(D3DXVECTOR3* pPos, D3DXVECTOR3* pPosOld, D3DXVECTOR3* pMove,
 		else if (
 			pPosOld->y - size.y >= pBlock->obj.pos.y + pBlock->obj.size.y
 			&& pPos->y - size.y < pBlock->obj.pos.y + pBlock->obj.size.y
-			&& pPos->x >= pBlock->obj.pos.x - 15
-			&& pPos->x <= pBlock->obj.pos.x + pBlock->obj.size.x + 15
+			&& pPos->x > pBlock->obj.pos.x - 10
+			&& pPos->x < pBlock->obj.pos.x + pBlock->obj.size.x + 10
 			)
 		{// 下からの衝突判定
 			pPos->y = pBlock->obj.pos.y + pBlock->obj.size.y + size.x;
 			pMove->y = 0;
 		}
 
-		if (
-			pPosOld->x <= pBlock->obj.pos.x - 8
-			&& pPos->x > pBlock->obj.pos.x - 8
-			&& pPos->y > pBlock->obj.pos.y
-			&& pPos->y < pBlock->obj.pos.y + pBlock->obj.size.y + size.y
-			)
-		{
-			pPos->x = pBlock->obj.pos.x - 8;
-		}// 左からの衝突判定
-		else if (
-			pPosOld->x >= pBlock->obj.pos.x + pBlock->obj.size.x + 8
-			&& pPos->x < pBlock->obj.pos.x + pBlock->obj.size.x + 8
-			&& pPos->y > pBlock->obj.pos.y
-			&& pPos->y < pBlock->obj.pos.y + pBlock->obj.size.y + size.y
-			)
-		{// 右からの衝突判定
-			pPos->x = pBlock->obj.pos.x + pBlock->obj.size.x + 8;
-		}
+
 
 	}
 

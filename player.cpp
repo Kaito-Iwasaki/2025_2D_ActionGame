@@ -124,7 +124,10 @@ void UpdatePlayer(void)
 		}
 	}
 
-	if (abs((long)g_player.move.x) > 0.01f)
+
+	g_player.obj.pos += g_player.move;
+
+	if (abs((long)g_player.move.x) > 0.01f && Magnitude(g_player.obj.pos, g_player.posOld) > 0.1f)
 	{
 		if (g_player.nCounterAnim % 10 == 0)
 		{
@@ -136,9 +139,8 @@ void UpdatePlayer(void)
 	{
 		g_player.nPatternAnimX = 0;
 	}
-	g_player.obj.pos += g_player.move;
 
-	g_player.move.x += (0 - g_player.move.x) * 0.1f;
+	g_player.move.x += (0 - g_player.move.x) * 0.5f;
 	g_player.move.y += GAME_GRAVITY;
 
 	if (CollisionBlock(&g_player.obj.pos, &g_player.posOld, &g_player.move, g_player.obj.size))

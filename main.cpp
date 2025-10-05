@@ -43,6 +43,8 @@ void Draw(void);
 //*********************************************************************
 LPDIRECT3D9 g_pD3D = NULL;					// Direct3Dオブジェクトへのポインタ
 LPDIRECT3DDEVICE9 g_pD3DDevice = NULL;		// Direct3Dデバイスへのポインタ
+LPDIRECTINPUT8 g_pInput = NULL;
+HWND g_hWnd;
 
 //=====================================================================
 // 
@@ -71,7 +73,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hInstancePrev, LPSTR lpCmdLine
 		LoadIcon(hInstance, IDI_APPLICATION)	// ファイルのアイコン
 	};
 
-	HWND hWnd;											// ウィンドウハンドル（識別子）
 	MSG msg;											// メッセージ格納用
 	RECT rect = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };	// 画面サイズ
 	DWORD dwCurrentTime;								// 現在の時刻
@@ -86,7 +87,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hInstancePrev, LPSTR lpCmdLine
 	AdjustWindowRect(&rect, WS_OVERLAPPEDWINDOW, FALSE);
 
 	// ウィンドウを生成
-	hWnd = CreateWindowEx(
+	g_hWnd = CreateWindowEx(
 		0,							// 拡張ウィンドウスタイル
 		CLASS_NAME,					// ウィンドウクラスの名前
 		WINDOW_NAME,				// ウィンドウの名前
@@ -102,7 +103,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hInstancePrev, LPSTR lpCmdLine
 	);
 
 	// 初期化処理
-	if (FAILED(Init(hInstance, hWnd, WINDOWED)))
+	if (FAILED(Init(hInstance, g_hWnd, WINDOWED)))
 	{// 初期化処理が失敗したら終了
 		return -1;
 	}
@@ -114,8 +115,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hInstancePrev, LPSTR lpCmdLine
 	dwExecLastTime = dwCurrentTime;
 
 	// ウィンドウの表示
-	ShowWindow(hWnd, nCmdShow);
-	UpdateWindow(hWnd);
+	ShowWindow(g_hWnd, nCmdShow);
+	UpdateWindow(g_hWnd);
 
 	// メッセージループ
 	while (1)
@@ -303,8 +304,26 @@ HRESULT Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindowed)
 	g_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
 	g_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_CURRENT);
 
+	// DirectInputオブジェクトの作成
+	if (FAILED(DirectInput8Create(
+		hInstance,
+		DIRECTINPUT_VERSION,
+		IID_IDirectInput8,
+		(void**)&g_pInput,
+		NULL
+	)))
+	{
+		return E_FAIL;
+	}
+
 	// キーボードの初期化処理
 	if (FAILED(InitKeyboard(hInstance, hWnd)))
+	{
+		return E_FAIL;
+	}
+
+	// マウスの初期化処理
+	if (FAILED(InitMouse(hInstance, hWnd)))
 	{
 		return E_FAIL;
 	}
@@ -338,8 +357,18 @@ void Uninit(void)
 	// キーボードの終了処理
 	UninitKeyboard();
 
+	// キーボードの終了処理
+	UninitMouse();
+
 	// ジョイパッドの終了処理
 	UninitJoypad();
+
+	// DirectInputオブジェクトの破棄
+	if (g_pInput != NULL)
+	{
+		g_pInput->Release();
+		g_pInput = NULL;
+	}
 
 	// Direct3Dデバイスの破棄
 	if (g_pD3DDevice != NULL)
@@ -363,6 +392,9 @@ void Update(void)
 {
 	// キーボードの更新処理
 	UpdateKeyboard();
+
+	// キーボードの更新処理
+	UpdateMouse();
 
 	// ジョイパッドの更新処理
 	UpdateJoypad();
@@ -403,4 +435,20 @@ void Draw(void)
 LPDIRECT3DDEVICE9 GetDevice(void)
 {
 	return g_pD3DDevice;
+}
+
+//=====================================================================
+// DirectInputオブジェクトの取得処理
+//=====================================================================
+LPDIRECTINPUT8 GetInput(void)
+{
+	return g_pInput;
+}
+
+//=====================================================================
+// ウィンドウの取得処理
+//=====================================================================
+HWND GetMainWindow(void)
+{
+	return g_hWnd;
 }

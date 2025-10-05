@@ -154,7 +154,7 @@ D3DXVECTOR2 Vector3To2(D3DXVECTOR3 source)
 //=====================================================================
 // 2次元ベクトルから3次元ベクトルへの変換処理
 //=====================================================================
-D3DXVECTOR3 Vector2To3(D3DXVECTOR3 source, float fValueZ)
+D3DXVECTOR3 Vector2To3(D3DXVECTOR2 source, float fValueZ)
 {
 	return D3DXVECTOR3(source.x, source.y, fValueZ);
 }
