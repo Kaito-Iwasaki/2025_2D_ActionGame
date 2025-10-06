@@ -19,8 +19,9 @@
 #define TEXTURE_MAX_X			(4)
 #define TEXTURE_MAX_Y			(2)
 #define INIT_POS				D3DXVECTOR3(SCREEN_CENTER, SCREEN_HEIGHT - 100, 0.0f)
-#define INIT_SIZE				D3DXVECTOR3(64.0f, 64.0f, 64.0f)
+#define INIT_SIZE				D3DXVECTOR3(50.0f, 75.0f, 0.0f) * 0.7f
 #define INIT_COLOR				D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f)
+#define INIT_HITBOX				D3DXVECTOR3(11.0f, 75.0f, 0.0f) * 0.7f
 
 //*********************************************************************
 // 
@@ -53,6 +54,7 @@ void InitPlayer(void)
 	g_player.obj.size = INIT_SIZE;
 	g_player.obj.color = INIT_COLOR;
 	g_player.obj.bVisible = true;
+	g_player.hitBoxSize = INIT_HITBOX;
 
 	// テクスチャの読み込み
 	if (TEXTURE_FILENAME)
@@ -106,12 +108,12 @@ void UpdatePlayer(void)
 
 	if (GetKeyboardPress(DIK_A))
 	{
-		g_player.move.x -= 1;
+		g_player.move.x -= 2;
 		g_player.nPatternAnimY = 1;
 	}
 	else if (GetKeyboardPress(DIK_D))
 	{
-		g_player.move.x += 1;
+		g_player.move.x += 2;
 		g_player.nPatternAnimY = 0;
 	}
 
@@ -120,7 +122,7 @@ void UpdatePlayer(void)
 		if (g_player.bIsJumping == false)
 		{
 			g_player.bIsJumping = true;
-			g_player.move.y = - 20.0f;
+			g_player.move.y = - 15.0f;
 		}
 	}
 
@@ -140,10 +142,10 @@ void UpdatePlayer(void)
 		g_player.nPatternAnimX = 0;
 	}
 
-	g_player.move.x += (0 - g_player.move.x) * 0.5f;
+	g_player.move.x += (0 - g_player.move.x) * 1.0f;
 	g_player.move.y += GAME_GRAVITY;
 
-	if (CollisionBlock(&g_player.obj.pos, &g_player.posOld, &g_player.move, g_player.obj.size))
+	if (CollisionBlock(&g_player.obj.pos, &g_player.posOld, &g_player.move, g_player.hitBoxSize))
 	{
 		g_player.bIsJumping = false;
 	}

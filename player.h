@@ -39,6 +39,7 @@ typedef struct
 	BASEOBJECT obj;
 	D3DXVECTOR3 posOld;
 	D3DXVECTOR3 move;
+	D3DXVECTOR3 hitBoxSize;
 	int nCounterAnim;
 	int nPatternAnimX;
 	int nPatternAnimY;

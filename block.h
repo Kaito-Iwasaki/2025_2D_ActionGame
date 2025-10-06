@@ -21,6 +21,7 @@
 // 
 //*********************************************************************
 #define MAX_BLOCK		(1024)
+#define BLOCK_SIZE		(20.0f)
 
 //*********************************************************************
 // 
@@ -47,7 +48,13 @@ typedef struct
 	bool bUsed;
 	BLOCK_TYPE type;
 	int nCounterState;
+	bool bCollidable;
 }BLOCK;
+
+typedef struct
+{
+	BLOCK_TYPE type;
+}MAP;
 
 //*********************************************************************
 // 
@@ -60,6 +67,7 @@ void UpdateBlock(void);
 void DrawBlock(void);
 BLOCK* GetBlock(void);
 BLOCK* SetBlock(BLOCK_TYPE type, D3DXVECTOR3 pos);
+BLOCK* SetBlock(BLOCK_TYPE type, int nX, int nY);
 bool CollisionBlock(
 	D3DXVECTOR3* pPos,
 	D3DXVECTOR3* pPosOld,
