@@ -8,7 +8,6 @@
 #include "input.h"
 #include "util.h"
 #include "Game.h"
-#include "block.h"
 
 //*********************************************************************
 // 
@@ -145,7 +144,7 @@ void UpdatePlayer(void)
 	g_player.move.x += (0 - g_player.move.x) * 1.0f;
 	g_player.move.y += GAME_GRAVITY;
 
-	if (CollisionBlock(&g_player.obj.pos, &g_player.posOld, &g_player.move, g_player.hitBoxSize))
+	if (CollisionBlock(&g_player.obj.pos, &g_player.posOld, &g_player.move, g_player.hitBoxSize, &g_player.pBlock))
 	{
 		g_player.bIsJumping = false;
 	}

@@ -15,6 +15,7 @@
 #include "util.h"
 #include "collision.h"
 #include "block.h"
+#include "block_act.h"
 
 #include "player.h"
 #include "baseScene.h"
@@ -35,13 +36,22 @@
 //*********************************************************************
 LPDIRECT3DVERTEXBUFFER9 g_pVtxBuffBlock = NULL;
 LPDIRECT3DTEXTURE9 g_pTexBuffBlock[BLOCK_TYPE_MAX] = {};
-BLOCK g_aBlock[MAX_BLOCK] = {};
+BLOCK g_aBlock[NUM_BLOCK_Y][NUM_BLOCK_X] = {};
 
 const char* g_aBlockFileName[BLOCK_TYPE_MAX] = {
+	NULL,
 	"data\\TEXTURE\\block000.png",
 	"data\\TEXTURE\\block000.png",
 	"data\\TEXTURE\\block000.png",
 	"data\\TEXTURE\\block000.png",
+};
+
+BLOCK_INFO g_aBlockInfo[BLOCK_TYPE_MAX] = {
+	{D3DXCOLOR(1.0f,1.0f,1.0f,1.0f), false},
+	{D3DXCOLOR(0.5f, 0.3f, 0.0f, 1.0f), true},
+	{D3DXCOLOR(0.0f, 0.7f, 0.0f, 1.0f), false},
+	{D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f), true, BLOCK_Platform},
+	{D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f), true}
 };
 
 //=====================================================================
@@ -50,7 +60,7 @@ const char* g_aBlockFileName[BLOCK_TYPE_MAX] = {
 void InitBlock(void)
 {
 	LPDIRECT3DDEVICE9 pDevice = GetDevice();	// デバイス
-	BLOCK* pBlock = &g_aBlock[0];
+	BLOCK* pBlock = &g_aBlock[0][0];
 
 	// 構造体の初期化
 	memset(pBlock, 0, sizeof(BLOCK) * MAX_BLOCK);
@@ -87,8 +97,6 @@ void InitBlock(void)
 //=====================================================================
 void UninitBlock(void)
 {
-	memset(&g_aBlock[0], 0, sizeof(BLOCK) * MAX_BLOCK);
-
 	if (g_pVtxBuffBlock != NULL)
 	{// 頂点バッファの破棄
 		g_pVtxBuffBlock->Release();
@@ -110,7 +118,17 @@ void UninitBlock(void)
 //=====================================================================
 void UpdateBlock(void)
 {
-	BLOCK* pBlock = &g_aBlock[0];
+	BLOCK* pBlock = &g_aBlock[0][0];
+
+	for (int nCount = 0; nCount < MAX_BLOCK; nCount++, pBlock++)
+	{
+		pBlock->posOld = pBlock->obj.pos;
+
+		if (pBlock->Update != NULL)
+		{
+			pBlock->Update(pBlock);
+		}
+	}
 }
 
 //=====================================================================
@@ -118,12 +136,9 @@ void UpdateBlock(void)
 //=====================================================================
 void DrawBlock(void)
 {
-	LPDIRECT3DDEVICE9 pDevice;
+	LPDIRECT3DDEVICE9 pDevice = GetDevice();
 	VERTEX_2D* pVtx;
-	BLOCK* pBlock = &g_aBlock[0];
-
-	// デバイスの取得
-	pDevice = GetDevice();
+	BLOCK* pBlock = &g_aBlock[0][0];
 
 	// 頂点バッファをロックして頂点情報へのポインタを取得
 	g_pVtxBuffBlock->Lock(0, 0, (void**)&pVtx, 0);
@@ -151,7 +166,7 @@ void DrawBlock(void)
 	// 頂点フォーマットの設定
 	pDevice->SetFVF(FVF_VERTEX_2D);
 
-	pBlock = &g_aBlock[0];
+	pBlock = &g_aBlock[0][0];
 	for (int nCount = 0; nCount < MAX_BLOCK; nCount++, pBlock++)
 	{
 		if (pBlock->bUsed == true && pBlock->obj.bVisible == true)
@@ -170,45 +185,54 @@ void DrawBlock(void)
 //=====================================================================
 BLOCK* GetBlock(void)
 {
-	return &g_aBlock[0];
+	return &g_aBlock[0][0];
 }
 
 //=====================================================================
 // ブロックの設定処理
 //=====================================================================
-BLOCK* SetBlock(BLOCK_TYPE type, D3DXVECTOR3 pos)
+BLOCK* SetBlock(BLOCK_TYPE type, int x, int y)
 {
-	LPDIRECT3DDEVICE9 pDevice = GetDevice();
-	BLOCK* pBlock = &g_aBlock[0];
+	BLOCK* pBlock = &g_aBlock[y][x];
 
-	for (int nCount = 0; nCount < MAX_BLOCK; nCount++, pBlock++)
+	memset(pBlock, 0, sizeof(BLOCK));
+	pBlock->bUsed = true;
+	pBlock->obj.pos = D3DXVECTOR3(x * BLOCK_SIZE, y * BLOCK_SIZE, 0.0f);
+	pBlock->obj.size = INIT_SIZE;
+	pBlock->obj.color = g_aBlockInfo[type].color;
+	pBlock->type = type;
+	pBlock->obj.bVisible = true;
+	pBlock->bCollidable = g_aBlockInfo[type].bCollidable;
+	pBlock->Update = g_aBlockInfo[type].Update;
+
+	if (type == BLOCK_TYPE_AIR)
 	{
-		if (pBlock->bUsed == false)
-		{
-			memset(pBlock, 0, sizeof(BLOCK));
-			pBlock->bUsed = true;
-			pBlock->obj.pos = pos;
-			pBlock->obj.size = INIT_SIZE;
-			pBlock->obj.color = INIT_COLOR;
-			pBlock->type = type;
-			pBlock->obj.bVisible = true;
-			pBlock->bCollidable = true;
-
-			return pBlock; // ブロックの生成に成功
-		}
+		pBlock->bCollidable = false;
+		pBlock->obj.bVisible = false;
 	}
-	return NULL;	// ブロックの生成に失敗
+
+	return pBlock;
 }
 
-bool CollisionBlock(D3DXVECTOR3* pPos, D3DXVECTOR3* pPosOld, D3DXVECTOR3* pMove, D3DXVECTOR3 size)
+bool CollisionBlock(
+	D3DXVECTOR3* pPos,
+	D3DXVECTOR3* pPosOld,
+	D3DXVECTOR3* pMove,
+	D3DXVECTOR3 size,
+	BLOCK** dpBlock
+)
 {
 	bool bLand = false;
+	bool bWallHit = false;
+	float fDistance;
 
-	BLOCK* pBlock = &g_aBlock[0];
+	BLOCK* pBlock = &g_aBlock[0][0];
 	for (int nCount = 0; nCount < MAX_BLOCK; nCount++, pBlock++)
 	{
 		if (pBlock->bUsed == false) continue;
 		if (pBlock->bCollidable == false) continue;
+
+		fDistance = Magnitude(pBlock->obj.pos, pBlock->posOld);
 
 		if (
 			pPosOld->x <= pBlock->obj.pos.x - size.x
@@ -241,6 +265,32 @@ bool CollisionBlock(D3DXVECTOR3* pPos, D3DXVECTOR3* pPosOld, D3DXVECTOR3* pMove,
 			bLand = true;
 			pPos->y = pBlock->obj.pos.y;
 			pMove->y = 0;
+			if (fDistance != 0)
+			{
+				*pPosOld = *pPos;
+				*pPos += (pBlock->obj.pos - pBlock->posOld) * 2;
+
+				if (
+					pPosOld->x <= pBlock->obj.pos.x - size.x
+					&& pPos->x > pBlock->obj.pos.x - size.x
+					&& pPos->y > pBlock->obj.pos.y
+					&& pPos->y < pBlock->obj.pos.y + pBlock->obj.size.y + size.y
+					)
+				{
+					pPos->x = pBlock->obj.pos.x - size.x;
+					pMove->x = 0;
+				}// 左からの衝突判定
+				else if (
+					pPosOld->x >= pBlock->obj.pos.x + pBlock->obj.size.x + size.x
+					&& pPos->x < pBlock->obj.pos.x + pBlock->obj.size.x + size.x
+					&& pPos->y > pBlock->obj.pos.y
+					&& pPos->y < pBlock->obj.pos.y + pBlock->obj.size.y + size.y
+					)
+				{// 右からの衝突判定
+					pPos->x = pBlock->obj.pos.x + pBlock->obj.size.x + size.x;
+					pMove->x = 0;
+				}
+			}
 		}
 		else if (
 			pPosOld->y - size.y >= pBlock->obj.pos.y + pBlock->obj.size.y
@@ -252,8 +302,6 @@ bool CollisionBlock(D3DXVECTOR3* pPos, D3DXVECTOR3* pPosOld, D3DXVECTOR3* pMove,
 			pPos->y = pBlock->obj.pos.y + pBlock->obj.size.y + size.y;
 			pMove->y = 0;
 		}
-
-
 
 	}
 

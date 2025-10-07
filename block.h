@@ -20,8 +20,10 @@
 // ***** マクロ定義 *****
 // 
 //*********************************************************************
-#define MAX_BLOCK		(1024)
-#define BLOCK_SIZE		(20.0f)
+#define BLOCK_SIZE		(20)
+#define NUM_BLOCK_X		(SCREEN_WIDTH / BLOCK_SIZE)
+#define NUM_BLOCK_Y		(SCREEN_HEIGHT / BLOCK_SIZE)
+#define MAX_BLOCK		(NUM_BLOCK_X * NUM_BLOCK_Y)
 
 //*********************************************************************
 // 
@@ -30,7 +32,8 @@
 //*********************************************************************
 typedef enum
 {
-	BLOCK_TYPE_000 = 0,
+	BLOCK_TYPE_AIR = 0,
+	BLOCK_TYPE_000,
 	BLOCK_TYPE_001,
 	BLOCK_TYPE_002,
 	BLOCK_TYPE_003,
@@ -42,19 +45,23 @@ typedef enum
 // ***** 構造体 *****
 // 
 //*********************************************************************
-typedef struct
+typedef struct BLOCK
 {
 	BASEOBJECT obj;
+	D3DXVECTOR3 posOld;
 	bool bUsed;
 	BLOCK_TYPE type;
 	int nCounterState;
 	bool bCollidable;
+	void (*Update)(BLOCK* pBlock);
 }BLOCK;
 
 typedef struct
 {
-	BLOCK_TYPE type;
-}MAP;
+	D3DXCOLOR color;
+	bool bCollidable;
+	void (*Update)(BLOCK* pBlock);
+}BLOCK_INFO;
 
 //*********************************************************************
 // 
@@ -66,13 +73,13 @@ void UninitBlock(void);
 void UpdateBlock(void);
 void DrawBlock(void);
 BLOCK* GetBlock(void);
-BLOCK* SetBlock(BLOCK_TYPE type, D3DXVECTOR3 pos);
-BLOCK* SetBlock(BLOCK_TYPE type, int nX, int nY);
+BLOCK* SetBlock(BLOCK_TYPE type, int x, int y);
 bool CollisionBlock(
 	D3DXVECTOR3* pPos,
 	D3DXVECTOR3* pPosOld,
 	D3DXVECTOR3* pMove,
-	D3DXVECTOR3 size
+	D3DXVECTOR3 size,
+	BLOCK** dpBlock
 );
 
 #endif

@@ -37,7 +37,8 @@
 // ***** プロトタイプ宣言 *****
 // 
 //*********************************************************************
-BLOCK* g_pBlockPreview = NULL;
+DECAL* g_pCursor = NULL;
+int CurrentBlock = 0;
 
 //=====================================================================
 // 初期化処理
@@ -56,65 +57,19 @@ void InitGame(void)
 		D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f)
 	);
 
-	g_pBlockPreview = SetBlock(
-		BLOCK_TYPE_000,
-		D3DXVECTOR3_ZERO
-	);
-	g_pBlockPreview->obj.color = D3DXCOLOR(1.0f, 0.0f, 0.0f, 0.5f);
-	g_pBlockPreview->bCollidable = false;
-
-	SetBlock(
-		BLOCK_TYPE_000,
-		D3DXVECTOR3(SCREEN_CENTER + 200, 600, 0)
+	g_pCursor = SetDecal(
+		DECAL_LABEL_NULL,
+		D3DXVECTOR3_ZERO,
+		D3DXVECTOR3(BLOCK_SIZE, BLOCK_SIZE, 0),
+		D3DXVECTOR3_ZERO,
+		D3DXCOLOR(1.0f, 0.0f, 0.0f, 0.5f)
 	);
 
-	SetBlock(
-		BLOCK_TYPE_000,
-		D3DXVECTOR3(SCREEN_CENTER + 100, 500, 0)
-	);
-
-	SetBlock(
-		BLOCK_TYPE_000,
-		D3DXVECTOR3(SCREEN_CENTER, 400, 0)
-	);
-
-	SetBlock(
-		BLOCK_TYPE_000,
-		D3DXVECTOR3(SCREEN_CENTER - 100, 500, 0)
-	);
-
-	SetBlock(
-		BLOCK_TYPE_000,
-		D3DXVECTOR3(SCREEN_CENTER - 200, 600, 0)
-	);
-
-	for (int i = 0; i < SCREEN_WIDTH / BLOCK_SIZE + 1; i++)
+	for (int i = 0; i < NUM_BLOCK_X; i++)
 	{
 		SetBlock(
 			BLOCK_TYPE_000,
-			D3DXVECTOR3(i * BLOCK_SIZE, 100, 0)
-		);
-	}
-
-	for (int i = 0; i < SCREEN_WIDTH / BLOCK_SIZE + 1; i++)
-	{
-		SetBlock(
-			BLOCK_TYPE_000,
-			D3DXVECTOR3(i * BLOCK_SIZE, SCREEN_HEIGHT, 0)
-		);
-	}
-	for (int i = 0; i < SCREEN_HEIGHT / BLOCK_SIZE + 1; i++)
-	{
-		SetBlock(
-			BLOCK_TYPE_000,
-			D3DXVECTOR3(0 - BLOCK_SIZE, SCREEN_HEIGHT - BLOCK_SIZE * (i + 1), 0)
-		);
-	}
-	for (int i = 0; i < SCREEN_HEIGHT / BLOCK_SIZE + 1; i++)
-	{
-		SetBlock(
-			BLOCK_TYPE_000,
-			D3DXVECTOR3(SCREEN_WIDTH, SCREEN_HEIGHT - BLOCK_SIZE * (i + 1), 0)
+			i, NUM_BLOCK_Y - 1
 		);
 	}
 }
@@ -134,23 +89,50 @@ void UninitGame(void)
 //=====================================================================
 void UpdateGame(void)
 {
-	UpdatePlayer();
 	UpdateBlock();
+	UpdatePlayer();
 
 	D3DXVECTOR2 posMouse = GetMousePos();
 	D3DXVECTOR3 posBlock = D3DXVECTOR3(
-		floorf((float)posMouse.x / BLOCK_SIZE) * BLOCK_SIZE,
-		floorf((float)posMouse.y / BLOCK_SIZE) * BLOCK_SIZE,
+		floorf(posMouse.x / BLOCK_SIZE) * BLOCK_SIZE + BLOCK_SIZE / 2,
+		floorf(posMouse.y / BLOCK_SIZE) * BLOCK_SIZE + BLOCK_SIZE / 2,
 		0.0f
 	);
-	g_pBlockPreview->obj.pos = posBlock;
+	g_pCursor->obj.pos = posBlock;
 
-	if (GetMouseTrigger(MOUSE_LEFT))
+	if (GetMouse().lZ >= 120)
+	{
+		CurrentBlock++;
+	}
+	else if (GetMouse().lZ <= -120)
+	{
+		CurrentBlock--;
+	}
+	if (CurrentBlock == -1)
+	{
+		CurrentBlock = 3 - 1;
+	}
+	else
+	{
+		CurrentBlock %= 3;
+	}
+
+	if (GetMousePress(MOUSE_LEFT))
 	{
 		PlaySound(SOUND_LABEL_SE_CURSOR);
 		SetBlock(
-			BLOCK_TYPE_000,
-			posBlock
+			(BLOCK_TYPE)(CurrentBlock + 1),
+			(int)posMouse.x / BLOCK_SIZE,
+			(int)posMouse.y / BLOCK_SIZE
+		);
+	}
+	else if (GetMousePress(MOUSE_RIGHT))
+	{
+		PlaySound(SOUND_LABEL_SE_CURSOR);
+		SetBlock(
+			BLOCK_TYPE_AIR,
+			(int)posMouse.x / BLOCK_SIZE,
+			(int)posMouse.y / BLOCK_SIZE
 		);
 	}
 }

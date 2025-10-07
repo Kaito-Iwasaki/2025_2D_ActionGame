@@ -1,20 +1,17 @@
 //=====================================================================
-// 
-// player.cppのヘッダファイル [player.h]
-// Author:
 //
+// TemplateScene_cpp [TemplateScene_cpp.h]
+// Author : 
+// 
 //=====================================================================
-#ifndef _PLAYER_H_
-#define _PLAYER_H_		// 二重インクルード防止のマクロ
 
 //*********************************************************************
 // 
 // ***** インクルードファイル *****
 // 
 //*********************************************************************
-#include "main.h"
-#include "baseObject.h"
 #include "block.h"
+#include "block_act.h"
 
 //*********************************************************************
 // 
@@ -32,31 +29,10 @@
 
 //*********************************************************************
 // 
-// ***** 構造体 *****
-// 
-//*********************************************************************
-typedef struct
-{
-	BASEOBJECT obj;
-	D3DXVECTOR3 posOld;
-	D3DXVECTOR3 move;
-	D3DXVECTOR3 hitBoxSize;
-	int nCounterAnim;
-	int nPatternAnimX;
-	int nPatternAnimY;
-	bool bIsJumping;
-	int nJumpLeft;
-	BLOCK* pBlock;
-}PLAYER;
-
-//*********************************************************************
-// 
 // ***** プロトタイプ宣言 *****
 // 
 //*********************************************************************
-void InitPlayer(void);
-void UninitPlayer(void);
-void UpdatePlayer(void);
-void DrawPlayer(void);
-
-#endif
+void BLOCK_Platform(BLOCK* pBlock)
+{
+	pBlock->obj.pos.x += 0.5f;
+}
