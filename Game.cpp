@@ -17,6 +17,7 @@
 #include "input.h"
 #include "sound.h"
 #include "util.h"
+#include "enemy.h"
 
 //*********************************************************************
 // 
@@ -45,9 +46,10 @@ int CurrentBlock = 0;
 //=====================================================================
 void InitGame(void)
 {
-	InitPlayer();
-	InitBlock();
 	InitDecal();
+	InitBlock();
+	InitPlayer();
+	InitEnemy();
 
 	SetDecal(
 		DECAL_LABEL_BG000,
@@ -68,10 +70,39 @@ void InitGame(void)
 	for (int i = 0; i < NUM_BLOCK_X; i++)
 	{
 		SetBlock(
-			BLOCK_TYPE_000,
+			BLOCK_TYPE_VOID,
+			i, 0
+		);
+	}
+
+	for (int i = 0; i < NUM_BLOCK_X; i++)
+	{
+		SetBlock(
+			BLOCK_TYPE_VOID,
 			i, NUM_BLOCK_Y - 1
 		);
 	}
+
+	for (int i = 0; i < NUM_BLOCK_Y; i++)
+	{
+		SetBlock(
+			BLOCK_TYPE_VOID,
+			0, i
+		);
+	}
+
+	for (int i = 0; i < NUM_BLOCK_Y; i++)
+	{
+		SetBlock(
+			BLOCK_TYPE_VOID,
+			NUM_BLOCK_X - 1, i
+		);
+	}
+
+	SetEnemy(
+		ENEMY_TYPE_000,
+		D3DXVECTOR3(100, 100, 0)
+	);
 }
 
 //=====================================================================
@@ -79,9 +110,10 @@ void InitGame(void)
 //=====================================================================
 void UninitGame(void)
 {
-	UninitPlayer();
-	UninitBlock();
 	UninitDecal();
+	UninitBlock();
+	UninitPlayer();
+	UninitEnemy();
 }
 
 //=====================================================================
@@ -91,6 +123,7 @@ void UpdateGame(void)
 {
 	UpdateBlock();
 	UpdatePlayer();
+	UpdateEnemy();
 
 	D3DXVECTOR2 posMouse = GetMousePos();
 	D3DXVECTOR3 posBlock = D3DXVECTOR3(
@@ -110,11 +143,11 @@ void UpdateGame(void)
 	}
 	if (CurrentBlock == -1)
 	{
-		CurrentBlock = 3 - 1;
+		CurrentBlock = BLOCK_TYPE_MAX - 1;
 	}
 	else
 	{
-		CurrentBlock %= 3;
+		CurrentBlock %= BLOCK_TYPE_MAX;
 	}
 
 	if (GetMousePress(MOUSE_LEFT))
@@ -144,5 +177,6 @@ void DrawGame(void)
 {
 	DrawDecal();
 	DrawBlock();
+	DrawEnemy();
 	DrawPlayer();
 }

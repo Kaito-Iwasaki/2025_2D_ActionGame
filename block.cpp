@@ -40,18 +40,39 @@ BLOCK g_aBlock[NUM_BLOCK_Y][NUM_BLOCK_X] = {};
 
 const char* g_aBlockFileName[BLOCK_TYPE_MAX] = {
 	NULL,
-	"data\\TEXTURE\\block000.png",
-	"data\\TEXTURE\\block000.png",
-	"data\\TEXTURE\\block000.png",
-	"data\\TEXTURE\\block000.png",
+	NULL,
+	"data\\TEXTURE\\grass000.png",
+	"data\\TEXTURE\\grass001.png",
+	"data\\TEXTURE\\grass002.png",
+	"data\\TEXTURE\\grass003.png",
+	"data\\TEXTURE\\grass004.png",
+	"data\\TEXTURE\\grass005.png",
+	"data\\TEXTURE\\grass006.png",
+	"data\\TEXTURE\\grass007.png",
+	"data\\TEXTURE\\grass008.png",
+	"data\\TEXTURE\\grass009.png",
+	"data\\TEXTURE\\grass010.png",
+	"data\\TEXTURE\\grass011.png",
+	"data\\TEXTURE\\grass012.png",
 };
 
 BLOCK_INFO g_aBlockInfo[BLOCK_TYPE_MAX] = {
 	{D3DXCOLOR(1.0f,1.0f,1.0f,1.0f), false},
-	{D3DXCOLOR(0.5f, 0.3f, 0.0f, 1.0f), true},
-	{D3DXCOLOR(0.0f, 0.7f, 0.0f, 1.0f), false},
+	{D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f), true},
+	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), true},
+	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), true},
+	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), true},
+	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), true},
+	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), true},
+	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), true},
+	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), true},
+	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), true},
+	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), true},
+	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), true},
+	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), true},
+	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), true},
+	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), true},
 	{D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f), true, BLOCK_Platform},
-	{D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f), true}
 };
 
 //=====================================================================
@@ -119,6 +140,7 @@ void UninitBlock(void)
 void UpdateBlock(void)
 {
 	BLOCK* pBlock = &g_aBlock[0][0];
+	PLAYER* pPlayer = GetPlayer();
 
 	for (int nCount = 0; nCount < MAX_BLOCK; nCount++, pBlock++)
 	{
@@ -154,7 +176,12 @@ void DrawBlock(void)
 			);
 		SetVertexRHW(pVtx, 1.0f);
 		SetVertexColor(pVtx, pBlock->obj.color);
-		SetVertexTexturePos(pVtx, pBlock->obj.bInversed);
+		SetVertexTexturePos(pVtx,
+			D3DXVECTOR2(0.01f, 0.01f),
+			D3DXVECTOR2(1.0f, 0.01f),
+			D3DXVECTOR2(0.01f, 1.0f),
+			D3DXVECTOR2(1.0f, 1.0f)
+		);
 	}
 
 	// 頂点バッファをアンロック
@@ -220,11 +247,8 @@ bool CollisionBlock(
 	D3DXVECTOR3* pMove,
 	D3DXVECTOR3 size,
 	BLOCK** dpBlock
-)
-{
+){
 	bool bLand = false;
-	bool bWallHit = false;
-	float fDistance;
 
 	BLOCK* pBlock = &g_aBlock[0][0];
 	for (int nCount = 0; nCount < MAX_BLOCK; nCount++, pBlock++)
@@ -232,7 +256,10 @@ bool CollisionBlock(
 		if (pBlock->bUsed == false) continue;
 		if (pBlock->bCollidable == false) continue;
 
-		fDistance = Magnitude(pBlock->obj.pos, pBlock->posOld);
+		if (dpBlock != NULL)
+		{
+			*dpBlock == NULL;
+		}
 
 		if (
 			pPosOld->x <= pBlock->obj.pos.x - size.x
@@ -242,7 +269,6 @@ bool CollisionBlock(
 			)
 		{
 			pPos->x = pBlock->obj.pos.x - size.x;
-			pMove->x = 0;
 		}// 左からの衝突判定
 		else if (
 			pPosOld->x >= pBlock->obj.pos.x + pBlock->obj.size.x + size.x
@@ -252,7 +278,6 @@ bool CollisionBlock(
 			)
 		{// 右からの衝突判定
 			pPos->x = pBlock->obj.pos.x + pBlock->obj.size.x + size.x;
-			pMove->x = 0;
 		}
 
 		if (
@@ -265,31 +290,10 @@ bool CollisionBlock(
 			bLand = true;
 			pPos->y = pBlock->obj.pos.y;
 			pMove->y = 0;
-			if (fDistance != 0)
-			{
-				*pPosOld = *pPos;
-				*pPos += (pBlock->obj.pos - pBlock->posOld) * 2;
 
-				if (
-					pPosOld->x <= pBlock->obj.pos.x - size.x
-					&& pPos->x > pBlock->obj.pos.x - size.x
-					&& pPos->y > pBlock->obj.pos.y
-					&& pPos->y < pBlock->obj.pos.y + pBlock->obj.size.y + size.y
-					)
-				{
-					pPos->x = pBlock->obj.pos.x - size.x;
-					pMove->x = 0;
-				}// 左からの衝突判定
-				else if (
-					pPosOld->x >= pBlock->obj.pos.x + pBlock->obj.size.x + size.x
-					&& pPos->x < pBlock->obj.pos.x + pBlock->obj.size.x + size.x
-					&& pPos->y > pBlock->obj.pos.y
-					&& pPos->y < pBlock->obj.pos.y + pBlock->obj.size.y + size.y
-					)
-				{// 右からの衝突判定
-					pPos->x = pBlock->obj.pos.x + pBlock->obj.size.x + size.x;
-					pMove->x = 0;
-				}
+			if (dpBlock != NULL)
+			{
+				*dpBlock = pBlock;
 			}
 		}
 		else if (

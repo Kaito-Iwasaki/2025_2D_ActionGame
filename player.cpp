@@ -125,6 +125,10 @@ void UpdatePlayer(void)
 		}
 	}
 
+	if (g_player.pBlock != NULL)
+	{
+		g_player.obj.pos += (g_player.pBlock->obj.pos - g_player.pBlock->posOld);
+	}
 
 	g_player.obj.pos += g_player.move;
 
@@ -151,8 +155,9 @@ void UpdatePlayer(void)
 	else
 	{
 		g_player.bIsJumping = true;
-
 	}
+
+
 }
 
 //=====================================================================
@@ -199,4 +204,9 @@ void DrawPlayer(void)
 		// ƒ|ƒŠƒSƒ“‚Ì•`‰æ
 		pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, 2);
 	}
+}
+
+PLAYER* GetPlayer(void)
+{
+	return &g_player;
 }

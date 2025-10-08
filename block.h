@@ -20,10 +20,12 @@
 // ***** É}ÉNÉçíËã` *****
 // 
 //*********************************************************************
-#define BLOCK_SIZE		(20)
+#define BLOCK_SIZE		(40)
 #define NUM_BLOCK_X		(SCREEN_WIDTH / BLOCK_SIZE)
 #define NUM_BLOCK_Y		(SCREEN_HEIGHT / BLOCK_SIZE)
 #define MAX_BLOCK		(NUM_BLOCK_X * NUM_BLOCK_Y)
+#define MAP_FILENAME	"map"
+#define MAP_FILENAME	"data\\MAP\\"
 
 //*********************************************************************
 // 
@@ -33,12 +35,23 @@
 typedef enum
 {
 	BLOCK_TYPE_AIR = 0,
-	BLOCK_TYPE_000,
-	BLOCK_TYPE_001,
-	BLOCK_TYPE_002,
-	BLOCK_TYPE_003,
+	BLOCK_TYPE_VOID,
+	BLOCK_TYPE_GRASS000,
+	BLOCK_TYPE_GRASS001,
+	BLOCK_TYPE_GRASS002,
+	BLOCK_TYPE_GRASS003,
+	BLOCK_TYPE_GRASS004,
+	BLOCK_TYPE_GRASS005,
+	BLOCK_TYPE_GRASS006,
+	BLOCK_TYPE_GRASS007,
+	BLOCK_TYPE_GRASS008,
+	BLOCK_TYPE_GRASS009,
+	BLOCK_TYPE_GRASS010,
+	BLOCK_TYPE_GRASS011,
+	BLOCK_TYPE_GRASS012,
+	BLOCK_TYPE_BLOCK000,
 	BLOCK_TYPE_MAX
-}BLOCK_TYPE;
+} BLOCK_TYPE;
 
 //*********************************************************************
 // 

@@ -147,6 +147,7 @@
     </ClInclude>
     <ClInclude Include="collision.h" />
     <ClInclude Include="decal.h" />
+    <ClInclude Include="enemy.h" />
     <ClInclude Include="player.h">
       <SubType>
       </SubType>
@@ -172,6 +173,7 @@
     <ClCompile Include="block.cpp" />
     <ClCompile Include="collision.cpp" />
     <ClCompile Include="decal.cpp" />
+    <ClCompile Include="enemy.cpp" />
     <ClCompile Include="fade.cpp" />
     <ClCompile Include="font.cpp" />
     <ClCompile Include="Game.cpp">

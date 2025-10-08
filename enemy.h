@@ -1,11 +1,11 @@
 //=====================================================================
 // 
-// player.cppのヘッダファイル [player.h]
+// enemy.cppのヘッダファイル [enemy.h]
 // Author:
 //
 //=====================================================================
-#ifndef _PLAYER_H_
-#define _PLAYER_H_		// 二重インクルード防止のマクロ
+#ifndef _ENEMY_H_
+#define _ENEMY_H_		// 二重インクルード防止のマクロ
 
 //*********************************************************************
 // 
@@ -21,14 +21,18 @@
 // ***** マクロ定義 *****
 // 
 //*********************************************************************
-
+#define MAX_ENEMY		(256)
 
 //*********************************************************************
 // 
 // ***** 列挙型 *****
 // 
 //*********************************************************************
-
+typedef enum
+{
+	ENEMY_TYPE_000 = 0,
+	ENEMY_TYPE_MAX
+}ENEMY_TYPE;
 
 //*********************************************************************
 // 
@@ -38,6 +42,7 @@
 typedef struct
 {
 	BASEOBJECT obj;
+	bool bUsed;
 	D3DXVECTOR3 posOld;
 	D3DXVECTOR3 move;
 	D3DXVECTOR3 hitBoxSize;
@@ -45,19 +50,18 @@ typedef struct
 	int nPatternAnimX;
 	int nPatternAnimY;
 	bool bIsJumping;
-	int nJumpLeft;
 	BLOCK* pBlock;
-}PLAYER;
+}ENEMY;
 
 //*********************************************************************
 // 
 // ***** プロトタイプ宣言 *****
 // 
 //*********************************************************************
-void InitPlayer(void);
-void UninitPlayer(void);
-void UpdatePlayer(void);
-void DrawPlayer(void);
-PLAYER* GetPlayer(void);
+void InitEnemy(void);
+void UninitEnemy(void);
+void UpdateEnemy(void);
+void DrawEnemy(void);
+ENEMY* SetEnemy(ENEMY_TYPE type, D3DXVECTOR3 pos);
 
 #endif
