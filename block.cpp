@@ -248,43 +248,25 @@ bool CollisionBlock(
 	D3DXVECTOR3 size,
 	BLOCK** dpBlock
 ){
+	BLOCK* pBlock = &g_aBlock[0][0];
 	bool bLand = false;
 
-	BLOCK* pBlock = &g_aBlock[0][0];
+	if (dpBlock != NULL)
+	{
+		*dpBlock = NULL;
+	}
+
 	for (int nCount = 0; nCount < MAX_BLOCK; nCount++, pBlock++)
 	{
 		if (pBlock->bUsed == false) continue;
 		if (pBlock->bCollidable == false) continue;
 
-		if (dpBlock != NULL)
-		{
-			*dpBlock == NULL;
-		}
-
-		if (
-			pPosOld->x <= pBlock->obj.pos.x - size.x
-			&& pPos->x > pBlock->obj.pos.x - size.x
-			&& pPos->y > pBlock->obj.pos.y
-			&& pPos->y < pBlock->obj.pos.y + pBlock->obj.size.y + size.y
-			)
-		{
-			pPos->x = pBlock->obj.pos.x - size.x;
-		}// ¶‚©‚ç‚ÌÕ“Ë”»’è
-		else if (
-			pPosOld->x >= pBlock->obj.pos.x + pBlock->obj.size.x + size.x
-			&& pPos->x < pBlock->obj.pos.x + pBlock->obj.size.x + size.x
-			&& pPos->y > pBlock->obj.pos.y
-			&& pPos->y < pBlock->obj.pos.y + pBlock->obj.size.y + size.y
-			)
-		{// ‰E‚©‚ç‚ÌÕ“Ë”»’è
-			pPos->x = pBlock->obj.pos.x + pBlock->obj.size.x + size.x;
-		}
-
+		// Õ“Ë”»’è
 		if (
 			pPosOld->y <= pBlock->obj.pos.y
 			&& pPos->y > pBlock->obj.pos.y
-			&& pPos->x > pBlock->obj.pos.x - size.x
-			&& pPos->x < pBlock->obj.pos.x + pBlock->obj.size.x + size.x
+			&& pPosOld->x + size.x / 2 > pBlock->obj.pos.x
+			&& pPosOld->x - size.x / 2 < pBlock->obj.pos.x + pBlock->obj.size.x
 			)
 		{// ã‚©‚ç‚ÌÕ“Ë”»’è
 			bLand = true;
@@ -297,15 +279,42 @@ bool CollisionBlock(
 			}
 		}
 		else if (
-			pPosOld->y - size.y >= pBlock->obj.pos.y + pBlock->obj.size.y
+			pPosOld->y - size.y >= pBlock->posOld.y + pBlock->obj.size.y
 			&& pPos->y - size.y < pBlock->obj.pos.y + pBlock->obj.size.y
-			&& pPos->x > pBlock->obj.pos.x - size.x
-			&& pPos->x < pBlock->obj.pos.x + pBlock->obj.size.x + size.x
+			&& pPosOld->x + size.x / 2 > pBlock->obj.pos.x
+			&& pPosOld->x - size.x / 2 < pBlock->obj.pos.x + pBlock->obj.size.x
 			)
 		{// ‰º‚©‚ç‚ÌÕ“Ë”»’è
 			pPos->y = pBlock->obj.pos.y + pBlock->obj.size.y + size.y;
 			pMove->y = 0;
 		}
+	}
+
+	pBlock = &g_aBlock[0][0];
+	for (int nCount = 0; nCount < MAX_BLOCK; nCount++, pBlock++)
+	{
+		if (pBlock->bUsed == false) continue;
+		if (pBlock->bCollidable == false) continue;
+
+		if (
+			pPosOld->x + size.x / 2 <= pBlock->posOld.x
+			&& pPos->x + size.x / 2 > pBlock->obj.pos.x
+			&& pPos->y > pBlock->obj.pos.y
+			&& pPos->y - size.y < pBlock->obj.pos.y + pBlock->obj.size.y
+			)
+		{// ¶‚©‚ç‚ÌÕ“Ë”»’è
+			pPos->x = pBlock->obj.pos.x - size.x / 2;
+		}
+		else if (
+			pPosOld->x - size.x / 2 >= pBlock->posOld.x + pBlock->obj.size.x
+			&& pPos->x - size.x / 2 < pBlock->obj.pos.x + pBlock->obj.size.x
+			&& pPos->y > pBlock->obj.pos.y
+			&& pPos->y - size.y < pBlock->obj.pos.y + pBlock->obj.size.y
+			)
+		{// ‰E‚©‚ç‚ÌÕ“Ë”»’è
+			pPos->x = pBlock->obj.pos.x + pBlock->obj.size.x + size.x / 2;
+		}
+
 
 	}
 

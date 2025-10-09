@@ -20,7 +20,7 @@
 #define INIT_POS				D3DXVECTOR3(SCREEN_CENTER, SCREEN_HEIGHT - 100, 0.0f)
 #define INIT_SIZE				D3DXVECTOR3(50.0f, 75.0f, 0.0f) * 0.7f
 #define INIT_COLOR				D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f)
-#define INIT_HITBOX				D3DXVECTOR3(11.0f, 75.0f, 0.0f) * 0.7f
+#define INIT_HITBOX				D3DXVECTOR3(22.0f, 75.0f, 0.0f) * 0.7f
 
 //*********************************************************************
 // 
@@ -125,14 +125,7 @@ void UpdatePlayer(void)
 		}
 	}
 
-	if (g_player.pBlock != NULL)
-	{
-		g_player.obj.pos += (g_player.pBlock->obj.pos - g_player.pBlock->posOld);
-	}
-
-	g_player.obj.pos += g_player.move;
-
-	if (abs((long)g_player.move.x) > 0.01f && Magnitude(g_player.obj.pos, g_player.posOld) > 0.1f)
+	if (abs((long)g_player.move.x) > 0.01f)
 	{
 		if (g_player.nCounterAnim % 10 == 0)
 		{
@@ -145,7 +138,14 @@ void UpdatePlayer(void)
 		g_player.nPatternAnimX = 0;
 	}
 
-	g_player.move.x += (0 - g_player.move.x) * 1.0f;
+	if (g_player.pBlock != NULL)
+	{
+		g_player.obj.pos += (g_player.pBlock->obj.pos - g_player.pBlock->posOld) * 2;
+	}
+
+	g_player.obj.pos += g_player.move;
+
+	g_player.move.x = 0;
 	g_player.move.y += GAME_GRAVITY;
 
 	if (CollisionBlock(&g_player.obj.pos, &g_player.posOld, &g_player.move, g_player.hitBoxSize, &g_player.pBlock))
@@ -157,7 +157,10 @@ void UpdatePlayer(void)
 		g_player.bIsJumping = true;
 	}
 
-
+	if (IsObjectOutOfScreen(g_player.obj))
+	{
+		g_player.obj.pos = INIT_POS;
+	}
 }
 
 //=====================================================================

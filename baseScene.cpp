@@ -63,6 +63,10 @@ void UninitScene(void)
 //=====================================================================
 void UpdateScene(void)
 {
+#if 0
+	if (GetKeyboardTrigger(DIK_RETURN) == false) return;
+#endif
+
 	// 現在のシーンの更新処理
 	g_scenes[g_currentScene].Update();
 

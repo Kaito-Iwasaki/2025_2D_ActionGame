@@ -99,10 +99,15 @@ void InitGame(void)
 		);
 	}
 
-	SetEnemy(
-		ENEMY_TYPE_000,
-		D3DXVECTOR3(100, 100, 0)
+	SetBlock(
+		BLOCK_TYPE_BLOCK000,
+		14, NUM_BLOCK_Y - 2
 	);
+
+	//SetEnemy(
+	//	ENEMY_TYPE_000,
+	//	D3DXVECTOR3(100, 100, 0)
+	//);
 }
 
 //=====================================================================
@@ -133,11 +138,11 @@ void UpdateGame(void)
 	);
 	g_pCursor->obj.pos = posBlock;
 
-	if (GetMouse().lZ >= 120)
+	if (GetMouse().lZ <= -120)
 	{
 		CurrentBlock++;
 	}
-	else if (GetMouse().lZ <= -120)
+	else if (GetMouse().lZ >= 120)
 	{
 		CurrentBlock--;
 	}
@@ -152,7 +157,6 @@ void UpdateGame(void)
 
 	if (GetMousePress(MOUSE_LEFT))
 	{
-		PlaySound(SOUND_LABEL_SE_CURSOR);
 		SetBlock(
 			(BLOCK_TYPE)(CurrentBlock + 1),
 			(int)posMouse.x / BLOCK_SIZE,
@@ -161,7 +165,6 @@ void UpdateGame(void)
 	}
 	else if (GetMousePress(MOUSE_RIGHT))
 	{
-		PlaySound(SOUND_LABEL_SE_CURSOR);
 		SetBlock(
 			BLOCK_TYPE_AIR,
 			(int)posMouse.x / BLOCK_SIZE,

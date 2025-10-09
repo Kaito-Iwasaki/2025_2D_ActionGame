@@ -62,6 +62,7 @@ typedef struct BLOCK
 {
 	BASEOBJECT obj;
 	D3DXVECTOR3 posOld;
+	D3DXVECTOR3 move;
 	bool bUsed;
 	BLOCK_TYPE type;
 	int nCounterState;

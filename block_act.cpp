@@ -34,5 +34,16 @@
 //*********************************************************************
 void BLOCK_Platform(BLOCK* pBlock)
 {
-	pBlock->obj.pos.x += 0.5f;
+	if (pBlock->nCounterState == 0)
+	{
+		pBlock->move.x = 4.0f;
+	}
+	pBlock->obj.pos.x += pBlock->move.x;
+
+	if (pBlock->nCounterState % 120 == 0)
+	{
+		pBlock->move.x *= -1;
+	}
+
+	pBlock->nCounterState++;
 }
