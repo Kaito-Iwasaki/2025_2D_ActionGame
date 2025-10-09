@@ -64,7 +64,7 @@ void UninitScene(void)
 void UpdateScene(void)
 {
 #if 0
-	if (GetKeyboardTrigger(DIK_RETURN) == false) return;
+	if (GetKeyboardRepeat(DIK_RETURN) == false) return;
 #endif
 
 	// 現在のシーンの更新処理

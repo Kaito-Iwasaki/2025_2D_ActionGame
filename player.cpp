@@ -140,13 +140,14 @@ void UpdatePlayer(void)
 
 	if (g_player.pBlock != NULL)
 	{
-		g_player.obj.pos += (g_player.pBlock->obj.pos - g_player.pBlock->posOld) * 2;
+		g_player.obj.pos += (g_player.pBlock->obj.pos - g_player.pBlock->posOld);
 	}
+
+	g_player.move.y += GAME_GRAVITY;
 
 	g_player.obj.pos += g_player.move;
 
 	g_player.move.x = 0;
-	g_player.move.y += GAME_GRAVITY;
 
 	if (CollisionBlock(&g_player.obj.pos, &g_player.posOld, &g_player.move, g_player.hitBoxSize, &g_player.pBlock))
 	{

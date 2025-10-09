@@ -263,7 +263,7 @@ bool CollisionBlock(
 
 		// Õ“Ë”»’è
 		if (
-			pPosOld->y <= pBlock->obj.pos.y
+			pPosOld->y <= pBlock->posOld.y
 			&& pPos->y > pBlock->obj.pos.y
 			&& pPosOld->x + size.x / 2 > pBlock->obj.pos.x
 			&& pPosOld->x - size.x / 2 < pBlock->obj.pos.x + pBlock->obj.size.x
