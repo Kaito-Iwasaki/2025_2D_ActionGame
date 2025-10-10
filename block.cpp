@@ -54,6 +54,10 @@ const char* g_aBlockFileName[BLOCK_TYPE_MAX] = {
 	"data\\TEXTURE\\grass010.png",
 	"data\\TEXTURE\\grass011.png",
 	"data\\TEXTURE\\grass012.png",
+	"data\\TEXTURE\\needle000.png",
+	"data\\TEXTURE\\grass012.png",
+	"data\\TEXTURE\\item000.png",
+	"data\\TEXTURE\\flag000.png",
 };
 
 BLOCK_INFO g_aBlockInfo[BLOCK_TYPE_MAX] = {
@@ -72,7 +76,10 @@ BLOCK_INFO g_aBlockInfo[BLOCK_TYPE_MAX] = {
 	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), true},
 	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), true},
 	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), true},
-	{D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f), true, BLOCK_Platform},
+	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), false, BLOCK_Needle},
+	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), true, BLOCK_Platform},
+	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), false, BLOCK_Coin},
+	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), false, BLOCK_Goal},
 };
 
 //=====================================================================
@@ -241,7 +248,7 @@ BLOCK* SetBlock(BLOCK_TYPE type, int x, int y)
 	return pBlock;
 }
 
-bool CollisionBlock(
+DWORD CollisionBlock(
 	D3DXVECTOR3* pPos,
 	D3DXVECTOR3* pPosOld,
 	D3DXVECTOR3* pMove,
@@ -249,7 +256,7 @@ bool CollisionBlock(
 	BLOCK** dpBlock
 ){
 	BLOCK* pBlock = &g_aBlock[0][0];
-	bool bLand = false;
+	DWORD dwHit = BLOCK_HIT_NONE;
 
 	if (dpBlock != NULL)
 	{
@@ -269,7 +276,7 @@ bool CollisionBlock(
 			&& pPosOld->x - size.x / 2 < pBlock->obj.pos.x + pBlock->obj.size.x
 			)
 		{// ã‚©‚ç‚ÌÕ“Ë”»’è
-			bLand = true;
+			dwHit |= BLOCK_HIT_TOP;
 			pPos->y = pBlock->obj.pos.y;
 			pMove->y = 0;
 
@@ -285,6 +292,7 @@ bool CollisionBlock(
 			&& pPosOld->x - size.x / 2 < pBlock->obj.pos.x + pBlock->obj.size.x
 			)
 		{// ‰º‚©‚ç‚ÌÕ“Ë”»’è
+			dwHit |= BLOCK_HIT_BOTTOM;
 			pPos->y = pBlock->obj.pos.y + pBlock->obj.size.y + size.y;
 			pMove->y = 0;
 		}
@@ -303,6 +311,7 @@ bool CollisionBlock(
 			&& pPos->y - size.y < pBlock->obj.pos.y + pBlock->obj.size.y
 			)
 		{// ¶‚©‚ç‚ÌÕ“Ë”»’è
+			dwHit |= BLOCK_HIT_LEFT;
 			pPos->x = pBlock->obj.pos.x - size.x / 2;
 		}
 		else if (
@@ -312,11 +321,10 @@ bool CollisionBlock(
 			&& pPos->y - size.y < pBlock->obj.pos.y + pBlock->obj.size.y
 			)
 		{// ‰E‚©‚ç‚ÌÕ“Ë”»’è
+			dwHit |= BLOCK_HIT_RIGHT;
 			pPos->x = pBlock->obj.pos.x + pBlock->obj.size.x + size.x / 2;
 		}
-
-
 	}
 
-	return bLand;
+	return dwHit;
 }

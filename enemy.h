@@ -50,6 +50,7 @@ typedef struct
 	int nPatternAnimX;
 	int nPatternAnimY;
 	bool bIsJumping;
+	bool bWasLanded;
 	BLOCK* pBlock;
 }ENEMY;
 

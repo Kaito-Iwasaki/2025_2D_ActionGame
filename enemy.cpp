@@ -16,13 +16,13 @@
 // ***** マクロ定義 *****
 // 
 //*********************************************************************
-#define TEXTURE_FILENAME		NULL
-#define TEXTURE_MAX_X			(4)
-#define TEXTURE_MAX_Y			(2)
+#define TEXTURE_FILENAME		"data\\TEXTURE\\enemy000.png"
+#define TEXTURE_MAX_X			(1)
+#define TEXTURE_MAX_Y			(1)
 #define INIT_POS				D3DXVECTOR3(SCREEN_CENTER, SCREEN_HEIGHT - 100, 0.0f)
-#define INIT_SIZE				D3DXVECTOR3(50.0f, 75.0f, 0.0f) * 0.7f
-#define INIT_COLOR				D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f)
-#define INIT_HITBOX				D3DXVECTOR3(11.0f, 75.0f, 0.0f) * 0.7f
+#define INIT_SIZE				D3DXVECTOR3(50.0f, 50.0f, 0.0f)
+#define INIT_COLOR				D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f)
+#define INIT_HITBOX				INIT_SIZE
 
 //*********************************************************************
 // 
@@ -119,6 +119,13 @@ void UpdateEnemy(void)
 
 		pEnemy->posOld = pEnemy->obj.pos;
 
+		if (pEnemy->pBlock != NULL)
+		{// ブロックに乗っているときにブロックの移動量を反映
+			pEnemy->obj.pos += (pEnemy->pBlock->obj.pos - pEnemy->pBlock->posOld);
+		}
+
+
+		pEnemy->move.y += GAME_GRAVITY;
 		pEnemy->obj.pos += pEnemy->move;
 
 		if (abs((long)pEnemy->move.x) > 0.01f && Magnitude(pEnemy->obj.pos, pEnemy->posOld) > 0.1f)
@@ -134,16 +141,20 @@ void UpdateEnemy(void)
 			pEnemy->nPatternAnimX = 0;
 		}
 
-		pEnemy->move.y += GAME_GRAVITY;
+		DWORD dwHit = CollisionBlock(&pEnemy->obj.pos, &pEnemy->posOld, &pEnemy->move, pEnemy->hitBoxSize, &pEnemy->pBlock);
 
-		if (CollisionBlock(&pEnemy->obj.pos, &pEnemy->posOld, &pEnemy->move, pEnemy->hitBoxSize, &pEnemy->pBlock))
+		if (dwHit & BLOCK_HIT_TOP)
 		{
 			pEnemy->bIsJumping = false;
 		}
 		else
 		{
 			pEnemy->bIsJumping = true;
+		}
 
+		if (dwHit & (BLOCK_HIT_LEFT | BLOCK_HIT_RIGHT))
+		{
+			pEnemy->move.x *= -1;
 		}
 
 		if (BoxCollision(
@@ -151,7 +162,15 @@ void UpdateEnemy(void)
 			pPlayer->obj.pos - D3DXVECTOR3(0, pPlayer->obj.size.y, 0), pPlayer->hitBoxSize
 		))
 		{// プレイヤーとの衝突判定
-			
+			if (pPlayer->posOld.y < pEnemy->obj.pos.y && pPlayer->move.y > 0)
+			{
+				pEnemy->bUsed = false;
+				pPlayer->move.y = -pPlayer->fJumpPower;
+			}
+			else
+			{
+				HitPlayer();
+			}
 		}
 	}
 
@@ -181,7 +200,7 @@ void DrawEnemy(void)
 		);
 		SetVertexRHW(pVtx, 1.0f);
 		SetVertexColor(pVtx, pEnemy->obj.color);
-		SetVertexTexturePos(pVtx, pEnemy->nPatternAnimX, pEnemy->nPatternAnimY, 4, 2, pEnemy->obj.bInversed);
+		SetVertexTexturePos(pVtx, pEnemy->nPatternAnimX, pEnemy->nPatternAnimY, TEXTURE_MAX_X, TEXTURE_MAX_Y, pEnemy->obj.bInversed);
 	}
 
 	// 頂点バッファをアンロック
@@ -221,7 +240,7 @@ ENEMY* SetEnemy(ENEMY_TYPE type, D3DXVECTOR3 pos)
 		pEnemy->obj.color = INIT_COLOR;
 		pEnemy->obj.bVisible = true;
 		pEnemy->hitBoxSize = INIT_HITBOX;
-		pEnemy->move = { 4,0 ,0};
+		pEnemy->move = { 2, 0 ,0};
 
 		return pEnemy;
 	}

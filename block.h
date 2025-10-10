@@ -27,6 +27,12 @@
 #define MAP_FILENAME	"map"
 #define MAP_FILENAME	"data\\MAP\\"
 
+#define BLOCK_HIT_NONE		(0x0000)
+#define BLOCK_HIT_TOP		(0x0001)
+#define BLOCK_HIT_BOTTOM	(0x0002)
+#define BLOCK_HIT_LEFT		(0x0004)
+#define BLOCK_HIT_RIGHT		(0x0008)
+
 //*********************************************************************
 // 
 // ***** —ñ‹“Œ^ *****
@@ -49,7 +55,10 @@ typedef enum
 	BLOCK_TYPE_GRASS010,
 	BLOCK_TYPE_GRASS011,
 	BLOCK_TYPE_GRASS012,
+	BLOCK_TYPE_NEEDLE000,
 	BLOCK_TYPE_BLOCK000,
+	BLOCK_TYPE_ITEM000,
+	BLOCK_TYPE_FLAG000,
 	BLOCK_TYPE_MAX
 } BLOCK_TYPE;
 
@@ -88,7 +97,7 @@ void UpdateBlock(void);
 void DrawBlock(void);
 BLOCK* GetBlock(void);
 BLOCK* SetBlock(BLOCK_TYPE type, int x, int y);
-bool CollisionBlock(
+DWORD CollisionBlock(
 	D3DXVECTOR3* pPos,
 	D3DXVECTOR3* pPosOld,
 	D3DXVECTOR3* pMove,

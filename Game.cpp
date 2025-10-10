@@ -18,6 +18,7 @@
 #include "sound.h"
 #include "util.h"
 #include "enemy.h"
+#include "item.h"
 
 //*********************************************************************
 // 
@@ -41,6 +42,8 @@
 DECAL* g_pCursor = NULL;
 int CurrentBlock = 0;
 
+BLOCK g_aMap[NUM_BLOCK_Y][NUM_BLOCK_X] = {};
+
 //=====================================================================
 // ‰Šú‰»ˆ—
 //=====================================================================
@@ -50,6 +53,7 @@ void InitGame(void)
 	InitBlock();
 	InitPlayer();
 	InitEnemy();
+	InitItem();
 
 	SetDecal(
 		DECAL_LABEL_BG000,
@@ -66,48 +70,22 @@ void InitGame(void)
 		D3DXVECTOR3_ZERO,
 		D3DXCOLOR(1.0f, 0.0f, 0.0f, 0.5f)
 	);
+	g_pCursor->obj.bVisible = false;
 
-	for (int i = 0; i < NUM_BLOCK_X; i++)
+	LoadBin("data\\MAP\\map.bin", &g_aMap[0][0], sizeof(BLOCK), MAX_BLOCK);
+
+	for (int y = 0; y < NUM_BLOCK_Y; y++)
 	{
-		SetBlock(
-			BLOCK_TYPE_VOID,
-			i, 0
-		);
+		for (int x = 0; x < NUM_BLOCK_X; x++)
+		{
+			SetBlock(g_aMap[y][x].type, x, y);
+		}
 	}
 
-	for (int i = 0; i < NUM_BLOCK_X; i++)
-	{
-		SetBlock(
-			BLOCK_TYPE_VOID,
-			i, NUM_BLOCK_Y - 1
-		);
-	}
-
-	for (int i = 0; i < NUM_BLOCK_Y; i++)
-	{
-		SetBlock(
-			BLOCK_TYPE_VOID,
-			0, i
-		);
-	}
-
-	for (int i = 0; i < NUM_BLOCK_Y; i++)
-	{
-		SetBlock(
-			BLOCK_TYPE_VOID,
-			NUM_BLOCK_X - 1, i
-		);
-	}
-
-	SetBlock(
-		BLOCK_TYPE_BLOCK000,
-		14, NUM_BLOCK_Y - 2
+	SetEnemy(
+		ENEMY_TYPE_000,
+		D3DXVECTOR3(900, 600, 0)
 	);
-
-	//SetEnemy(
-	//	ENEMY_TYPE_000,
-	//	D3DXVECTOR3(100, 100, 0)
-	//);
 }
 
 //=====================================================================
@@ -119,6 +97,7 @@ void UninitGame(void)
 	UninitBlock();
 	UninitPlayer();
 	UninitEnemy();
+	UninitItem();
 }
 
 //=====================================================================
@@ -129,7 +108,9 @@ void UpdateGame(void)
 	UpdateBlock();
 	UpdatePlayer();
 	UpdateEnemy();
+	UpdateItem();
 
+#ifdef _DEBUG
 	D3DXVECTOR2 posMouse = GetMousePos();
 	D3DXVECTOR3 posBlock = D3DXVECTOR3(
 		floorf(posMouse.x / BLOCK_SIZE) * BLOCK_SIZE + BLOCK_SIZE / 2,
@@ -137,6 +118,7 @@ void UpdateGame(void)
 		0.0f
 	);
 	g_pCursor->obj.pos = posBlock;
+	g_pCursor->obj.bVisible = true;
 
 	if (GetMouse().lZ <= -120)
 	{
@@ -171,6 +153,12 @@ void UpdateGame(void)
 			(int)posMouse.y / BLOCK_SIZE
 		);
 	}
+
+	if (GetKeyboardTrigger(DIK_F1))
+	{
+		SaveBin("data\\MAP\\map.bin", GetBlock(), sizeof(BLOCK), MAX_BLOCK);
+	}
+#endif
 }
 
 //=====================================================================
@@ -180,6 +168,7 @@ void DrawGame(void)
 {
 	DrawDecal();
 	DrawBlock();
+	DrawItem();
 	DrawEnemy();
 	DrawPlayer();
 }

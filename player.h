@@ -28,7 +28,16 @@
 // ***** —ñ‹“Œ^ *****
 // 
 //*********************************************************************
-
+typedef enum
+{
+	PLAYERSTATE_INIT = 0,
+	PLAYERSTATE_APPEAR,
+	PLAYERSTATE_NORMAL,
+	PLAYERSTATE_DAMAGED,
+	PLAYERSTATE_DIED,
+	PLAYERSTATE_END,
+	PLAYERSTATE_MAX
+}PLAYERSTATE;
 
 //*********************************************************************
 // 
@@ -41,6 +50,11 @@ typedef struct
 	D3DXVECTOR3 posOld;
 	D3DXVECTOR3 move;
 	D3DXVECTOR3 hitBoxSize;
+	PLAYERSTATE state;
+	float fSpeed;
+	int nLife;
+	float fJumpPower;
+	int nCounterState;
 	int nCounterAnim;
 	int nPatternAnimX;
 	int nPatternAnimY;
@@ -59,5 +73,7 @@ void UninitPlayer(void);
 void UpdatePlayer(void);
 void DrawPlayer(void);
 PLAYER* GetPlayer(void);
+void HitPlayer(void);
+void SetPlayerState(PLAYERSTATE state);
 
 #endif

@@ -1,11 +1,11 @@
 //=====================================================================
-//
-// block_act.cppのヘッダファイル [block_act.h]
-// Author : 
 // 
+// item.cppのヘッダファイル [item.h]
+// Author:
+//
 //=====================================================================
-#ifndef _block_act_H_
-#define _block_act_H_
+#ifndef _ITEM_H_
+#define _ITEM_H_		// 二重インクルード防止のマクロ
 
 //*********************************************************************
 // 
@@ -13,6 +13,7 @@
 // 
 //*********************************************************************
 #include "main.h"
+#include "baseObject.h"
 #include "block.h"
 
 //*********************************************************************
@@ -20,23 +21,45 @@
 // ***** マクロ定義 *****
 // 
 //*********************************************************************
-
+#define MAX_ITEM		(256)
 
 //*********************************************************************
 // 
 // ***** 列挙型 *****
 // 
 //*********************************************************************
+typedef enum
+{
+	ITEM_TYPE_000 = 0,
+	ITEM_TYPE_MAX
+}ITEM_TYPE;
 
+//*********************************************************************
+// 
+// ***** 構造体 *****
+// 
+//*********************************************************************
+typedef struct
+{
+	BASEOBJECT obj;
+	bool bUsed;
+	D3DXVECTOR3 posOld;
+	D3DXVECTOR3 move;
+	D3DXVECTOR3 hitBoxSize;
+	int nCounterAnim;
+	int nPatternAnimX;
+	int nPatternAnimY;
+}ITEM;
 
 //*********************************************************************
 // 
 // ***** プロトタイプ宣言 *****
 // 
 //*********************************************************************
-void BLOCK_Needle(BLOCK* pBlock);
-void BLOCK_Platform(BLOCK* pBlock);
-void BLOCK_Coin(BLOCK* pBlock);
-void BLOCK_Goal(BLOCK* pBlock);
+void InitItem(void);
+void UninitItem(void);
+void UpdateItem(void);
+void DrawItem(void);
+ITEM* SetItem(ITEM_TYPE type, D3DXVECTOR3 pos);
 
 #endif

@@ -8,6 +8,7 @@
 #include "input.h"
 #include "util.h"
 #include "Game.h"
+#include "fade.h"
 
 //*********************************************************************
 // 
@@ -17,10 +18,13 @@
 #define TEXTURE_FILENAME		"data\\TEXTURE\\player000.png"
 #define TEXTURE_MAX_X			(4)
 #define TEXTURE_MAX_Y			(2)
-#define INIT_POS				D3DXVECTOR3(SCREEN_CENTER, SCREEN_HEIGHT - 100, 0.0f)
+#define INIT_POS				D3DXVECTOR3(100, 500, 0.0f)
 #define INIT_SIZE				D3DXVECTOR3(50.0f, 75.0f, 0.0f) * 0.7f
 #define INIT_COLOR				D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f)
 #define INIT_HITBOX				D3DXVECTOR3(22.0f, 75.0f, 0.0f) * 0.7f
+#define INIT_PLAYER_SPEED		(4.0f)
+#define INIT_PLAYER_LIFE		(3)
+#define INIT_PLAYER_JUMPPOWER	(15.0f)
 
 //*********************************************************************
 // 
@@ -54,6 +58,10 @@ void InitPlayer(void)
 	g_player.obj.color = INIT_COLOR;
 	g_player.obj.bVisible = true;
 	g_player.hitBoxSize = INIT_HITBOX;
+	g_player.state = PLAYERSTATE_INIT;
+	g_player.fSpeed = INIT_PLAYER_SPEED;
+	g_player.nLife = INIT_PLAYER_LIFE;
+	g_player.fJumpPower = INIT_PLAYER_JUMPPOWER;
 
 	// テクスチャの読み込み
 	if (TEXTURE_FILENAME)
@@ -103,53 +111,89 @@ void UninitPlayer(void)
 //=====================================================================
 void UpdatePlayer(void)
 {
+	g_player.nCounterState++;
+	switch (g_player.state)
+	{
+	case PLAYERSTATE_INIT:
+		g_player.obj.pos = INIT_POS;
+		g_player.obj.bVisible = true;
+		g_player.move = D3DXVECTOR3_ZERO;
+		g_player.fSpeed = INIT_PLAYER_SPEED;
+		g_player.nLife = INIT_PLAYER_LIFE;
+		SetPlayerState(PLAYERSTATE_APPEAR);
+
+	case PLAYERSTATE_APPEAR:
+		g_player.obj.bVisible ^= 1;
+		if (g_player.nCounterState > 120)
+		{
+			g_player.obj.bVisible = true;
+			SetPlayerState(PLAYERSTATE_NORMAL);
+		}
+		break;
+
+	case PLAYERSTATE_NORMAL:
+		break;
+
+	case PLAYERSTATE_DAMAGED:
+		g_player.obj.bVisible ^= 1;
+		if (g_player.nCounterState > 120)
+		{
+			g_player.obj.bVisible ^= 1;
+			SetPlayerState(PLAYERSTATE_NORMAL);
+		}
+		break;
+
+	case PLAYERSTATE_DIED:
+		g_player.obj.bVisible = false;
+		if (g_player.nCounterState > 30)
+		{
+			SetPlayerState(PLAYERSTATE_INIT);
+		}
+		return;
+
+	case PLAYERSTATE_END:
+		SetFade(SCENE_GAME);
+		return;
+	}
+
+	// 前回の位置を記録
 	g_player.posOld = g_player.obj.pos;
 
+	// プレイヤーの操作処理
+	g_player.move.x = 0;
 	if (GetKeyboardPress(DIK_A))
-	{
-		g_player.move.x -= 2;
-		g_player.nPatternAnimY = 1;
+	{// 左
+		g_player.move.x -= g_player.fSpeed;
+		/*g_player.nPatternAnimY = 1;*/
 	}
-	else if (GetKeyboardPress(DIK_D))
-	{
-		g_player.move.x += 2;
-		g_player.nPatternAnimY = 0;
+	if (GetKeyboardPress(DIK_D))
+	{// 右
+		g_player.move.x += g_player.fSpeed;
+		//g_player.nPatternAnimY = 0;
 	}
 
 	if (GetKeyboardPress(DIK_SPACE))
-	{
+	{// ジャンプ
 		if (g_player.bIsJumping == false)
 		{
 			g_player.bIsJumping = true;
-			g_player.move.y = - 15.0f;
+			g_player.move.y = -g_player.fJumpPower;
 		}
-	}
-
-	if (abs((long)g_player.move.x) > 0.01f)
-	{
-		if (g_player.nCounterAnim % 10 == 0)
-		{
-			g_player.nPatternAnimX = (g_player.nPatternAnimX + 1) % 4;
-		}
-		g_player.nCounterAnim++;
-	}
-	else
-	{
-		g_player.nPatternAnimX = 0;
 	}
 
 	if (g_player.pBlock != NULL)
-	{
+	{// ブロックに乗っているときにブロックの移動量を反映
 		g_player.obj.pos += (g_player.pBlock->obj.pos - g_player.pBlock->posOld);
 	}
 
-	g_player.move.y += GAME_GRAVITY;
-
+	// 位置を更新
+	g_player.move.y += GAME_GRAVITY;	// 重力を加算
 	g_player.obj.pos += g_player.move;
 
-	g_player.move.x = 0;
+	DWORD dwHit = CollisionBlock(&g_player.obj.pos, &g_player.posOld, &g_player.move, g_player.hitBoxSize, &g_player.pBlock);
 
-	if (CollisionBlock(&g_player.obj.pos, &g_player.posOld, &g_player.move, g_player.hitBoxSize, &g_player.pBlock))
+	// ブロックとの衝突判定
+	if (dwHit & BLOCK_HIT_TOP)
 	{
 		g_player.bIsJumping = false;
 	}
@@ -158,9 +202,37 @@ void UpdatePlayer(void)
 		g_player.bIsJumping = true;
 	}
 
+	// アニメーションの更新
+	if (g_player.bIsJumping)
+	{// ジャンプ
+		g_player.nPatternAnimX = 1;
+	}
+	else if (abs((long)g_player.move.x) > 0.01f)
+	{// 移動
+		if (g_player.nCounterAnim % 5 == 0)
+		{
+			g_player.nPatternAnimX = (g_player.nPatternAnimX + 1) % 4;
+		}
+		g_player.nCounterAnim++;
+	}
+	else
+	{// 停止
+		g_player.nPatternAnimX = 0;
+	}
+
+	// アニメーションの向きを設定
+	if (g_player.move.x < 0)
+	{// 左
+		g_player.nPatternAnimY = 1;
+	}
+	else if (g_player.move.x > 0)
+	{// 右
+		g_player.nPatternAnimY = 0;
+	}
+
 	if (IsObjectOutOfScreen(g_player.obj))
-	{
-		g_player.obj.pos = INIT_POS;
+	{// 画面外に出たら死亡
+		SetPlayerState(PLAYERSTATE_DIED);
 	}
 }
 
@@ -171,11 +243,8 @@ void UpdatePlayer(void)
 //=====================================================================
 void DrawPlayer(void)
 {
-	LPDIRECT3DDEVICE9 pDevice;
+	LPDIRECT3DDEVICE9 pDevice = GetDevice();;
 	VERTEX_2D* pVtx;
-
-	// デバイスの取得
-	pDevice = GetDevice();
 
 	// 頂点バッファをロックして頂点情報へのポインタを取得
 	g_pVtxBuffPlayer->Lock(0, 0, (void**)&pVtx, 0);
@@ -213,4 +282,28 @@ void DrawPlayer(void)
 PLAYER* GetPlayer(void)
 {
 	return &g_player;
+}
+
+void HitPlayer(void)
+{
+	if (g_player.state == PLAYERSTATE_APPEAR)	return;
+	if (g_player.state == PLAYERSTATE_DAMAGED)	return;
+	if (g_player.state == PLAYERSTATE_DIED)		return;
+
+	g_player.nLife--;
+
+	if (g_player.nLife < 1)
+	{
+		SetPlayerState(PLAYERSTATE_DIED);
+	}
+	else
+	{
+		SetPlayerState(PLAYERSTATE_DAMAGED);
+	}
+}
+
+void SetPlayerState(PLAYERSTATE state)
+{
+	g_player.state = state;
+	g_player.nCounterState = 0;
 }
