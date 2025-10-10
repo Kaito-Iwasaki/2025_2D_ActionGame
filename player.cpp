@@ -19,9 +19,9 @@
 #define TEXTURE_MAX_X			(4)
 #define TEXTURE_MAX_Y			(2)
 #define INIT_POS				D3DXVECTOR3(100, 500, 0.0f)
-#define INIT_SIZE				D3DXVECTOR3(50.0f, 75.0f, 0.0f) * 0.7f
+#define INIT_SIZE				D3DXVECTOR3(75.0f, 75.0f, 0.0f) * 0.7f
 #define INIT_COLOR				D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f)
-#define INIT_HITBOX				D3DXVECTOR3(22.0f, 75.0f, 0.0f) * 0.7f
+#define INIT_HITBOX				D3DXVECTOR3(45.0f, 70.0f, 0.0f) * 0.7f
 #define INIT_PLAYER_SPEED		(4.0f)
 #define INIT_PLAYER_LIFE		(3)
 #define INIT_PLAYER_JUMPPOWER	(15.0f)
@@ -202,32 +202,35 @@ void UpdatePlayer(void)
 		g_player.bIsJumping = true;
 	}
 
+	if (g_player.nCounterAnim % 5 == 0)
+	{
+		g_player.nPatternAnimX = (g_player.nPatternAnimX + 1) % 4;
+	}
+	g_player.nCounterAnim++;
+
 	// アニメーションの更新
 	if (g_player.bIsJumping)
 	{// ジャンプ
-		g_player.nPatternAnimX = 1;
+		g_player.nPatternAnimX = 0;
+		g_player.nPatternAnimY = 1;
 	}
 	else if (abs((long)g_player.move.x) > 0.01f)
 	{// 移動
-		if (g_player.nCounterAnim % 5 == 0)
-		{
-			g_player.nPatternAnimX = (g_player.nPatternAnimX + 1) % 4;
-		}
-		g_player.nCounterAnim++;
+		g_player.nPatternAnimY = 1;
 	}
 	else
 	{// 停止
-		g_player.nPatternAnimX = 0;
+		g_player.nPatternAnimY = 0;
 	}
 
 	// アニメーションの向きを設定
 	if (g_player.move.x < 0)
 	{// 左
-		g_player.nPatternAnimY = 1;
+		g_player.obj.bInversed = true;
 	}
 	else if (g_player.move.x > 0)
 	{// 右
-		g_player.nPatternAnimY = 0;
+		g_player.obj.bInversed = false;
 	}
 
 	if (IsObjectOutOfScreen(g_player.obj))
