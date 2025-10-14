@@ -151,7 +151,7 @@ void UpdateEnemy(void)
 		{
 			pEnemy->bIsJumping = true;
 		}
-
+		
 		if (dwHit & (BLOCK_HIT_LEFT | BLOCK_HIT_RIGHT))
 		{
 			pEnemy->move.x *= -1;

@@ -18,6 +18,7 @@
 // シーン
 #include "Title.h"
 #include "Game.h"
+#include "Editor.h"
 
 //*********************************************************************
 // 
@@ -32,6 +33,7 @@ SCENE g_currentScene = SCENE_GAME;		// 現在のシーン
 SCENEDATA g_scenes[SCENE_MAX] = {
 	{ InitTitle, UninitTitle, UpdateTitle, DrawTitle },
 	{ InitGame, UninitGame, UpdateGame, DrawGame },
+	{ InitEditor, UninitEditor, UpdateEditor, DrawEditor },
 };
 
 //=====================================================================
@@ -103,6 +105,9 @@ SCENE SetScene(SCENE nextScene, bool bStopSound)
 	return g_currentScene;
 }
 
+//=====================================================================
+// 現在のシーンを取得する処理
+//=====================================================================
 SCENE GetCurrentScene(void)
 {
 	return g_currentScene;

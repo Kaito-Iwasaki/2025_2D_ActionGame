@@ -46,7 +46,8 @@ typedef struct
 FONT g_aFont[MAX_FONT] = {};
 
 FONT_INFO g_aFontInfo[FONT_LABEL_MAX] = {
-	{"data\\FONT\\x10y12pxDonguriDuel.ttf", "x10y12pxDonguriDuel" }
+	{ "", "Terminal"},
+	{ "data\\FONT\\x10y12pxDonguriDuel.ttf", "x10y12pxDonguriDuel" },
 };
 
 //=====================================================================
@@ -130,7 +131,16 @@ FONT* GetFont(void)
 //=====================================================================
 // 画像の設定処理
 //=====================================================================
-FONT* SetFont(D3DXVECTOR3 pos, D3DXVECTOR3 size, D3DXVECTOR3 rot, D3DXCOLOR col, int nScale, const char* aText, UINT format)
+FONT* SetFont(
+	FONT_LABEL type,		// 使用するフォント
+	D3DXVECTOR3 pos,		// 位置
+	D3DXVECTOR3 size,		// サイズ
+	D3DXVECTOR3 rot,		// 回転
+	D3DXCOLOR col,			// 色
+	int nScale,				// テキストのサイズ4
+	const char* aText,		// 表示するテキスト
+	UINT format				// テキストフォーマット
+)
 {
 	LPDIRECT3DDEVICE9 pDevice = GetDevice();
 
@@ -145,12 +155,13 @@ FONT* SetFont(D3DXVECTOR3 pos, D3DXVECTOR3 size, D3DXVECTOR3 rot, D3DXCOLOR col,
 			pFont->obj.size = size;
 			pFont->obj.color = col;
 			pFont->nID = nCount;
+			pFont->type = type;
 			pFont->format = format;
 			pFont->obj.bVisible = true;
 			strcpy(&pFont->aText[0], aText);
 
 			D3DXFONT_DESC fontDesc = {
-				nScale,								// Height
+				nScale,							// Height
 				0,								// Width (0 = 自動)
 				FW_NORMAL,						// Weight
 				1,								// MipLevels
@@ -162,7 +173,7 @@ FONT* SetFont(D3DXVECTOR3 pos, D3DXVECTOR3 size, D3DXVECTOR3 rot, D3DXCOLOR col,
 				""
 			};
 
-			strcpy(&fontDesc.FaceName[0], &g_aFontInfo[0].aFontName[0]);
+			strcpy(&fontDesc.FaceName[0], &g_aFontInfo[type].aFontName[0]);
 
 			D3DXCreateFontIndirect(pDevice, &fontDesc, &pFont->font);
 
@@ -172,6 +183,7 @@ FONT* SetFont(D3DXVECTOR3 pos, D3DXVECTOR3 size, D3DXVECTOR3 rot, D3DXCOLOR col,
 
 	return NULL;
 }
+
 
 //=====================================================================
 // 画像の削除処理（指定）

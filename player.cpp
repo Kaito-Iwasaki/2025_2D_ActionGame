@@ -24,7 +24,7 @@
 #define INIT_HITBOX				D3DXVECTOR3(45.0f, 70.0f, 0.0f) * 0.7f
 #define INIT_PLAYER_SPEED		(4.0f)
 #define INIT_PLAYER_LIFE		(3)
-#define INIT_PLAYER_JUMPPOWER	(15.0f)
+#define INIT_PLAYER_JUMPPOWER	(16.0f)
 
 //*********************************************************************
 // 

@@ -24,8 +24,6 @@
 #define NUM_BLOCK_X		(SCREEN_WIDTH / BLOCK_SIZE)
 #define NUM_BLOCK_Y		(SCREEN_HEIGHT / BLOCK_SIZE)
 #define MAX_BLOCK		(NUM_BLOCK_X * NUM_BLOCK_Y)
-#define MAP_FILENAME	"map"
-#define MAP_FILENAME	"data\\MAP\\"
 
 #define BLOCK_HIT_NONE		(0x0000)
 #define BLOCK_HIT_TOP		(0x0001)

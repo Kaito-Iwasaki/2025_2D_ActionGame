@@ -1,6 +1,6 @@
 //=====================================================================
 //
-// Game [Game.h]
+// Editor [Editor.h]
 // Author : 
 // 
 //=====================================================================
@@ -10,16 +10,13 @@
 // ***** インクルードファイル *****
 // 
 //*********************************************************************
-#include "Game.h"
-#include "player.h"
-#include "block.h"
-#include "decal.h"
-#include "input.h"
 #include "sound.h"
-#include "util.h"
-#include "enemy.h"
-#include "item.h"
+#include "input.h"
+#include "Editor.h"
+#include "decal.h"
+#include "block.h"
 #include "fade.h"
+#include "font.h"
 
 //*********************************************************************
 // 
@@ -40,19 +37,18 @@
 // ***** プロトタイプ宣言 *****
 // 
 //*********************************************************************
-
-BLOCK g_aMap[NUM_BLOCK_Y][NUM_BLOCK_X] = {};
+DECAL* g_pCursor = NULL;
+FONT* g_pFont = NULL;
+int CurrentBlock = 0;
 
 //=====================================================================
 // 初期化処理
 //=====================================================================
-void InitGame(void)
+void InitEditor(void)
 {
 	InitDecal();
+	InitFont();
 	InitBlock();
-	InitPlayer();
-	InitEnemy();
-	InitItem();
 
 	SetDecal(
 		DECAL_LABEL_BG000,
@@ -62,110 +58,99 @@ void InitGame(void)
 		D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f)
 	);
 
+	g_pCursor = SetDecal(
+		DECAL_LABEL_NULL,
+		D3DXVECTOR3_ZERO,
+		D3DXVECTOR3(BLOCK_SIZE, BLOCK_SIZE, 0),
+		D3DXVECTOR3_ZERO,
+		D3DXCOLOR(1.0f, 0.0f, 0.0f, 0.5f)
+	);
+	g_pCursor->obj.bVisible = false;
 
-
-	LoadBin("data\\MAP\\map.bin", &g_aMap[0][0], sizeof(BLOCK), MAX_BLOCK);
-
-	for (int y = 0; y < NUM_BLOCK_Y; y++)
-	{
-		for (int x = 0; x < NUM_BLOCK_X; x++)
-		{
-			SetBlock(g_aMap[y][x].type, x, y);
-		}
-	}
-
-	SetEnemy(
-		ENEMY_TYPE_000,
-		D3DXVECTOR3(900, 600, 0)
+	g_pFont = SetFont(
+		FONT_LABEL_TERMINAL,
+		D3DXVECTOR3(0, 0, 0),
+		D3DXVECTOR3(SCREEN_WIDTH, SCREEN_HEIGHT, 0),
+		D3DXVECTOR3_ZERO,
+		D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
+		30,
+		"選択ブロック：BLOCK_000",
+		DT_LEFT
 	);
 }
 
 //=====================================================================
 // 終了処理
 //=====================================================================
-void UninitGame(void)
+void UninitEditor(void)
 {
 	UninitDecal();
+	UninitFont();
 	UninitBlock();
-	UninitPlayer();
-	UninitEnemy();
-	UninitItem();
 }
 
 //=====================================================================
 // 更新処理
 //=====================================================================
-void UpdateGame(void)
+void UpdateEditor(void)
 {
 	UpdateBlock();
-	UpdatePlayer();
-	UpdateEnemy();
-	UpdateItem();
 
-#ifdef _DEBUG
-	//D3DXVECTOR2 posMouse = GetMousePos();
-	//D3DXVECTOR3 posBlock = D3DXVECTOR3(
-	//	floorf(posMouse.x / BLOCK_SIZE) * BLOCK_SIZE + BLOCK_SIZE / 2,
-	//	floorf(posMouse.y / BLOCK_SIZE) * BLOCK_SIZE + BLOCK_SIZE / 2,
-	//	0.0f
-	//);
-	//g_pCursor->obj.pos = posBlock;
-	//g_pCursor->obj.bVisible = true;
+	D3DXVECTOR2 posMouse = GetMousePos();
+	D3DXVECTOR3 posBlock = D3DXVECTOR3(
+		floorf(posMouse.x / BLOCK_SIZE) * BLOCK_SIZE + BLOCK_SIZE / 2,
+		floorf(posMouse.y / BLOCK_SIZE) * BLOCK_SIZE + BLOCK_SIZE / 2,
+		0.0f
+	);
+	g_pCursor->obj.pos = posBlock;
+	g_pCursor->obj.bVisible = true;
 
-	//if (GetMouse().lZ <= -120)
-	//{
-	//	CurrentBlock++;
-	//}
-	//else if (GetMouse().lZ >= 120)
-	//{
-	//	CurrentBlock--;
-	//}
-	//if (CurrentBlock == -1)
-	//{
-	//	CurrentBlock = BLOCK_TYPE_MAX - 1;
-	//}
-	//else
-	//{
-	//	CurrentBlock %= BLOCK_TYPE_MAX;
-	//}
-
-	//if (GetMousePress(MOUSE_LEFT))
-	//{
-	//	SetBlock(
-	//		(BLOCK_TYPE)(CurrentBlock + 1),
-	//		(int)posMouse.x / BLOCK_SIZE,
-	//		(int)posMouse.y / BLOCK_SIZE
-	//	);
-	//}
-	//else if (GetMousePress(MOUSE_RIGHT))
-	//{
-	//	SetBlock(
-	//		BLOCK_TYPE_AIR,
-	//		(int)posMouse.x / BLOCK_SIZE,
-	//		(int)posMouse.y / BLOCK_SIZE
-	//	);
-	//}
-
-	if (GetKeyboardTrigger(DIK_F1))
+	if (GetMouse().lZ <= -120)
 	{
-		SaveBin("data\\MAP\\map.bin", GetBlock(), sizeof(BLOCK), MAX_BLOCK);
+		CurrentBlock++;
+	}
+	else if (GetMouse().lZ >= 120)
+	{
+		CurrentBlock--;
+	}
+
+	CurrentBlock %= (BLOCK_TYPE_MAX - 1);
+	if (CurrentBlock == 0)
+	{
+		CurrentBlock = (BLOCK_TYPE_MAX - 1);
+	}
+
+	sprintf(&g_pFont->aText[0], "選択:%d", CurrentBlock);
+
+	if (GetMousePress(MOUSE_LEFT))
+	{
+		SetBlock(
+			(BLOCK_TYPE)(CurrentBlock),
+			(int)posMouse.x / BLOCK_SIZE,
+			(int)posMouse.y / BLOCK_SIZE
+		);
+	}
+	else if (GetMousePress(MOUSE_RIGHT))
+	{
+		SetBlock(
+			BLOCK_TYPE_AIR,
+			(int)posMouse.x / BLOCK_SIZE,
+			(int)posMouse.y / BLOCK_SIZE
+		);
 	}
 
 	if (GetKeyboardTrigger(DIK_F5))
 	{
-		SetScene(SCENE_EDITOR);
+		SetScene(SCENE_GAME);
 	}
-#endif
 }
 
 //=====================================================================
 // 描画処理
 //=====================================================================
-void DrawGame(void)
+void DrawEditor(void)
 {
 	DrawDecal();
+	DrawFont();
 	DrawBlock();
-	DrawItem();
-	DrawEnemy();
-	DrawPlayer();
 }
