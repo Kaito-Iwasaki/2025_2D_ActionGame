@@ -27,7 +27,7 @@
 //*********************************************************************
 #define INIT_POS						D3DXVECTOR3_ZERO
 #define INIT_SIZE						D3DXVECTOR3(BLOCK_SIZE, BLOCK_SIZE, 0.0f)
-#define INIT_COLOR						D3DXCOLOR(0.5f, 0.3f, 0.0f, 1.0f)
+#define INIT_COLOR						D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f)
 
 //*********************************************************************
 // 
@@ -61,7 +61,7 @@ const char* g_aBlockFileName[BLOCK_TYPE_MAX] = {
 };
 
 BLOCK_INFO g_aBlockInfo[BLOCK_TYPE_MAX] = {
-	{D3DXCOLOR(1.0f,1.0f,1.0f,1.0f), false},
+	{D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f), false},
 	{D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f), true},
 	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), true},
 	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), true},
@@ -248,6 +248,9 @@ BLOCK* SetBlock(BLOCK_TYPE type, int x, int y)
 	return pBlock;
 }
 
+//=====================================================================
+// ブロックの衝突判定処理
+//=====================================================================
 DWORD CollisionBlock(
 	D3DXVECTOR3* pPos,
 	D3DXVECTOR3* pPosOld,
@@ -263,12 +266,12 @@ DWORD CollisionBlock(
 		*dpBlock = NULL;
 	}
 
+	// 上下の衝突判定
 	for (int nCount = 0; nCount < MAX_BLOCK; nCount++, pBlock++)
 	{
 		if (pBlock->bUsed == false) continue;
 		if (pBlock->bCollidable == false) continue;
 
-		// 衝突判定
 		if (
 			pPosOld->y <= pBlock->posOld.y
 			&& pPos->y > pBlock->obj.pos.y
@@ -299,6 +302,8 @@ DWORD CollisionBlock(
 	}
 
 	pBlock = &g_aBlock[0][0];
+
+	// 左右の衝突判定
 	for (int nCount = 0; nCount < MAX_BLOCK; nCount++, pBlock++)
 	{
 		if (pBlock->bUsed == false) continue;
@@ -327,4 +332,9 @@ DWORD CollisionBlock(
 	}
 
 	return dwHit;
+}
+
+BLOCK_INFO* GetBlockInfo(void)
+{
+	return &g_aBlockInfo[0];
 }

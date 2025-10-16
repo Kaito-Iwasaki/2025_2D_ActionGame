@@ -18,6 +18,7 @@
 
 #include "player.h"
 #include "baseScene.h"
+#include "Game.h"
 
 //*********************************************************************
 // 
@@ -26,7 +27,7 @@
 //*********************************************************************
 #define INIT_POS						D3DXVECTOR3_ZERO
 #define INIT_SIZE						D3DXVECTOR3(BLOCK_SIZE, BLOCK_SIZE, 0.0f)
-#define INIT_COLOR						D3DXCOLOR(0.5f, 0.3f, 0.0f, 1.0f)
+#define INIT_COLOR						D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f)
 
 //*********************************************************************
 // 
@@ -34,10 +35,10 @@
 // 
 //*********************************************************************
 LPDIRECT3DVERTEXBUFFER9 g_pVtxBuffEditorBlock = NULL;
-LPDIRECT3DTEXTURE9 g_pTexBuffEditorBlock[EDITORBLOCK_TYPE_MAX] = {};
+LPDIRECT3DTEXTURE9 g_pTexBuffEditorBlock[BLOCK_TYPE_MAX] = {};
 EDITORBLOCK g_aEditorBlock[NUM_BLOCK_Y][NUM_BLOCK_X] = {};
 
-const char* g_aEditorBlockFileName[EDITORBLOCK_TYPE_MAX] = {
+const char* g_aEditorBlockFileName[BLOCK_TYPE_MAX] = {
 	NULL,
 	NULL,
 	"data\\TEXTURE\\grass000.png",
@@ -66,18 +67,24 @@ void InitEditorBlock(void)
 {
 	LPDIRECT3DDEVICE9 pDevice = GetDevice();	// デバイス
 	EDITORBLOCK* pEditorBlock = &g_aEditorBlock[0][0];
+	MAPINFO* pMap = GetMap();
 
 	// 構造体の初期化
 	memset(pEditorBlock, 0, sizeof(EDITORBLOCK) * MAX_BLOCK);
-	for (int nCount = 0; nCount < MAX_BLOCK; nCount++, pEditorBlock++)
+	for (int y = 0; y < NUM_BLOCK_Y; y++)
 	{
-		pEditorBlock->obj.pos = D3DXVECTOR3_ZERO;
-		pEditorBlock->obj.size = D3DXVECTOR3_ZERO;
-		pEditorBlock->obj.color = INIT_COLOR;
+		for (int x = 0; x < NUM_BLOCK_X; x++, pEditorBlock++, pMap++)
+		{
+			pEditorBlock->obj.pos = D3DXVECTOR3(x * BLOCK_SIZE, y * BLOCK_SIZE, 0.0f);
+			pEditorBlock->obj.size = INIT_SIZE;
+			pEditorBlock->obj.color = GetBlockInfo()[pMap->type].color;
+			pEditorBlock->obj.bVisible = true;
+			pEditorBlock->type = pMap->type;
+		}
 	}
 
 	// テクスチャの読み込み
-	for (int nCount = 0; nCount < EDITORBLOCK_TYPE_MAX; nCount++)
+	for (int nCount = 0; nCount < BLOCK_TYPE_MAX; nCount++)
 	{
 		D3DXCreateTextureFromFile(
 			pDevice,
@@ -108,7 +115,7 @@ void UninitEditorBlock(void)
 		g_pVtxBuffEditorBlock = NULL;
 	}
 
-	for (int nCount = 0; nCount < EDITORBLOCK_TYPE_MAX; nCount++)
+	for (int nCount = 0; nCount < BLOCK_TYPE_MAX; nCount++)
 	{
 		if (g_pTexBuffEditorBlock[nCount] != NULL)
 		{// テクスチャバッファの破棄
@@ -123,7 +130,20 @@ void UninitEditorBlock(void)
 //=====================================================================
 void UpdateEditorBlock(void)
 {
-	EDITORBLOCK* pEditorBlock = &g_aEditorBlock[0][0];
+	if (GetKeyboardTrigger(DIK_F2))
+	{
+		MAPINFO MapInfo[NUM_BLOCK_Y][NUM_BLOCK_X];
+
+		for (int y = 0; y < NUM_BLOCK_Y; y++)
+		{
+			for (int x = 0; x < NUM_BLOCK_X; x++)
+			{
+				MapInfo[y][x].type = g_aEditorBlock[y][x].type;
+			}
+		}
+
+		SetMap(&MapInfo[0][0]);
+	}
 }
 
 //=====================================================================
@@ -169,7 +189,7 @@ void DrawEditorBlock(void)
 	pEditorBlock = &g_aEditorBlock[0][0];
 	for (int nCount = 0; nCount < MAX_BLOCK; nCount++, pEditorBlock++)
 	{
-		if (pEditorBlock->bUsed == true && pEditorBlock->obj.bVisible == true)
+		if (pEditorBlock->obj.bVisible == true)
 		{// ポリゴン描画
 			// テクスチャの設定
 			pDevice->SetTexture(0, g_pTexBuffEditorBlock[pEditorBlock->type]);
@@ -191,16 +211,12 @@ EDITORBLOCK* GetEditorBlock(void)
 //=====================================================================
 // ブロックの設定処理
 //=====================================================================
-EDITORBLOCK* SetEditorBlock(EDITORBLOCK_TYPE type, int x, int y)
+EDITORBLOCK* SetEditorBlock(BLOCK_TYPE type, int x, int y)
 {
 	EDITORBLOCK* pEditorBlock = &g_aEditorBlock[y][x];
 
-	memset(pEditorBlock, 0, sizeof(EDITORBLOCK));
-	pEditorBlock->bUsed = true;
-	pEditorBlock->obj.pos = D3DXVECTOR3(x * BLOCK_SIZE, y * BLOCK_SIZE, 0.0f);
-	pEditorBlock->obj.size = INIT_SIZE;
 	pEditorBlock->type = type;
-	pEditorBlock->obj.bVisible = true;
+	pEditorBlock->obj.color = GetBlockInfo()[type].color;
 
 	return pEditorBlock;
 }

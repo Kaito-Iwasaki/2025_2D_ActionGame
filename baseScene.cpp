@@ -18,6 +18,7 @@
 // シーン
 #include "Title.h"
 #include "Game.h"
+#include "Result.h"
 #include "Editor.h"
 
 //*********************************************************************
@@ -25,7 +26,7 @@
 // ***** グローバル変数 *****
 // 
 //*********************************************************************
-SCENE g_currentScene = SCENE_GAME;		// 現在のシーン
+SCENE g_currentScene = SCENE_TITLE;		// 現在のシーン
 
 //*********************************************************************
 // 各シーンの処理関数
@@ -33,6 +34,7 @@ SCENE g_currentScene = SCENE_GAME;		// 現在のシーン
 SCENEDATA g_scenes[SCENE_MAX] = {
 	{ InitTitle, UninitTitle, UpdateTitle, DrawTitle },
 	{ InitGame, UninitGame, UpdateGame, DrawGame },
+	{ InitResult, UninitResult, UpdateResult, DrawResult },
 	{ InitEditor, UninitEditor, UpdateEditor, DrawEditor },
 };
 

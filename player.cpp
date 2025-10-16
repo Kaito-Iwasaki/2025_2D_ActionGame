@@ -152,7 +152,7 @@ void UpdatePlayer(void)
 		return;
 
 	case PLAYERSTATE_END:
-		SetFade(SCENE_GAME);
+		SetFade(SCENE_RESULT);
 		return;
 	}
 
@@ -190,15 +190,15 @@ void UpdatePlayer(void)
 	g_player.move.y += GAME_GRAVITY;	// 重力を加算
 	g_player.obj.pos += g_player.move;
 
+	// ブロックとの衝突判定
 	DWORD dwHit = CollisionBlock(&g_player.obj.pos, &g_player.posOld, &g_player.move, g_player.hitBoxSize, &g_player.pBlock);
 
-	// ブロックとの衝突判定
 	if (dwHit & BLOCK_HIT_TOP)
-	{
+	{// 地面に接している
 		g_player.bIsJumping = false;
 	}
 	else
-	{
+	{// 空中にいる
 		g_player.bIsJumping = true;
 	}
 

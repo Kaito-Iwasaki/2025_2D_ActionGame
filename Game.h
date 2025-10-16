@@ -1,7 +1,7 @@
 //=====================================================================
 //
 // Game.cppのヘッダファイル [Game.h]
-// Author : 
+// Author : Kaito Iwasaki
 // 
 //=====================================================================
 #ifndef _Game_H_
@@ -13,6 +13,7 @@
 // 
 //*********************************************************************
 #include "main.h"
+#include "editorblock.h"
 
 //*********************************************************************
 // 
@@ -26,7 +27,12 @@
 // ***** 列挙型 *****
 // 
 //*********************************************************************
-
+typedef enum
+{
+	GAMESTATE_NORMAL = 0,
+	GAMESTATE_END,
+	GAMESTATE_MAX
+}GAMESTATE;
 
 //*********************************************************************
 // 
@@ -37,5 +43,8 @@ void InitGame(void);
 void UninitGame(void);
 void UpdateGame(void);
 void DrawGame(void);
+void SetGameState(GAMESTATE newState);
+void SetMap(MAPINFO* map);
+MAPINFO* GetMap(void);
 
 #endif

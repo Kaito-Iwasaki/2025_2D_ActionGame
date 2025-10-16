@@ -15,6 +15,7 @@
 #include "Editor.h"
 #include "decal.h"
 #include "block.h"
+#include "editorblock.h"
 #include "fade.h"
 #include "font.h"
 
@@ -48,7 +49,7 @@ void InitEditor(void)
 {
 	InitDecal();
 	InitFont();
-	InitBlock();
+	InitEditorBlock();
 
 	SetDecal(
 		DECAL_LABEL_BG000,
@@ -86,7 +87,7 @@ void UninitEditor(void)
 {
 	UninitDecal();
 	UninitFont();
-	UninitBlock();
+	UninitEditorBlock();
 }
 
 //=====================================================================
@@ -94,7 +95,7 @@ void UninitEditor(void)
 //=====================================================================
 void UpdateEditor(void)
 {
-	UpdateBlock();
+	UpdateEditorBlock();
 
 	D3DXVECTOR2 posMouse = GetMousePos();
 	D3DXVECTOR3 posBlock = D3DXVECTOR3(
@@ -124,7 +125,7 @@ void UpdateEditor(void)
 
 	if (GetMousePress(MOUSE_LEFT))
 	{
-		SetBlock(
+		SetEditorBlock(
 			(BLOCK_TYPE)(CurrentBlock),
 			(int)posMouse.x / BLOCK_SIZE,
 			(int)posMouse.y / BLOCK_SIZE
@@ -132,7 +133,7 @@ void UpdateEditor(void)
 	}
 	else if (GetMousePress(MOUSE_RIGHT))
 	{
-		SetBlock(
+		SetEditorBlock(
 			BLOCK_TYPE_AIR,
 			(int)posMouse.x / BLOCK_SIZE,
 			(int)posMouse.y / BLOCK_SIZE
@@ -151,6 +152,6 @@ void UpdateEditor(void)
 void DrawEditor(void)
 {
 	DrawDecal();
+	DrawEditorBlock();
 	DrawFont();
-	DrawBlock();
 }

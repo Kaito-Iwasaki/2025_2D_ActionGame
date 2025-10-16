@@ -102,5 +102,6 @@ DWORD CollisionBlock(
 	D3DXVECTOR3 size,
 	BLOCK** dpBlock
 );
+BLOCK_INFO* GetBlockInfo(void);
 
 #endif

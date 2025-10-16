@@ -1,7 +1,7 @@
 //=====================================================================
 //
-// Game [Game.h]
-// Author : 
+// ゲーム画面処理 [Game.h]
+// Author : Kaito Iwasaki
 // 
 //=====================================================================
 
@@ -40,8 +40,7 @@
 // ***** プロトタイプ宣言 *****
 // 
 //*********************************************************************
-
-BLOCK g_aMap[NUM_BLOCK_Y][NUM_BLOCK_X] = {};
+MAPINFO g_map[NUM_BLOCK_Y][NUM_BLOCK_X] = {};
 
 //=====================================================================
 // 初期化処理
@@ -62,22 +61,15 @@ void InitGame(void)
 		D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f)
 	);
 
-
-
-	LoadBin("data\\MAP\\map.bin", &g_aMap[0][0], sizeof(BLOCK), MAX_BLOCK);
+	//LoadBin("data\\MAP\\map.bin", &g_aMap[0][0], sizeof(BLOCK), MAX_BLOCK);
 
 	for (int y = 0; y < NUM_BLOCK_Y; y++)
 	{
 		for (int x = 0; x < NUM_BLOCK_X; x++)
 		{
-			SetBlock(g_aMap[y][x].type, x, y);
+			SetBlock(g_map[y][x].type, x, y);
 		}
 	}
-
-	SetEnemy(
-		ENEMY_TYPE_000,
-		D3DXVECTOR3(900, 600, 0)
-	);
 }
 
 //=====================================================================
@@ -151,6 +143,11 @@ void UpdateGame(void)
 		SaveBin("data\\MAP\\map.bin", GetBlock(), sizeof(BLOCK), MAX_BLOCK);
 	}
 
+	if (GetKeyboardTrigger(DIK_F2))
+	{
+		exit(0);
+	}
+
 	if (GetKeyboardTrigger(DIK_F5))
 	{
 		SetScene(SCENE_EDITOR);
@@ -168,4 +165,25 @@ void DrawGame(void)
 	DrawItem();
 	DrawEnemy();
 	DrawPlayer();
+}
+
+void SetGameState(GAMESTATE newState)
+{
+
+}
+
+void SetMap(MAPINFO* map)
+{
+	for (int y = 0; y < NUM_BLOCK_Y; y++)
+	{
+		for (int x = 0; x < NUM_BLOCK_X; x++, map++)
+		{
+			g_map[y][x].type = map->type;
+		}
+	}
+}
+
+MAPINFO* GetMap(void)
+{
+	return &g_map[0][0];
 }

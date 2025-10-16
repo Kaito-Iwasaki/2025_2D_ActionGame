@@ -1,7 +1,7 @@
 //=====================================================================
 //
-// Title [Title.h]
-// Author : 
+// リザルト画面処理 [Result.h]
+// Author : Kaito Iwasaki
 // 
 //=====================================================================
 
@@ -10,9 +10,10 @@
 // ***** インクルードファイル *****
 // 
 //*********************************************************************
-#include "Title.h"
-#include "decal.h"
+#include "Result.h"
 #include "input.h"
+#include "sound.h"
+#include "decal.h"
 #include "fade.h"
 
 //*********************************************************************
@@ -39,12 +40,12 @@
 //=====================================================================
 // 初期化処理
 //=====================================================================
-void InitTitle(void)
+void InitResult(void)
 {
 	InitDecal();
 
 	SetDecal(
-		DECAL_LABEL_TITLE_BG000,
+		DECAL_LABEL_RESULT_BG000,
 		D3DXVECTOR3(SCREEN_CENTER, SCREEN_VCENTER, 0),
 		D3DXVECTOR3(SCREEN_WIDTH, SCREEN_HEIGHT, 0),
 		D3DXVECTOR3_ZERO,
@@ -55,7 +56,7 @@ void InitTitle(void)
 //=====================================================================
 // 終了処理
 //=====================================================================
-void UninitTitle(void)
+void UninitResult(void)
 {
 	UninitDecal();
 }
@@ -63,18 +64,18 @@ void UninitTitle(void)
 //=====================================================================
 // 更新処理
 //=====================================================================
-void UpdateTitle(void)
+void UpdateResult(void)
 {
 	if (GetKeyboardTrigger(DIK_RETURN))
 	{
-		SetFade(SCENE_GAME);
+		SetFade(SCENE_TITLE);
 	}
 }
 
 //=====================================================================
 // 描画処理
 //=====================================================================
-void DrawTitle(void)
+void DrawResult(void)
 {
 	DrawDecal();
 }
