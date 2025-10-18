@@ -21,7 +21,7 @@
 // ***** É}ÉNÉçíËã` *****
 // 
 //*********************************************************************
-
+#define PLAYER_CHARGE_DECAY		(0.01f);
 
 //*********************************************************************
 // 
@@ -59,7 +59,8 @@ typedef struct
 	int nPatternAnimX;
 	int nPatternAnimY;
 	bool bIsJumping;
-	int nJumpLeft;
+	float fCharge;
+	bool bIsFlying;
 	BLOCK* pBlock;
 }PLAYER;
 

@@ -25,6 +25,7 @@
 #define INIT_PLAYER_SPEED		(4.0f)
 #define INIT_PLAYER_LIFE		(3)
 #define INIT_PLAYER_JUMPPOWER	(16.0f)
+#define INIT_PLAYER_CHARGE		(1.0f)
 
 //*********************************************************************
 // 
@@ -62,6 +63,8 @@ void InitPlayer(void)
 	g_player.fSpeed = INIT_PLAYER_SPEED;
 	g_player.nLife = INIT_PLAYER_LIFE;
 	g_player.fJumpPower = INIT_PLAYER_JUMPPOWER;
+	g_player.fCharge = INIT_PLAYER_CHARGE;
+	g_player.bIsFlying = false;
 
 	// テクスチャの読み込み
 	if (TEXTURE_FILENAME)
@@ -120,6 +123,7 @@ void UpdatePlayer(void)
 		g_player.move = D3DXVECTOR3_ZERO;
 		g_player.fSpeed = INIT_PLAYER_SPEED;
 		g_player.nLife = INIT_PLAYER_LIFE;
+		g_player.fCharge = INIT_PLAYER_CHARGE;
 		SetPlayerState(PLAYERSTATE_APPEAR);
 
 	case PLAYERSTATE_APPEAR:
@@ -164,20 +168,39 @@ void UpdatePlayer(void)
 	if (GetKeyboardPress(DIK_A))
 	{// 左
 		g_player.move.x -= g_player.fSpeed;
-		/*g_player.nPatternAnimY = 1;*/
 	}
 	if (GetKeyboardPress(DIK_D))
 	{// 右
 		g_player.move.x += g_player.fSpeed;
-		//g_player.nPatternAnimY = 0;
 	}
 
-	if (GetKeyboardPress(DIK_SPACE))
+	if (GetKeyboardTrigger(DIK_SPACE))
 	{// ジャンプ
 		if (g_player.bIsJumping == false)
-		{
+		{// 接地中にスペースキーが押された
 			g_player.bIsJumping = true;
 			g_player.move.y = -g_player.fJumpPower;
+		}
+		else
+		{// 空中でスペースキーが押された
+			if (g_player.fCharge > 0)
+			{
+				g_player.bIsFlying = true;
+			}
+		}
+	}
+	else if (GetKeyboardRelease(DIK_SPACE))
+	{// 空中でスペースキーが離された
+		g_player.bIsFlying = false;
+	}
+
+	if (g_player.bIsFlying)
+	{
+		g_player.move.y = 0;
+		g_player.fCharge -= PLAYER_CHARGE_DECAY;
+		if (g_player.fCharge <= 0.0f)
+		{
+			g_player.bIsFlying = false;
 		}
 	}
 
@@ -187,7 +210,10 @@ void UpdatePlayer(void)
 	}
 
 	// 位置を更新
-	g_player.move.y += GAME_GRAVITY;	// 重力を加算
+	if (g_player.bIsFlying == false)
+	{
+		g_player.move.y += GAME_GRAVITY;	// 重力を加算
+	}
 	g_player.obj.pos += g_player.move;
 
 	// ブロックとの衝突判定
@@ -196,6 +222,7 @@ void UpdatePlayer(void)
 	if (dwHit & BLOCK_HIT_TOP)
 	{// 地面に接している
 		g_player.bIsJumping = false;
+		g_player.fCharge = INIT_PLAYER_CHARGE;
 	}
 	else
 	{// 空中にいる
