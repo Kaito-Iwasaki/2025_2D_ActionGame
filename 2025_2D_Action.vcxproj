@@ -152,8 +152,10 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="editorblock.h" />
+    <ClInclude Include="effect.h" />
     <ClInclude Include="enemy.h" />
     <ClInclude Include="item.h" />
+    <ClInclude Include="particle.h" />
     <ClInclude Include="player.h">
       <SubType>
       </SubType>
@@ -188,6 +190,7 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="editorblock.cpp" />
+    <ClCompile Include="effect.cpp" />
     <ClCompile Include="enemy.cpp" />
     <ClCompile Include="fade.cpp" />
     <ClCompile Include="font.cpp" />
@@ -198,6 +201,7 @@
     <ClCompile Include="input.cpp" />
     <ClCompile Include="item.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="particle.cpp" />
     <ClCompile Include="player.cpp">
       <SubType>
       </SubType>

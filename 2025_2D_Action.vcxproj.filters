@@ -99,6 +99,12 @@
     <ClCompile Include="Result.cpp">
       <Filter>ソース ファイル\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="effect.cpp">
+      <Filter>ソース ファイル\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="particle.cpp">
+      <Filter>ソース ファイル\Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sound.h">
@@ -160,6 +166,12 @@
     </ClInclude>
     <ClInclude Include="Result.h">
       <Filter>ヘッダー ファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="particle.h">
+      <Filter>ヘッダー ファイル\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="effect.h">
+      <Filter>ヘッダー ファイル\GameObject</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

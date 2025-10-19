@@ -9,6 +9,7 @@
 #include "util.h"
 #include "Game.h"
 #include "fade.h"
+#include "particle.h"
 
 //*********************************************************************
 // 
@@ -194,10 +195,41 @@ void UpdatePlayer(void)
 		g_player.bIsFlying = false;
 	}
 
+	// ‹ó’†‚Å‚Ì‹““®
 	if (g_player.bIsFlying)
 	{
 		g_player.move.y = 0;
 		g_player.fCharge -= PLAYER_CHARGE_DECAY;
+
+		EFFECTINFO infoRed;
+		infoRed.col = D3DXCOLOR(1.0f, 0.3f, 0.0f, 1.0f);
+		infoRed.fMaxAlpha = 0.5f;
+		infoRed.fMaxScale = 0.6f;
+		infoRed.fRotSpeed = 0.5f;
+		infoRed.fSpeed = 2.0f;
+		infoRed.nMaxLife = 30;
+
+		EFFECTINFO infoWhite = infoRed;
+		infoWhite.col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+		infoWhite.fMaxScale = 0.5f;
+
+		SetParticle(
+			infoRed,
+			g_player.obj.pos,
+			0.0f,
+			1.0f,
+			1,
+			3
+		);
+		SetParticle(
+			infoWhite,
+			g_player.obj.pos,
+			0.0f,
+			1.0f,
+			1,
+			3
+		);
+
 		if (g_player.fCharge <= 0.0f)
 		{
 			g_player.bIsFlying = false;

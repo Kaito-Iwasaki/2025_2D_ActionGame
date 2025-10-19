@@ -20,6 +20,8 @@
 #include "enemy.h"
 #include "item.h"
 #include "fade.h"
+#include "effect.h"
+#include "particle.h"
 
 //*********************************************************************
 // 
@@ -41,6 +43,8 @@
 // 
 //*********************************************************************
 MAPINFO g_map[NUM_BLOCK_Y][NUM_BLOCK_X] = {};
+int g_nCurrentStage = 0;
+GAMESTATE g_gameState = GAMESTATE_NORMAL;
 
 //=====================================================================
 // èâä˙âªèàóù
@@ -52,6 +56,8 @@ void InitGame(void)
 	InitPlayer();
 	InitEnemy();
 	InitItem();
+	InitEffect();
+	InitParticle();
 
 	SetDecal(
 		DECAL_LABEL_BG000,
@@ -61,7 +67,13 @@ void InitGame(void)
 		D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f)
 	);
 
-	//LoadBin("data\\MAP\\map.bin", &g_aMap[0][0], sizeof(BLOCK), MAX_BLOCK);
+	char aStageFileName[MAX_PATH] = {};
+
+	GetStageName(g_nCurrentStage, &aStageFileName[0]);
+
+	OutputDebugString(aStageFileName);
+
+	LoadBin(&aStageFileName[0], &g_map[0][0], sizeof(BLOCK), MAX_BLOCK);
 
 	for (int y = 0; y < NUM_BLOCK_Y; y++)
 	{
@@ -82,6 +94,8 @@ void UninitGame(void)
 	UninitPlayer();
 	UninitEnemy();
 	UninitItem();
+	UninitParticle();
+	UninitEffect();
 }
 
 //=====================================================================
@@ -93,6 +107,8 @@ void UpdateGame(void)
 	UpdatePlayer();
 	UpdateEnemy();
 	UpdateItem();
+	UpdateParticle();
+	UpdateEffect();
 
 #ifdef _DEBUG
 	//D3DXVECTOR2 posMouse = GetMousePos();
@@ -164,6 +180,7 @@ void DrawGame(void)
 	DrawBlock();
 	DrawItem();
 	DrawEnemy();
+	DrawEffect();
 	DrawPlayer();
 }
 
@@ -186,4 +203,9 @@ void SetMap(MAPINFO* map)
 MAPINFO* GetMap(void)
 {
 	return &g_map[0][0];
+}
+
+void GetStageName(int nStage, char* pBuffer)
+{
+	sprintf(pBuffer, "data\\MAP\\level%02d.bin", nStage);
 }

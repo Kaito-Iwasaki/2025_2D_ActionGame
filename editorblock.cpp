@@ -157,7 +157,7 @@ void UpdateEditorBlock(void)
 			}
 		}
 
-		SaveBin("data\\MAP\\level01.bin", &MapInfo[0][0], sizeof(MAPINFO), MAX_BLOCK);
+		SaveBin("data\\MAP\\level00.bin", &MapInfo[0][0], sizeof(MAPINFO), MAX_BLOCK);
 	}
 }
 

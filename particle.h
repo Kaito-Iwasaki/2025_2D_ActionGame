@@ -1,11 +1,11 @@
 //=====================================================================
-//
-// Game.cppのヘッダファイル [Game.h]
-// Author : Kaito Iwasaki
 // 
+// particle.cppのヘッダファイル [particle.h]
+// Author : Kaito Iwasaki
+//
 //=====================================================================
-#ifndef _Game_H_
-#define _Game_H_
+#ifndef _PARTICLE_H_
+#define _PARTICLE_H_		// 二重インクルード防止のマクロ
 
 //*********************************************************************
 // 
@@ -13,40 +13,47 @@
 // 
 //*********************************************************************
 #include "main.h"
-#include "editorblock.h"
+#include "baseObject.h"
+#include "effect.h"
 
 //*********************************************************************
 // 
 // ***** マクロ定義 *****
 // 
 //*********************************************************************
-#define GAME_GRAVITY		(1.0f)
+#define MAX_PARTICLE		(256)
 
 //*********************************************************************
 // 
 // ***** 列挙型 *****
 // 
 //*********************************************************************
-typedef enum
+
+
+//*********************************************************************
+// 
+// ***** 構造体 *****
+// 
+//*********************************************************************
+typedef struct
 {
-	GAMESTATE_NORMAL = 0,
-	GAMESTATE_RESET,
-	GAMESTATE_CLEAR,
-	GAMESTATE_MAX
-}GAMESTATE;
+	BASEOBJECT obj;
+	bool bUsed;
+	EFFECTINFO info;
+	float fAngle;
+	float fRange;
+	int nLife;
+	int nNumEffect;
+}PARTICLE;
 
 //*********************************************************************
 // 
 // ***** プロトタイプ宣言 *****
 // 
 //*********************************************************************
-void InitGame(void);
-void UninitGame(void);
-void UpdateGame(void);
-void DrawGame(void);
-void SetGameState(GAMESTATE newState);
-void SetMap(MAPINFO* map);
-MAPINFO* GetMap(void);
-void GetStageName(int nStage, char* pBuffer);
+void InitParticle(void);
+void UninitParticle(void);
+void UpdateParticle(void);
+void SetParticle(EFFECTINFO info, D3DXVECTOR3 pos, float fAngle, float fRange, int nLife, int nNumEffect);
 
 #endif

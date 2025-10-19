@@ -1,11 +1,11 @@
 //=====================================================================
-//
-// Game.cppのヘッダファイル [Game.h]
-// Author : Kaito Iwasaki
 // 
+// effect.cppのヘッダファイル [effect.h]
+// Author:
+//
 //=====================================================================
-#ifndef _Game_H_
-#define _Game_H_
+#ifndef _EFFECT_H_
+#define _EFFECT_H_		// 二重インクルード防止のマクロ
 
 //*********************************************************************
 // 
@@ -13,40 +13,56 @@
 // 
 //*********************************************************************
 #include "main.h"
-#include "editorblock.h"
+#include "baseObject.h"
 
 //*********************************************************************
 // 
 // ***** マクロ定義 *****
 // 
 //*********************************************************************
-#define GAME_GRAVITY		(1.0f)
+#define MAX_EFFECT			(1024)
 
 //*********************************************************************
 // 
 // ***** 列挙型 *****
 // 
 //*********************************************************************
-typedef enum
+
+
+//*********************************************************************
+// 
+// ***** 構造体 *****
+// 
+//*********************************************************************
+typedef struct
 {
-	GAMESTATE_NORMAL = 0,
-	GAMESTATE_RESET,
-	GAMESTATE_CLEAR,
-	GAMESTATE_MAX
-}GAMESTATE;
+	float fSpeed;
+	float fRotSpeed;
+	float fMaxScale;
+	int nMaxLife;
+	float fMaxAlpha;
+	D3DXCOLOR col;
+}EFFECTINFO;
+
+typedef struct
+{
+	BASEOBJECT obj;
+	bool bUsed;
+	EFFECTINFO info;
+	float fAngle;
+	float fScale;
+	int nLife;
+}EFFECT;
 
 //*********************************************************************
 // 
 // ***** プロトタイプ宣言 *****
 // 
 //*********************************************************************
-void InitGame(void);
-void UninitGame(void);
-void UpdateGame(void);
-void DrawGame(void);
-void SetGameState(GAMESTATE newState);
-void SetMap(MAPINFO* map);
-MAPINFO* GetMap(void);
-void GetStageName(int nStage, char* pBuffer);
+void InitEffect(void);
+void UninitEffect(void);
+void UpdateEffect(void);
+void DrawEffect(void);
+void SetEffect(D3DXVECTOR3 pos, float fSpeed, float fRotSpeed, float fAngle, float fScale, int nLife, D3DXCOLOR col);
 
 #endif
