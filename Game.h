@@ -52,5 +52,6 @@ void SetMap(MAPINFO* map);
 MAPINFO* GetMap(void);
 void GetStageName(int nStage, char* pBuffer);
 void SetStage(int nStage);
+int GetStage(void);
 
 #endif

@@ -16,6 +16,8 @@
 #include "player.h"
 #include "fade.h"
 #include "Game.h"
+#include "effect.h"
+#include "particle.h"
 
 //*********************************************************************
 // 
@@ -43,9 +45,13 @@ void BLOCK_Needle(BLOCK* pBlock)
 	if (pPlayer->state == PLAYERSTATE_INIT) return;
 	if (pPlayer->state == PLAYERSTATE_DIED) return;
 
+	D3DXVECTOR3 posBlockCenter = pBlock->obj.pos + D3DXVECTOR3(BLOCK_SIZE / 2, BLOCK_SIZE / 2, 0);
+
 	if (BoxCollision(
-		pBlock->obj.pos + D3DXVECTOR3(pBlock->obj.size.x / 2, -pBlock->obj.size.y / 2, 0), D3DXVECTOR3(BLOCK_SIZE, BLOCK_SIZE * 0.25f, 0.0f),
-		pPlayer->obj.pos - D3DXVECTOR3(0, pPlayer->obj.size.y, 0), pPlayer->hitBoxSize
+		posBlockCenter,
+		D3DXVECTOR3(BLOCK_SIZE * 0.75f, BLOCK_SIZE * 0.75f, 0.0f),
+		pPlayer->obj.pos + D3DXVECTOR3(0, -pPlayer->obj.size.y / 2, 0),
+		pPlayer->hitBoxSize
 	))
 	{
 		SetPlayerState(PLAYERSTATE_DIED);
@@ -75,11 +81,32 @@ void BLOCK_Coin(BLOCK* pBlock)
 	if (pPlayer->state == PLAYERSTATE_INIT) return;
 	if (pPlayer->state == PLAYERSTATE_DIED) return;
 
+	D3DXVECTOR3 posBlockCenter = pBlock->obj.pos + D3DXVECTOR3(BLOCK_SIZE / 2, BLOCK_SIZE / 2, 0);
+
 	if (BoxCollision(
-		pBlock->obj.pos + D3DXVECTOR3(pBlock->obj.size.x / 2, -pBlock->obj.size.y / 2, 0), D3DXVECTOR3(BLOCK_SIZE, BLOCK_SIZE * 0.25f, 0.0f),
-		pPlayer->obj.pos - D3DXVECTOR3(0, pPlayer->obj.size.y, 0), pPlayer->hitBoxSize
+		posBlockCenter,
+		D3DXVECTOR3(BLOCK_SIZE, BLOCK_SIZE, 0.0f),
+		pPlayer->obj.pos + D3DXVECTOR3(0, -pPlayer->obj.size.y / 2, 0),
+		pPlayer->hitBoxSize
 	))
 	{
+		EFFECTINFO info;
+		info.col = D3DXCOLOR(1.0f, 0.8f, 0.0f, 1.0f);
+		info.fMaxAlpha = 1.0f;
+		info.fMaxScale = 0.3f;
+		info.fRotSpeed = 0.5f;
+		info.fSpeed = 2.0f;
+		info.nMaxLife = 30;
+
+		SetParticle(
+			info,
+			posBlockCenter,
+			0.0f,
+			D3DX_PI * 2,
+			1,
+			10
+		);
+
 		pBlock->bUsed = false;
 	}
 }
@@ -88,9 +115,16 @@ void BLOCK_Goal(BLOCK* pBlock)
 {
 	PLAYER* pPlayer = GetPlayer();
 
+	if (pPlayer->state == PLAYERSTATE_INIT) return;
+	if (pPlayer->state == PLAYERSTATE_DIED) return;
+
+	D3DXVECTOR3 posBlockCenter = pBlock->obj.pos + D3DXVECTOR3(BLOCK_SIZE / 2, BLOCK_SIZE / 2, 0);
+
 	if (BoxCollision(
-		pBlock->obj.pos + D3DXVECTOR3(pBlock->obj.size.x / 2, -pBlock->obj.size.y / 2, 0), D3DXVECTOR3(BLOCK_SIZE, BLOCK_SIZE * 0.25f, 0.0f),
-		pPlayer->obj.pos - D3DXVECTOR3(0, pPlayer->obj.size.y, 0), pPlayer->hitBoxSize
+		posBlockCenter,
+		D3DXVECTOR3(BLOCK_SIZE, BLOCK_SIZE, 0.0f),
+		pPlayer->obj.pos + D3DXVECTOR3(0, -pPlayer->obj.size.y / 2, 0),
+		pPlayer->hitBoxSize
 	))
 	{
 		if (GetGameState() == GAMESTATE_NORMAL)

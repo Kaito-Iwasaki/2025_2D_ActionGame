@@ -18,6 +18,7 @@
 #include "editorblock.h"
 #include "fade.h"
 #include "font.h"
+#include "Game.h"
 
 //*********************************************************************
 // 
@@ -61,7 +62,7 @@ void InitEditor(void)
 	);
 
 	g_nCurrentBlock = 0;
-	g_nOutputLevel = 0;
+	g_nOutputLevel = GetStage();
 
 	g_pCursor = SetDecal(
 		DECAL_LABEL_NULL,
@@ -100,6 +101,8 @@ void UninitEditor(void)
 void UpdateEditor(void)
 {
 	UpdateEditorBlock();
+
+	char aFileName[MAX_PATH] = {};
 
 	D3DXVECTOR2 posMouse = GetMousePos();
 	D3DXVECTOR3 posBlock = D3DXVECTOR3(
@@ -156,14 +159,20 @@ void UpdateEditor(void)
 
 	if (GetKeyboardTrigger(DIK_F2))
 	{
-		char aFileName[MAX_PATH] = {};
 		sprintf(&aFileName[0], "data\\MAP\\level%02d.bin", g_nOutputLevel);
 
 		SaveEditorBlock(&aFileName[0]);
 	}
 
+
 	if (GetKeyboardTrigger(DIK_F5))
 	{
+		SetStage(g_nOutputLevel);
+		SetScene(SCENE_GAME);
+	}
+	else if (GetKeyboardTrigger(DIK_F6))
+	{
+		SetStage(0);
 		SetScene(SCENE_GAME);
 	}
 }

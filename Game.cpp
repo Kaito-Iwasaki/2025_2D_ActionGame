@@ -158,8 +158,8 @@ void UpdateGame(void)
 	}
 
 #ifdef _DEBUG
-	if (GetKeyboardTrigger(DIK_F1))
-	{// エディタモード遷移
+	if (GetKeyboardTrigger(DIK_F1) && GetFade() == FADE_NONE)
+	{// デバッグ用クリアボタン
 		SetGameState(GAMESTATE_CLEAR);
 	}
 	if (GetKeyboardTrigger(DIK_F5))
@@ -228,4 +228,9 @@ void GetStageName(int nStage, char* pBuffer)
 void SetStage(int nStage)
 {
 	g_nCurrentStage = nStage;
+}
+
+int GetStage(void)
+{
+	return g_nCurrentStage;
 }

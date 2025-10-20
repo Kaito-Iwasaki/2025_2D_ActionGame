@@ -254,6 +254,7 @@ void UpdatePlayer(void)
 	if (dwHit & BLOCK_HIT_TOP)
 	{// ínñ Ç…ê⁄ÇµÇƒÇ¢ÇÈ
 		g_player.bIsJumping = false;
+		g_player.bIsFlying = false;
 		g_player.fCharge = INIT_PLAYER_CHARGE;
 	}
 	else

@@ -151,6 +151,8 @@ void UpdateBlock(void)
 
 	for (int nCount = 0; nCount < MAX_BLOCK; nCount++, pBlock++)
 	{
+		if (pBlock->bUsed == false) continue;
+
 		pBlock->posOld = pBlock->obj.pos;
 
 		if (pBlock->Update != NULL)
