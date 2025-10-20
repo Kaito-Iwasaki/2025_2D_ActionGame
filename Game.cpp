@@ -22,13 +22,14 @@
 #include "fade.h"
 #include "effect.h"
 #include "particle.h"
+#include "pause.h"
 
 //*********************************************************************
 // 
 // ***** マクロ定義 *****
 // 
 //*********************************************************************
-
+#define MAX_LEVEL	(6)
 
 //*********************************************************************
 // 
@@ -45,6 +46,7 @@
 MAPINFO g_map[NUM_BLOCK_Y][NUM_BLOCK_X] = {};
 int g_nCurrentStage = 0;
 GAMESTATE g_gameState = GAMESTATE_NORMAL;
+bool g_bIsPause = false;
 
 //=====================================================================
 // 初期化処理
@@ -58,6 +60,7 @@ void InitGame(void)
 	InitItem();
 	InitEffect();
 	InitParticle();
+	InitPause();
 
 	SetDecal(
 		DECAL_LABEL_BG000,
@@ -67,13 +70,16 @@ void InitGame(void)
 		D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f)
 	);
 
+	g_bIsPause = false;
+
 	char aStageFileName[MAX_PATH] = {};
 
 	GetStageName(g_nCurrentStage, &aStageFileName[0]);
 
-	OutputDebugString(aStageFileName);
-
+	memset(&g_map[0][0], 0, sizeof(g_map));
 	LoadBin(&aStageFileName[0], &g_map[0][0], sizeof(BLOCK), MAX_BLOCK);
+
+	SetGameState(GAMESTATE_NORMAL);
 
 	for (int y = 0; y < NUM_BLOCK_Y; y++)
 	{
@@ -96,6 +102,7 @@ void UninitGame(void)
 	UninitItem();
 	UninitParticle();
 	UninitEffect();
+	UninitPause();
 }
 
 //=====================================================================
@@ -103,69 +110,56 @@ void UninitGame(void)
 //=====================================================================
 void UpdateGame(void)
 {
-	UpdateBlock();
-	UpdatePlayer();
-	UpdateEnemy();
-	UpdateItem();
-	UpdateParticle();
-	UpdateEffect();
+	if (GetKeyboardTrigger(DIK_P))
+	{
+		TogglePause(!g_bIsPause);
+	}
+
+	if (g_bIsPause)
+	{
+		UpdatePause();
+	}
+	else
+	{
+		UpdateBlock();
+		UpdatePlayer();
+		UpdateEnemy();
+		UpdateItem();
+		UpdateParticle();
+		UpdateEffect();
+
+		switch (g_gameState)
+		{
+		case GAMESTATE_NORMAL:
+			break;
+
+		case GAMESTATE_CLEAR:
+			SetStage(g_nCurrentStage + 1);
+			SetPlayerState(PLAYERSTATE_END);
+			SetGameState(GAMESTATE_END);
+			break;
+
+		case GAMESTATE_END:
+			if (g_nCurrentStage == MAX_LEVEL)
+			{
+				SetFade(SCENE_RESULT, false);
+			}
+			else
+			{
+				SetFade(SCENE_GAME, false);
+			}
+
+			break;
+		}
+	}
 
 #ifdef _DEBUG
-	//D3DXVECTOR2 posMouse = GetMousePos();
-	//D3DXVECTOR3 posBlock = D3DXVECTOR3(
-	//	floorf(posMouse.x / BLOCK_SIZE) * BLOCK_SIZE + BLOCK_SIZE / 2,
-	//	floorf(posMouse.y / BLOCK_SIZE) * BLOCK_SIZE + BLOCK_SIZE / 2,
-	//	0.0f
-	//);
-	//g_pCursor->obj.pos = posBlock;
-	//g_pCursor->obj.bVisible = true;
-
-	//if (GetMouse().lZ <= -120)
-	//{
-	//	CurrentBlock++;
-	//}
-	//else if (GetMouse().lZ >= 120)
-	//{
-	//	CurrentBlock--;
-	//}
-	//if (CurrentBlock == -1)
-	//{
-	//	CurrentBlock = BLOCK_TYPE_MAX - 1;
-	//}
-	//else
-	//{
-	//	CurrentBlock %= BLOCK_TYPE_MAX;
-	//}
-
-	//if (GetMousePress(MOUSE_LEFT))
-	//{
-	//	SetBlock(
-	//		(BLOCK_TYPE)(CurrentBlock + 1),
-	//		(int)posMouse.x / BLOCK_SIZE,
-	//		(int)posMouse.y / BLOCK_SIZE
-	//	);
-	//}
-	//else if (GetMousePress(MOUSE_RIGHT))
-	//{
-	//	SetBlock(
-	//		BLOCK_TYPE_AIR,
-	//		(int)posMouse.x / BLOCK_SIZE,
-	//		(int)posMouse.y / BLOCK_SIZE
-	//	);
-	//}
-
 	if (GetKeyboardTrigger(DIK_F1))
-	{
-		SaveBin("data\\MAP\\map.bin", GetBlock(), sizeof(BLOCK), MAX_BLOCK);
+	{// エディタモード遷移
+		SetGameState(GAMESTATE_CLEAR);
 	}
-
-	if (GetKeyboardTrigger(DIK_F2))
-	{
-		exit(0);
-	}
-
 	if (GetKeyboardTrigger(DIK_F5))
-	{
+	{// エディタモード遷移
 		SetScene(SCENE_EDITOR);
 	}
 #endif
@@ -182,11 +176,27 @@ void DrawGame(void)
 	DrawEnemy();
 	DrawEffect();
 	DrawPlayer();
+
+	if (g_bIsPause)
+	{
+		DrawPause();
+	}
 }
 
 void SetGameState(GAMESTATE newState)
 {
+	g_gameState = newState;
+}
 
+GAMESTATE GetGameState(void)
+{
+	return g_gameState;
+}
+
+void TogglePause(bool bIsPause)
+{
+	SetPauseMenuCursor(0);
+	g_bIsPause = bIsPause;
 }
 
 void SetMap(MAPINFO* map)
@@ -208,4 +218,9 @@ MAPINFO* GetMap(void)
 void GetStageName(int nStage, char* pBuffer)
 {
 	sprintf(pBuffer, "data\\MAP\\level%02d.bin", nStage);
+}
+
+void SetStage(int nStage)
+{
+	g_nCurrentStage = nStage;
 }

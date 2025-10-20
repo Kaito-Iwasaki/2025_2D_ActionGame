@@ -1,33 +1,32 @@
 //=====================================================================
-//
-// editorblock.cppのヘッダファイル [editorblock.h]
-// Author : Kaito Iwasaki
 // 
+// pause.cppのヘッダファイル [pause.h]
+// Author : Kaito Iwasaki
+//
 //=====================================================================
-#ifndef _EDITORBLOCK_H_
-#define _EDITORBLOCK_H_
+#ifndef _PAUSE_H_
+#define _PAUSE_H_		// 二重インクルード防止のマクロ
 
 //*********************************************************************
 // 
 // ***** インクルードファイル *****
 // 
 //*********************************************************************
-#include "baseObject.h"
 #include "main.h"
-#include "block.h"
-
-//*********************************************************************
-// 
-// ***** マクロ定義 *****
-// 
-//*********************************************************************
-#define MAX_BLOCK_PARAM		(4)
+#include "baseObject.h"
 
 //*********************************************************************
 // 
 // ***** 列挙型 *****
 // 
 //*********************************************************************
+typedef enum
+{
+	PAUSE_MENU_CONTINUE = 0,
+	PAUSE_MENU_RETRY,
+	PAUSE_MENU_QUIT,
+	PAUSE_MENU_MAX
+}PAUSE_MENU;
 
 //*********************************************************************
 // 
@@ -37,27 +36,18 @@
 typedef struct
 {
 	BASEOBJECT obj;
-	BLOCK_TYPE type;
-}EDITORBLOCK;
-
-typedef struct
-{
-	BLOCK_TYPE type;				// ブロックの種類
-	int nParam[MAX_BLOCK_PARAM];	// ブロックのパラメータ
-}MAPINFO;
+	int nSelect;
+}PAUSE;
 
 //*********************************************************************
 // 
 // ***** プロトタイプ宣言 *****
 // 
 //*********************************************************************
-void InitEditorBlock(void);
-void UninitEditorBlock(void);
-void UpdateEditorBlock(void);
-void DrawEditorBlock(void);
-EDITORBLOCK* GetEditorBlock(void);
-EDITORBLOCK* SetEditorBlock(BLOCK_TYPE type, int x, int y);
-bool SaveEditorBlock(const char* aFileName);
-
+void InitPause(void);
+void UninitPause(void);
+void UpdatePause(void);
+void DrawPause(void);
+void SetPauseMenuCursor(int nCursor);
 
 #endif

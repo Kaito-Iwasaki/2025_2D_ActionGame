@@ -130,35 +130,20 @@ void UninitEditorBlock(void)
 //=====================================================================
 void UpdateEditorBlock(void)
 {
-	if (GetKeyboardTrigger(DIK_F2))
-	{
-		MAPINFO MapInfo[NUM_BLOCK_Y][NUM_BLOCK_X];
+	//if (GetKeyboardTrigger(DIK_F2))
+	//{
+	//	MAPINFO MapInfo[NUM_BLOCK_Y][NUM_BLOCK_X];
 
-		for (int y = 0; y < NUM_BLOCK_Y; y++)
-		{
-			for (int x = 0; x < NUM_BLOCK_X; x++)
-			{
-				MapInfo[y][x].type = g_aEditorBlock[y][x].type;
-			}
-		}
+	//	for (int y = 0; y < NUM_BLOCK_Y; y++)
+	//	{
+	//		for (int x = 0; x < NUM_BLOCK_X; x++)
+	//		{
+	//			MapInfo[y][x].type = g_aEditorBlock[y][x].type;
+	//		}
+	//	}
 
-		SetMap(&MapInfo[0][0]);
-	}
-
-	if (GetKeyboardTrigger(DIK_F3))
-	{
-		MAPINFO MapInfo[NUM_BLOCK_Y][NUM_BLOCK_X];
-
-		for (int y = 0; y < NUM_BLOCK_Y; y++)
-		{
-			for (int x = 0; x < NUM_BLOCK_X; x++)
-			{
-				MapInfo[y][x].type = g_aEditorBlock[y][x].type;
-			}
-		}
-
-		SaveBin("data\\MAP\\level00.bin", &MapInfo[0][0], sizeof(MAPINFO), MAX_BLOCK);
-	}
+	//	SetMap(&MapInfo[0][0]);
+	//}
 }
 
 //=====================================================================
@@ -234,4 +219,19 @@ EDITORBLOCK* SetEditorBlock(BLOCK_TYPE type, int x, int y)
 	pEditorBlock->obj.color = GetBlockInfo()[type].color;
 
 	return pEditorBlock;
+}
+
+bool SaveEditorBlock(const char* pFileName)
+{
+	MAPINFO MapInfo[NUM_BLOCK_Y][NUM_BLOCK_X];
+
+	for (int y = 0; y < NUM_BLOCK_Y; y++)
+	{
+		for (int x = 0; x < NUM_BLOCK_X; x++)
+		{
+			MapInfo[y][x].type = g_aEditorBlock[y][x].type;
+		}
+	}
+
+	return SaveBin(pFileName, &MapInfo[0][0], sizeof(MAPINFO), MAX_BLOCK);
 }

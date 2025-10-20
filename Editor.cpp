@@ -40,7 +40,8 @@
 //*********************************************************************
 DECAL* g_pCursor = NULL;
 FONT* g_pFont = NULL;
-int CurrentBlock = 0;
+int g_nCurrentBlock = 0;
+int g_nOutputLevel = 0;
 
 //=====================================================================
 // 初期化処理
@@ -59,6 +60,9 @@ void InitEditor(void)
 		D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f)
 	);
 
+	g_nCurrentBlock = 0;
+	g_nOutputLevel = 0;
+
 	g_pCursor = SetDecal(
 		DECAL_LABEL_NULL,
 		D3DXVECTOR3_ZERO,
@@ -75,7 +79,7 @@ void InitEditor(void)
 		D3DXVECTOR3_ZERO,
 		D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
 		30,
-		"選択ブロック：BLOCK_000",
+		"",
 		DT_LEFT
 	);
 }
@@ -108,25 +112,35 @@ void UpdateEditor(void)
 
 	if (GetMouse().lZ <= -120)
 	{
-		CurrentBlock++;
+		g_nCurrentBlock++;
 	}
 	else if (GetMouse().lZ >= 120)
 	{
-		CurrentBlock--;
+		g_nCurrentBlock--;
 	}
 
-	CurrentBlock %= (BLOCK_TYPE_MAX - 1);
-	if (CurrentBlock == 0)
+	g_nCurrentBlock %= (BLOCK_TYPE_MAX - 1);
+	if (g_nCurrentBlock == 0)
 	{
-		CurrentBlock = (BLOCK_TYPE_MAX - 1);
+		g_nCurrentBlock = (BLOCK_TYPE_MAX - 1);
 	}
 
-	sprintf(&g_pFont->aText[0], "選択:%d", CurrentBlock);
+	if (GetKeyboardRepeat(DIK_UP))
+	{
+		g_nOutputLevel++;
+	}
+	else if (GetKeyboardRepeat(DIK_DOWN))
+	{
+		g_nOutputLevel--;
+	}
+	g_nOutputLevel = (g_nOutputLevel + MAX_LEVEL) % MAX_LEVEL;
+
+	sprintf(&g_pFont->aText[0], "ブロック:%d\n出力ファイル名：data\\MAP\\level%02d.bin", g_nCurrentBlock, g_nOutputLevel);
 
 	if (GetMousePress(MOUSE_LEFT))
 	{
 		SetEditorBlock(
-			(BLOCK_TYPE)(CurrentBlock),
+			(BLOCK_TYPE)(g_nCurrentBlock),
 			(int)posMouse.x / BLOCK_SIZE,
 			(int)posMouse.y / BLOCK_SIZE
 		);
@@ -138,6 +152,14 @@ void UpdateEditor(void)
 			(int)posMouse.x / BLOCK_SIZE,
 			(int)posMouse.y / BLOCK_SIZE
 		);
+	}
+
+	if (GetKeyboardTrigger(DIK_F2))
+	{
+		char aFileName[MAX_PATH] = {};
+		sprintf(&aFileName[0], "data\\MAP\\level%02d.bin", g_nOutputLevel);
+
+		SaveEditorBlock(&aFileName[0]);
 	}
 
 	if (GetKeyboardTrigger(DIK_F5))

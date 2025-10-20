@@ -1,6 +1,6 @@
 //=====================================================================
 //
-// TemplateScene_cpp [TemplateScene_cpp.h]
+// ƒuƒƒbƒN‹““®ˆ— [block_act.cpp]
 // Author : 
 // 
 //=====================================================================
@@ -15,6 +15,7 @@
 #include "collision.h"
 #include "player.h"
 #include "fade.h"
+#include "Game.h"
 
 //*********************************************************************
 // 
@@ -92,6 +93,9 @@ void BLOCK_Goal(BLOCK* pBlock)
 		pPlayer->obj.pos - D3DXVECTOR3(0, pPlayer->obj.size.y, 0), pPlayer->hitBoxSize
 	))
 	{
-		SetPlayerState(PLAYERSTATE_END);
+		if (GetGameState() == GAMESTATE_NORMAL)
+		{
+			SetGameState(GAMESTATE_CLEAR);
+		}
 	}
 }

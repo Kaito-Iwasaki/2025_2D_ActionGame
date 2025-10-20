@@ -156,6 +156,7 @@
     <ClInclude Include="enemy.h" />
     <ClInclude Include="item.h" />
     <ClInclude Include="particle.h" />
+    <ClInclude Include="pause.h" />
     <ClInclude Include="player.h">
       <SubType>
       </SubType>
@@ -202,6 +203,7 @@
     <ClCompile Include="item.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="particle.cpp" />
+    <ClCompile Include="pause.cpp" />
     <ClCompile Include="player.cpp">
       <SubType>
       </SubType>

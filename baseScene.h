@@ -19,7 +19,9 @@
 // ***** É}ÉNÉçíËã` *****
 // 
 //*********************************************************************
-
+#define INPUT_TRIGGER_ACCEPT	GetKeyboardTrigger(DIK_RETURN) || GetJoypadTrigger(JOYKEY_START)
+#define INPUT_PRESS_LEFT		GetKeyboardPress(DIK_A) || GetJoypadPress(JOYKEY_LEFT) || GetJoystickPress(JOYSTICK_L_LEFT)
+#define INPUT_PRESS_RIGHT		GetKeyboardPress(DIK_D) || GetJoypadPress(JOYKEY_RIGHT) || GetJoystickPress(JOYSTICK_L_RIGHT)
 
 //*********************************************************************
 // 

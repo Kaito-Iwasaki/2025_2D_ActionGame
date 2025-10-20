@@ -19,7 +19,7 @@
 #define TEXTURE_FILENAME		"data\\TEXTURE\\player000.png"
 #define TEXTURE_MAX_X			(4)
 #define TEXTURE_MAX_Y			(2)
-#define INIT_POS				D3DXVECTOR3(100, 500, 0.0f)
+#define INIT_POS				D3DXVECTOR3(100, 640, 0.0f)
 #define INIT_SIZE				D3DXVECTOR3(75.0f, 75.0f, 0.0f) * 0.7f
 #define INIT_COLOR				D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f)
 #define INIT_HITBOX				D3DXVECTOR3(45.0f, 70.0f, 0.0f) * 0.7f
@@ -150,14 +150,14 @@ void UpdatePlayer(void)
 
 	case PLAYERSTATE_DIED:
 		g_player.obj.bVisible = false;
-		if (g_player.nCounterState > 30)
-		{
-			SetPlayerState(PLAYERSTATE_INIT);
-		}
+		//if (g_player.nCounterState > 30)
+		//{
+		//	SetPlayerState(PLAYERSTATE_INIT);
+		//}
+		SetGameState(GAMESTATE_END);
 		return;
 
 	case PLAYERSTATE_END:
-		SetFade(SCENE_RESULT);
 		return;
 	}
 
@@ -166,16 +166,16 @@ void UpdatePlayer(void)
 
 	// プレイヤーの操作処理
 	g_player.move.x = 0;
-	if (GetKeyboardPress(DIK_A))
+	if (INPUT_PRESS_LEFT)
 	{// 左
 		g_player.move.x -= g_player.fSpeed;
 	}
-	if (GetKeyboardPress(DIK_D))
+	if (INPUT_PRESS_RIGHT)
 	{// 右
 		g_player.move.x += g_player.fSpeed;
 	}
 
-	if (GetKeyboardTrigger(DIK_SPACE))
+	if (GetKeyboardTrigger(DIK_SPACE) || GetJoypadTrigger(JOYKEY_A))
 	{// ジャンプ
 		if (g_player.bIsJumping == false)
 		{// 接地中にスペースキーが押された
@@ -206,7 +206,7 @@ void UpdatePlayer(void)
 		infoRed.fMaxAlpha = 0.5f;
 		infoRed.fMaxScale = 0.6f;
 		infoRed.fRotSpeed = 0.5f;
-		infoRed.fSpeed = 2.0f;
+		infoRed.fSpeed = 4.0f;
 		infoRed.nMaxLife = 30;
 
 		EFFECTINFO infoWhite = infoRed;
@@ -215,19 +215,19 @@ void UpdatePlayer(void)
 
 		SetParticle(
 			infoRed,
-			g_player.obj.pos,
+			g_player.obj.pos + D3DXVECTOR3(0, -2, 0),
 			0.0f,
-			1.0f,
+			0.6f,
 			1,
-			3
+			1
 		);
 		SetParticle(
 			infoWhite,
-			g_player.obj.pos,
+			g_player.obj.pos + D3DXVECTOR3(0, -2, 0),
 			0.0f,
-			1.0f,
+			0.6f,
 			1,
-			3
+			1
 		);
 
 		if (g_player.fCharge <= 0.0f)

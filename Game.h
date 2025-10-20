@@ -32,6 +32,7 @@ typedef enum
 	GAMESTATE_NORMAL = 0,
 	GAMESTATE_RESET,
 	GAMESTATE_CLEAR,
+	GAMESTATE_END,
 	GAMESTATE_MAX
 }GAMESTATE;
 
@@ -45,8 +46,11 @@ void UninitGame(void);
 void UpdateGame(void);
 void DrawGame(void);
 void SetGameState(GAMESTATE newState);
+GAMESTATE GetGameState(void);
+void TogglePause(bool bIsPause);
 void SetMap(MAPINFO* map);
 MAPINFO* GetMap(void);
 void GetStageName(int nStage, char* pBuffer);
+void SetStage(int nStage);
 
 #endif

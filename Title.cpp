@@ -14,6 +14,7 @@
 #include "decal.h"
 #include "input.h"
 #include "fade.h"
+#include "Game.h"
 
 //*********************************************************************
 // 
@@ -65,8 +66,9 @@ void UninitTitle(void)
 //=====================================================================
 void UpdateTitle(void)
 {
-	if (GetKeyboardTrigger(DIK_RETURN))
-	{
+	if (INPUT_TRIGGER_ACCEPT)
+	{// ゲームスタート
+		SetStage(0);
 		SetFade(SCENE_GAME);
 	}
 }
