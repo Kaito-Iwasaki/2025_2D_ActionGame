@@ -37,6 +37,12 @@
     <Filter Include="ヘッダー ファイル\Component">
       <UniqueIdentifier>{307d41bd-73f4-4afc-bf1a-5148fe4c0143}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\GameObject\UI">
+      <UniqueIdentifier>{c9d92299-29a0-462f-8498-74b73a01e907}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\GameObject\UI">
+      <UniqueIdentifier>{75d643db-39d3-4a90-9161-eb5c7fd9b7d9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="sound.cpp">
@@ -105,8 +111,11 @@
     <ClCompile Include="particle.cpp">
       <Filter>ソース ファイル\Component</Filter>
     </ClCompile>
+    <ClCompile Include="fuelbar.cpp">
+      <Filter>ソース ファイル\GameObject\UI</Filter>
+    </ClCompile>
     <ClCompile Include="pause.cpp">
-      <Filter>ソース ファイル\GameObject</Filter>
+      <Filter>ソース ファイル\GameObject\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -177,7 +186,10 @@
       <Filter>ヘッダー ファイル\GameObject</Filter>
     </ClInclude>
     <ClInclude Include="pause.h">
-      <Filter>ヘッダー ファイル\GameObject</Filter>
+      <Filter>ヘッダー ファイル\GameObject\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="fuelbar.h">
+      <Filter>ヘッダー ファイル\GameObject\UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

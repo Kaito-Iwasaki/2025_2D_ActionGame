@@ -23,6 +23,7 @@
 #include "effect.h"
 #include "particle.h"
 #include "pause.h"
+#include "fuelbar.h"
 
 //*********************************************************************
 // 
@@ -61,6 +62,7 @@ void InitGame(void)
 	InitEffect();
 	InitParticle();
 	InitPause();
+	InitFuelBar();
 
 	SetDecal(
 		DECAL_LABEL_BG000,
@@ -103,6 +105,7 @@ void UninitGame(void)
 	UninitParticle();
 	UninitEffect();
 	UninitPause();
+	UninitFuelBar();
 }
 
 //=====================================================================
@@ -110,7 +113,7 @@ void UninitGame(void)
 //=====================================================================
 void UpdateGame(void)
 {
-	if (GetKeyboardTrigger(DIK_P))
+	if (INPUT_TRIGGER_PAUSE)
 	{
 		TogglePause(!g_bIsPause);
 	}
@@ -127,6 +130,7 @@ void UpdateGame(void)
 		UpdateItem();
 		UpdateParticle();
 		UpdateEffect();
+		UpdateFuelBar();
 
 		switch (g_gameState)
 		{
@@ -176,6 +180,7 @@ void DrawGame(void)
 	DrawEnemy();
 	DrawEffect();
 	DrawPlayer();
+	DrawFuelBar();
 
 	if (g_bIsPause)
 	{

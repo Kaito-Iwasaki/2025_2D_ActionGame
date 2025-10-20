@@ -26,7 +26,7 @@
 #define INIT_PLAYER_SPEED		(4.0f)
 #define INIT_PLAYER_LIFE		(3)
 #define INIT_PLAYER_JUMPPOWER	(16.0f)
-#define INIT_PLAYER_CHARGE		(1.0f)
+#define INIT_PLAYER_CHARGE		PLAYER_CHARGE_MAX
 
 //*********************************************************************
 // 
@@ -190,7 +190,7 @@ void UpdatePlayer(void)
 			}
 		}
 	}
-	else if (GetKeyboardRelease(DIK_SPACE))
+	else if (GetKeyboardRelease(DIK_SPACE) || GetJoypadRelease(JOYKEY_A))
 	{// 空中でスペースキーが離された
 		g_player.bIsFlying = false;
 	}

@@ -66,7 +66,7 @@ void UninitResult(void)
 //=====================================================================
 void UpdateResult(void)
 {
-	if (GetKeyboardTrigger(DIK_RETURN))
+	if (INPUT_TRIGGER_ACCEPT)
 	{
 		SetFade(SCENE_TITLE);
 	}

@@ -154,6 +154,7 @@
     <ClInclude Include="editorblock.h" />
     <ClInclude Include="effect.h" />
     <ClInclude Include="enemy.h" />
+    <ClInclude Include="fuelbar.h" />
     <ClInclude Include="item.h" />
     <ClInclude Include="particle.h" />
     <ClInclude Include="pause.h" />
@@ -195,6 +196,7 @@
     <ClCompile Include="enemy.cpp" />
     <ClCompile Include="fade.cpp" />
     <ClCompile Include="font.cpp" />
+    <ClCompile Include="fuelbar.cpp" />
     <ClCompile Include="Game.cpp">
       <SubType>
       </SubType>
