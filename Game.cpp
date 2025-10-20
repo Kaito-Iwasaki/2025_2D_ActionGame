@@ -79,7 +79,7 @@ void InitGame(void)
 	GetStageName(g_nCurrentStage, &aStageFileName[0]);
 
 	memset(&g_map[0][0], 0, sizeof(g_map));
-	LoadBin(&aStageFileName[0], &g_map[0][0], sizeof(BLOCK), MAX_BLOCK);
+	LoadBin(&aStageFileName[0], &g_map[0][0], sizeof(MAPINFO), MAX_BLOCK);
 
 	SetGameState(GAMESTATE_NORMAL);
 

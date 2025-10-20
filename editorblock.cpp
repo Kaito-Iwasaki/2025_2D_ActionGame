@@ -130,20 +130,7 @@ void UninitEditorBlock(void)
 //=====================================================================
 void UpdateEditorBlock(void)
 {
-	//if (GetKeyboardTrigger(DIK_F2))
-	//{
-	//	MAPINFO MapInfo[NUM_BLOCK_Y][NUM_BLOCK_X];
 
-	//	for (int y = 0; y < NUM_BLOCK_Y; y++)
-	//	{
-	//		for (int x = 0; x < NUM_BLOCK_X; x++)
-	//		{
-	//			MapInfo[y][x].type = g_aEditorBlock[y][x].type;
-	//		}
-	//	}
-
-	//	SetMap(&MapInfo[0][0]);
-	//}
 }
 
 //=====================================================================
