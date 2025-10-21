@@ -1,7 +1,7 @@
 //=====================================================================
 // 
 // プレイヤー処理 [player.cpp]
-// Author : 
+// Author : Kaito Iwasaki
 //
 //=====================================================================
 #include "player.h"
@@ -10,6 +10,7 @@
 #include "Game.h"
 #include "fade.h"
 #include "particle.h"
+#include "sound.h"
 
 //*********************************************************************
 // 
@@ -125,16 +126,17 @@ void UpdatePlayer(void)
 		g_player.fSpeed = INIT_PLAYER_SPEED;
 		g_player.nLife = INIT_PLAYER_LIFE;
 		g_player.fCharge = INIT_PLAYER_CHARGE;
-		SetPlayerState(PLAYERSTATE_APPEAR);
-
-	case PLAYERSTATE_APPEAR:
-		g_player.obj.bVisible ^= 1;
-		if (g_player.nCounterState > 120)
-		{
-			g_player.obj.bVisible = true;
-			SetPlayerState(PLAYERSTATE_NORMAL);
-		}
+		SetPlayerState(PLAYERSTATE_NORMAL);
 		break;
+
+	//case PLAYERSTATE_APPEAR:
+	//	g_player.obj.bVisible ^= 1;
+	//	if (g_player.nCounterState > 120)
+	//	{
+	//		g_player.obj.bVisible = true;
+	//		SetPlayerState(PLAYERSTATE_NORMAL);
+	//	}
+	//	break;
 
 	case PLAYERSTATE_NORMAL:
 		break;
@@ -154,10 +156,12 @@ void UpdatePlayer(void)
 		//{
 		//	SetPlayerState(PLAYERSTATE_INIT);
 		//}
+		StopSound(SOUND_LABEL_SE_JET);
 		SetGameState(GAMESTATE_END);
 		return;
 
 	case PLAYERSTATE_END:
+		StopSound(SOUND_LABEL_SE_JET);
 		return;
 	}
 
@@ -180,12 +184,12 @@ void UpdatePlayer(void)
 		if (g_player.bIsJumping == false)
 		{// 接地中にスペースキーが押された
 			EFFECTINFO infoWhite;
-			infoWhite.col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+			infoWhite.col = D3DXCOLOR(0.9f, 0.9f, 0.9f, 1.0f);
 			infoWhite.fMaxAlpha = 0.5f;
 			infoWhite.fMaxScale = 0.6f;
 			infoWhite.fRotSpeed = 0.01f;
 			infoWhite.fSpeed = 1.0f;
-			infoWhite.nMaxLife = 120;
+			infoWhite.nMaxLife = 60;
 
 			SetParticle(
 				infoWhite,
@@ -196,6 +200,8 @@ void UpdatePlayer(void)
 				5
 			);
 
+			PlaySound(SOUND_LABEL_SE_JUMP);
+
 			g_player.bIsJumping = true;
 			g_player.move.y = -g_player.fJumpPower;
 		}
@@ -203,12 +209,14 @@ void UpdatePlayer(void)
 		{// 空中でスペースキーが押された
 			if (g_player.fCharge > 0)
 			{
+				PlaySound(SOUND_LABEL_SE_JET, 0.1f);
 				g_player.bIsFlying = true;
 			}
 		}
 	}
 	else if (GetKeyboardRelease(DIK_SPACE) || GetJoypadRelease(JOYKEY_A))
 	{// 空中でスペースキーが離された
+		StopSound(SOUND_LABEL_SE_JET);
 		g_player.bIsFlying = false;
 	}
 
@@ -250,6 +258,7 @@ void UpdatePlayer(void)
 
 		if (g_player.fCharge <= 0.0f)
 		{
+			StopSound(SOUND_LABEL_SE_JET);
 			g_player.bIsFlying = false;
 		}
 	}
@@ -271,9 +280,29 @@ void UpdatePlayer(void)
 
 	if (dwHit & BLOCK_HIT_TOP)
 	{// 地面に接している
+		if (g_player.bIsJumping == true)
+		{
+			EFFECTINFO info;
+			info.col = D3DXCOLOR(0.9f, 0.9f, 0.9f, 1.0f);
+			info.fMaxAlpha = 0.5f;
+			info.fMaxScale = 0.4f;
+			info.fRotSpeed = 0.5f;
+			info.fSpeed = 4.0f;
+			info.nMaxLife = 20;
+
+			SetParticle(
+				info,
+				g_player.obj.pos,
+				D3DX_PI,
+				D3DX_PI / 2,
+				1,
+				5
+			);
+		}
 		g_player.bIsJumping = false;
 		g_player.bIsFlying = false;
-		g_player.fCharge = INIT_PLAYER_CHARGE;
+		g_player.fCharge += 0.05f;
+		Clampf(&g_player.fCharge, 0.0f, 1.0f);
 	}
 	else
 	{// 空中にいる

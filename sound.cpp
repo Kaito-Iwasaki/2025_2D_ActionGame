@@ -35,6 +35,9 @@ DWORD g_aSizeAudio[SOUND_LABEL_MAX] = {};					// オーディオデータサイズ
 // サウンドの情報
 SOUNDINFO g_aSoundInfo[SOUND_LABEL_MAX] = {
 	{"data\\SE\\cursor.wav", 0},
+	{"data\\SE\\jump.wav", 0},
+	{"data\\SE\\jet.wav", -1},
+	{"data\\SE\\coin.wav", 0},
 };
 
 //=============================================================================

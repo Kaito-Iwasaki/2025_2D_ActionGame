@@ -118,7 +118,7 @@ void UpdateFuelBar(void)
 
 	for (int nCount = 0; nCount < FUELBAR_TYPE_MAX; nCount++, pFuelBar++)
 	{
-		if (pPlayer->fCharge == PLAYER_CHARGE_MAX)
+		if (pPlayer->fCharge == PLAYER_CHARGE_MAX || pPlayer->obj.bVisible == false)
 		{
 			pFuelBar->obj.bVisible = false;
 		}
