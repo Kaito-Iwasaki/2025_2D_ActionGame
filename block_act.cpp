@@ -156,9 +156,7 @@ void BLOCK_Goal(BLOCK* pBlock)
 //=====================================================================
 void BLOCK_StartBlock(BLOCK* pBlock)
 {
-	D3DXVECTOR3 posBlockCenter = pBlock->obj.pos + D3DXVECTOR3(BLOCK_SIZE / 2, BLOCK_SIZE / 2, 0);
-
-	GetPlayer()->startPos = posBlockCenter;
+	GetPlayer()->startPos = pBlock->obj.pos + D3DXVECTOR3(BLOCK_SIZE / 2, BLOCK_SIZE, 0);;
 
 	pBlock->bUsed = false;
 }
