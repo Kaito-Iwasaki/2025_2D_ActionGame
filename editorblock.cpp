@@ -58,6 +58,7 @@ const char* g_aEditorBlockFileName[BLOCK_TYPE_MAX] = {
 	"data\\TEXTURE\\grass012.png",
 	"data\\TEXTURE\\item000.png",
 	"data\\TEXTURE\\flag000.png",
+	"data\\TEXTURE\\player.png",
 };
 
 //=====================================================================

@@ -335,10 +335,16 @@ void PauseSound(SOUND_LABEL label)
 
 HRESULT UnPauseSound(SOUND_LABEL label)
 {
+	XAUDIO2_VOICE_STATE xa2state;
+
 	if (g_apSourceVoice[label] != NULL)
 	{
-		// ˆê’â~
-		g_apSourceVoice[label]->Start(0);
+		g_apSourceVoice[label]->GetState(&xa2state);
+		if (xa2state.BuffersQueued != 0)
+		{// Ä¶’†
+			// ˆê’â~
+			g_apSourceVoice[label]->Start(0);
+		}
 	}
 
 	return S_OK;

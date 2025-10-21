@@ -63,6 +63,7 @@ typedef struct
 	float fCharge;
 	bool bIsFlying;
 	BLOCK* pBlock;
+	D3DXVECTOR3 startPos;
 }PLAYER;
 
 //*********************************************************************
@@ -77,5 +78,7 @@ void DrawPlayer(void);
 PLAYER* GetPlayer(void);
 void HitPlayer(void);
 void SetPlayerState(PLAYERSTATE state);
+void PausePlayer(void);
+void UnPausePlayer(void);
 
 #endif

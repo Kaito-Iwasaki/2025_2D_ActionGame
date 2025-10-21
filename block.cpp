@@ -58,6 +58,7 @@ const char* g_aBlockFileName[BLOCK_TYPE_MAX] = {
 	"data\\TEXTURE\\grass012.png",
 	"data\\TEXTURE\\item000.png",
 	"data\\TEXTURE\\flag000.png",
+	"data\\TEXTURE\\player.png",
 };
 
 BLOCK_INFO g_aBlockInfo[BLOCK_TYPE_MAX] = {
@@ -80,6 +81,7 @@ BLOCK_INFO g_aBlockInfo[BLOCK_TYPE_MAX] = {
 	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), true, BLOCK_Platform},
 	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), false, BLOCK_Coin},
 	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), false, BLOCK_Goal},
+	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), false, BLOCK_StartBlock},
 };
 
 //=====================================================================

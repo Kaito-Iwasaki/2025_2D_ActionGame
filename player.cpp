@@ -20,7 +20,7 @@
 #define TEXTURE_FILENAME		"data\\TEXTURE\\player000.png"
 #define TEXTURE_MAX_X			(4)
 #define TEXTURE_MAX_Y			(2)
-#define INIT_POS				D3DXVECTOR3(100, 640, 0.0f)
+#define INIT_POS				D3DXVECTOR3(100.0f, 640.0f, 0.0f)
 #define INIT_SIZE				D3DXVECTOR3(75.0f, 75.0f, 0.0f) * 0.7f
 #define INIT_COLOR				D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f)
 #define INIT_HITBOX				D3DXVECTOR3(45.0f, 70.0f, 0.0f) * 0.7f
@@ -59,8 +59,9 @@ void InitPlayer(void)
 	g_player.obj.pos = INIT_POS;
 	g_player.obj.size = INIT_SIZE;
 	g_player.obj.color = INIT_COLOR;
-	g_player.obj.bVisible = true;
+	g_player.obj.bVisible = false;
 	g_player.hitBoxSize = INIT_HITBOX;
+	g_player.startPos = INIT_POS;
 	g_player.state = PLAYERSTATE_INIT;
 	g_player.fSpeed = INIT_PLAYER_SPEED;
 	g_player.nLife = INIT_PLAYER_LIFE;
@@ -120,7 +121,7 @@ void UpdatePlayer(void)
 	switch (g_player.state)
 	{
 	case PLAYERSTATE_INIT:
-		g_player.obj.pos = INIT_POS;
+		g_player.obj.pos = g_player.startPos;
 		g_player.obj.bVisible = true;
 		g_player.move = D3DXVECTOR3_ZERO;
 		g_player.fSpeed = INIT_PLAYER_SPEED;
@@ -416,4 +417,14 @@ void SetPlayerState(PLAYERSTATE state)
 {
 	g_player.state = state;
 	g_player.nCounterState = 0;
+}
+
+void PausePlayer(void)
+{
+	PauseSound(SOUND_LABEL_SE_JET);
+}
+
+void UnPausePlayer(void)
+{
+	UnPauseSound(SOUND_LABEL_SE_JET);
 }

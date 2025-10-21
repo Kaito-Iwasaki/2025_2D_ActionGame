@@ -24,13 +24,14 @@
 #include "particle.h"
 #include "pause.h"
 #include "fuelbar.h"
+#include "font.h"
 
 //*********************************************************************
 // 
 // ***** マクロ定義 *****
 // 
 //*********************************************************************
-#define MAX_LEVEL	(6)
+#define MAX_LEVEL	(10)
 
 //*********************************************************************
 // 
@@ -48,6 +49,9 @@ MAPINFO g_map[NUM_BLOCK_Y][NUM_BLOCK_X] = {};
 int g_nCurrentStage = 0;
 GAMESTATE g_gameState = GAMESTATE_NORMAL;
 bool g_bIsPause = false;
+FONT* g_pFontInfo = NULL;
+DWORD g_dwTimer = timeGetTime();
+DWORD g_dwStart = timeGetTime();
 
 //=====================================================================
 // 初期化処理
@@ -58,6 +62,7 @@ void InitGame(void)
 
 	// 各オブジェクトの初期化処理
 	InitDecal();
+	InitFont();
 	InitBlock();
 	InitPlayer();
 	InitEnemy();
@@ -76,9 +81,22 @@ void InitGame(void)
 		D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f)
 	);
 
+	g_pFontInfo = SetFont(
+		FONT_LABEL_DONGURI,
+		D3DXVECTOR3_ZERO,
+		D3DXVECTOR3(SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f),
+		D3DXVECTOR3_ZERO,
+		D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
+		30,
+		"",
+		DT_CENTER
+	);
+
 	// 値の初期化
 	g_bIsPause = false;
+	g_dwStart = timeGetTime();
 	SetGameState(GAMESTATE_NORMAL);
+	sprintf(&g_pFontInfo->aText[0], "Level %02d", g_nCurrentStage  + 1);
 
 	// 現在のステージ情報のファイル名を取得
 	GetStageName(g_nCurrentStage, &aStageFileName[0]);
@@ -104,6 +122,7 @@ void UninitGame(void)
 {
 	// 各オブジェクトの終了処理
 	UninitDecal();
+	UninitFont();
 	UninitBlock();
 	UninitPlayer();
 	UninitEnemy();
@@ -119,6 +138,8 @@ void UninitGame(void)
 //=====================================================================
 void UpdateGame(void)
 {
+	g_dwTimer = timeGetTime();
+
 	if (INPUT_TRIGGER_PAUSE)
 	{// ポーズメニュー
 		TogglePause(!g_bIsPause);
@@ -143,6 +164,7 @@ void UpdateGame(void)
 		switch (g_gameState)
 		{
 		case GAMESTATE_NORMAL:	// 通常
+			sprintf(&g_pFontInfo->aText[0], "Level %02d\nTime %.2f", g_nCurrentStage + 1, (float)(g_dwTimer - g_dwStart) / 1000.0f);
 			break;
 
 		case GAMESTATE_CLEAR:	// クリア
@@ -198,6 +220,7 @@ void DrawGame(void)
 	DrawEffect();
 	DrawPlayer();
 	DrawFuelBar();
+	DrawFont();
 
 	if (g_bIsPause)
 	{// ポーズメニュー描画
@@ -226,8 +249,19 @@ GAMESTATE GetGameState(void)
 //=====================================================================
 void TogglePause(bool bIsPause)
 {
+	if (GetFade() != FADE_NONE) return;
+
 	SetPauseMenuCursor(0);
 	g_bIsPause = bIsPause;
+
+	if (bIsPause)
+	{
+		PausePlayer();
+	}
+	else
+	{
+		UnPausePlayer();
+	}
 }
 
 //=====================================================================

@@ -38,5 +38,6 @@ void BLOCK_Needle(BLOCK* pBlock);
 void BLOCK_Platform(BLOCK* pBlock);
 void BLOCK_Coin(BLOCK* pBlock);
 void BLOCK_Goal(BLOCK* pBlock);
+void BLOCK_StartBlock(BLOCK* pBlock);
 
 #endif

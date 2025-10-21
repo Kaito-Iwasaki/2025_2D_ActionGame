@@ -139,7 +139,7 @@ void BLOCK_Goal(BLOCK* pBlock)
 
 	if (BoxCollision(
 		posBlockCenter,
-		D3DXVECTOR3(BLOCK_SIZE, BLOCK_SIZE, 0.0f),
+		D3DXVECTOR3(BLOCK_SIZE * 0.25f, BLOCK_SIZE * 0.25f, 0.0f),
 		pPlayer->obj.pos + D3DXVECTOR3(0, -pPlayer->obj.size.y / 2, 0),
 		pPlayer->hitBoxSize
 	))
@@ -149,4 +149,16 @@ void BLOCK_Goal(BLOCK* pBlock)
 			SetGameState(GAMESTATE_CLEAR);
 		}
 	}
+}
+
+//=====================================================================
+// 開始ブロック
+//=====================================================================
+void BLOCK_StartBlock(BLOCK* pBlock)
+{
+	D3DXVECTOR3 posBlockCenter = pBlock->obj.pos + D3DXVECTOR3(BLOCK_SIZE / 2, BLOCK_SIZE / 2, 0);
+
+	GetPlayer()->startPos = posBlockCenter;
+
+	pBlock->bUsed = false;
 }

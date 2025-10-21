@@ -41,7 +41,7 @@
 //*********************************************************************
 DECAL* g_pCursor = NULL;
 FONT* g_pFont = NULL;
-int g_nCurrentBlock = 0;
+int g_nCurrentBlock = 1;
 int g_nOutputLevel = 0;
 
 //=====================================================================
@@ -61,7 +61,7 @@ void InitEditor(void)
 		D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f)
 	);
 
-	g_nCurrentBlock = 0;
+	g_nCurrentBlock = 1;
 	g_nOutputLevel = GetStage();
 
 	g_pCursor = SetDecal(
