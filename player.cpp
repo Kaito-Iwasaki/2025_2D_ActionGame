@@ -130,15 +130,6 @@ void UpdatePlayer(void)
 		SetPlayerState(PLAYERSTATE_NORMAL);
 		break;
 
-	//case PLAYERSTATE_APPEAR:
-	//	g_player.obj.bVisible ^= 1;
-	//	if (g_player.nCounterState > 120)
-	//	{
-	//		g_player.obj.bVisible = true;
-	//		SetPlayerState(PLAYERSTATE_NORMAL);
-	//	}
-	//	break;
-
 	case PLAYERSTATE_NORMAL:
 		break;
 
@@ -313,6 +304,33 @@ void UpdatePlayer(void)
 	if (g_player.nCounterAnim % 5 == 0)
 	{
 		g_player.nPatternAnimX = (g_player.nPatternAnimX + 1) % 4;
+
+		if (abs((long)g_player.move.x) > 0.01f && g_player.bIsJumping == false)
+		{
+			EFFECTINFO info;
+			info.col = D3DXCOLOR(0.9f, 0.9f, 0.9f, 1.0f);
+			info.fMaxAlpha = 0.5f;
+			info.fMaxScale = 0.4f;
+			info.fRotSpeed = 0.5f;
+			info.fSpeed = 0.5f;
+			info.nMaxLife = 60;
+
+			float fAngle = -2.2f;
+
+			if (g_player.obj.bInversed)
+			{
+				fAngle *= -1;
+			}
+
+			SetParticle(
+				info,
+				g_player.obj.pos,
+				fAngle,
+				0.5f,
+				1,
+				3
+			);
+		}
 	}
 	g_player.nCounterAnim++;
 
@@ -427,4 +445,9 @@ void PausePlayer(void)
 void UnPausePlayer(void)
 {
 	UnPauseSound(SOUND_LABEL_SE_JET);
+
+	if (GetKeyboardPress(DIK_SPACE) == false && GetJoypadRelease(JOYKEY_A) == false)
+	{
+		g_player.bIsFlying = false;
+	}
 }
