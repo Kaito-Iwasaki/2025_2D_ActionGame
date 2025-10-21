@@ -179,6 +179,23 @@ void UpdatePlayer(void)
 	{// ジャンプ
 		if (g_player.bIsJumping == false)
 		{// 接地中にスペースキーが押された
+			EFFECTINFO infoWhite;
+			infoWhite.col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+			infoWhite.fMaxAlpha = 0.5f;
+			infoWhite.fMaxScale = 0.6f;
+			infoWhite.fRotSpeed = 0.01f;
+			infoWhite.fSpeed = 1.0f;
+			infoWhite.nMaxLife = 120;
+
+			SetParticle(
+				infoWhite,
+				g_player.obj.pos,
+				D3DX_PI,
+				D3DX_PI / 2,
+				1,
+				5
+			);
+
 			g_player.bIsJumping = true;
 			g_player.move.y = -g_player.fJumpPower;
 		}
@@ -221,6 +238,7 @@ void UpdatePlayer(void)
 			1,
 			1
 		);
+
 		SetParticle(
 			infoWhite,
 			g_player.obj.pos + D3DXVECTOR3(0, -2, 0),
