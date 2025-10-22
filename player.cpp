@@ -26,7 +26,7 @@
 #define INIT_HITBOX				D3DXVECTOR3(45.0f, 70.0f, 0.0f) * 0.7f
 #define INIT_PLAYER_SPEED		(4.0f)
 #define INIT_PLAYER_LIFE		(3)
-#define INIT_PLAYER_JUMPPOWER	(16.0f)
+#define INIT_PLAYER_JUMPPOWER	(10.0f)
 #define INIT_PLAYER_CHARGE		PLAYER_CHARGE_MAX
 
 //*********************************************************************
@@ -143,13 +143,12 @@ void UpdatePlayer(void)
 		break;
 
 	case PLAYERSTATE_DIED:
-		g_player.obj.bVisible = false;
-		//if (g_player.nCounterState > 30)
-		//{
-		//	SetPlayerState(PLAYERSTATE_INIT);
-		//}
-		StopSound(SOUND_LABEL_SE_JET);
-		SetGameState(GAMESTATE_END);
+		if (g_player.nCounterState > 30)
+		{
+			SetGameState(GAMESTATE_END);
+		}
+		g_player.move.y += GAME_GRAVITY;	// èdóÕÇâ¡éZ
+		g_player.obj.pos += g_player.move;
 		return;
 
 	case PLAYERSTATE_END:
@@ -359,9 +358,9 @@ void UpdatePlayer(void)
 		g_player.obj.bInversed = false;
 	}
 
-	if (IsObjectOutOfScreen(g_player.obj))
+	if (IsObjectOutOfScreen(g_player.obj, OOS_BOTTOM))
 	{// âÊñ äOÇ…èoÇΩÇÁéÄñS
-		SetPlayerState(PLAYERSTATE_DIED);
+		KillPlayer();
 	}
 }
 
@@ -450,4 +449,15 @@ void UnPausePlayer(void)
 	{
 		g_player.bIsFlying = false;
 	}
+}
+
+void KillPlayer(void)
+{
+	if (g_player.state == PLAYERSTATE_DIED) return;
+	if (GetGameState() == GAMESTATE_CLEAR) return;
+
+	g_player.bIsFlying = false;
+	StopSound(SOUND_LABEL_SE_JET);
+	g_player.move = D3DXVECTOR3(0.0f, -g_player.fJumpPower, 0.0f);
+	SetPlayerState(PLAYERSTATE_DIED);
 }

@@ -80,5 +80,6 @@ void HitPlayer(void);
 void SetPlayerState(PLAYERSTATE state);
 void PausePlayer(void);
 void UnPausePlayer(void);
+void KillPlayer(void);
 
 #endif

@@ -169,7 +169,7 @@ void UpdateEnemy(void)
 			}
 			else
 			{
-				HitPlayer();
+				KillPlayer();
 			}
 		}
 	}

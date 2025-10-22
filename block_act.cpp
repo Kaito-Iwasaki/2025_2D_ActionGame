@@ -60,7 +60,7 @@ void BLOCK_Needle(BLOCK* pBlock)
 		pPlayer->hitBoxSize
 	))
 	{
-		SetPlayerState(PLAYERSTATE_DIED);
+		KillPlayer();
 	}
 }
 
