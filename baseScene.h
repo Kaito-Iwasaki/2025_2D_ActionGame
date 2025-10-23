@@ -35,8 +35,10 @@
 typedef enum
 {
 	SCENE_TITLE = 0,	// タイトル画面
+	SCENE_TUTORIAL,		// チュートリアル画面
 	SCENE_GAME,			// ゲーム画面
 	SCENE_RESULT,		// リザルト画面
+	SCENE_RANKING,		// ランキング画面
 	SCENE_EDITOR,		// エディタ画面
 	SCENE_MAX
 }SCENE;	

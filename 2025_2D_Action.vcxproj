@@ -170,12 +170,20 @@
     </ClInclude>
     <ClInclude Include="input.h" />
     <ClInclude Include="main.h" />
+    <ClInclude Include="Ranking.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="Result.h">
       <SubType>
       </SubType>
     </ClInclude>
     <ClInclude Include="sound.h" />
     <ClInclude Include="Title.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="Tutorial.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -210,6 +218,10 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="Ranking.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="Result.cpp">
       <SubType>
       </SubType>
@@ -220,6 +232,10 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="Title.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="Tutorial.cpp">
       <SubType>
       </SubType>
     </ClCompile>

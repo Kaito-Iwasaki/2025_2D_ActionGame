@@ -17,8 +17,10 @@
 
 // シーン
 #include "Title.h"
+#include "Tutorial.h"
 #include "Game.h"
 #include "Result.h"
+#include "Ranking.h"
 #include "Editor.h"
 
 //*********************************************************************
@@ -33,8 +35,10 @@ SCENE g_currentScene = SCENE_TITLE;		// 現在のシーン
 //*********************************************************************
 SCENEDATA g_scenes[SCENE_MAX] = {
 	{ InitTitle, UninitTitle, UpdateTitle, DrawTitle },
+	{ InitTutorial, UninitTutorial, UpdateTutorial, DrawTutorial },
 	{ InitGame, UninitGame, UpdateGame, DrawGame },
 	{ InitResult, UninitResult, UpdateResult, DrawResult },
+	{ InitRanking, UninitRanking, UpdateRanking, DrawRanking },
 	{ InitEditor, UninitEditor, UpdateEditor, DrawEditor },
 };
 

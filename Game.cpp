@@ -52,7 +52,6 @@ GAMESTATE g_gameState = GAMESTATE_NORMAL;
 int g_nCounterGameState = 0;
 bool g_bIsPause = false;
 FONT* g_pFontInfo = NULL;
-DWORD g_dwTimer = 120;
 DWORD g_dwStart = timeGetTime();
 DWORD g_dwLast = timeGetTime();
 int g_nTimer = INIT_TIMER;
@@ -351,4 +350,9 @@ void AddScore(int nScore)
 int GetScore(void)
 {
 	return g_nScore;
+}
+
+int GetGameTimeLeft(void)
+{
+	return g_nTimer;
 }
