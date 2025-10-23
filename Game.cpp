@@ -56,6 +56,7 @@ DWORD g_dwTimer = 120;
 DWORD g_dwStart = timeGetTime();
 DWORD g_dwLast = timeGetTime();
 int g_nTimer = INIT_TIMER;
+int g_nScore;
 
 //=====================================================================
 // 初期化処理
@@ -168,11 +169,17 @@ void UpdateGame(void)
 		switch (g_gameState)
 		{
 		case GAMESTATE_NORMAL:	// 通常
-			sprintf(&g_pFontInfo->aText[0], "Level %02d\nTime %d", g_nCurrentStage + 1, (g_nTimer) / 10);
-
 			if (GetFade() == FADE_NONE && GetPlayer()->state != PLAYERSTATE_END)
 			{
 				g_nTimer--;
+			}
+
+			sprintf(&g_pFontInfo->aText[0], "Level %02d | Time %03d | Score | %06d", g_nCurrentStage + 1, (g_nTimer) / 10, g_nScore);
+
+			if (g_nTimer <= 0)
+			{
+				KillPlayer();
+				SetFade(SCENE_RESULT);
 			}
 
 			break;
@@ -180,6 +187,8 @@ void UpdateGame(void)
 		case GAMESTATE_CLEAR:	// クリア
 			// プレイヤーを終了状態に移行
 			SetPlayerState(PLAYERSTATE_END);
+
+			sprintf(&g_pFontInfo->aText[0], "Level %02d | Time %03d | Score | %06d", g_nCurrentStage + 1, (g_nTimer) / 10, g_nScore);
 
 			if (g_nCounterGameState > 60)
 			{
@@ -258,10 +267,14 @@ GAMESTATE GetGameState(void)
 	return g_gameState;
 }
 
+//=====================================================================
+// ゲーム情報の初期化処理
+//=====================================================================
 void ResetGame(void)
 {
 	SetStage(0);
 	g_nTimer = INIT_TIMER;
+	g_nScore = 0;
 }
 
 //=====================================================================
@@ -328,4 +341,14 @@ void SetStage(int nStage)
 int GetStage(void)
 {
 	return g_nCurrentStage;
+}
+
+void AddScore(int nScore)
+{
+	g_nScore += nScore;
+}
+
+int GetScore(void)
+{
+	return g_nScore;
 }

@@ -126,12 +126,14 @@ void UpdatePlayer(void)
 	case PLAYERSTATE_INIT:
 		g_player.obj.pos = g_player.startPos;
 		g_player.obj.bVisible = true;
+		g_player.obj.bInversed = false;
 		g_player.move = D3DXVECTOR3_ZERO;
 		g_player.fSpeed = INIT_PLAYER_SPEED;
 		g_player.nLife = INIT_PLAYER_LIFE;
 		g_player.fCharge = INIT_PLAYER_CHARGE;
 		g_player.bIsControlEnabled = true;
 		SetPlayerState(PLAYERSTATE_NORMAL);
+		PlaySound(SOUND_LABEL_SE_APPEAR);
 
 		{
 			EFFECTINFO info;
@@ -205,7 +207,7 @@ void UpdatePlayer(void)
 			);
 		}
 
-		g_player.move.y += GAME_GRAVITY;	// èdóÕÇâ¡éZ
+		g_player.move.y += GAME_GRAVITY * 2;	// èdóÕÇâ¡éZ
 		g_player.obj.pos += g_player.move;
 		return;
 
@@ -524,12 +526,14 @@ void UnPausePlayer(void)
 void KillPlayer(void)
 {
 	if (g_player.state == PLAYERSTATE_DIED) return;
+	if (g_player.state == PLAYERSTATE_END) return;
 	if (GetGameState() == GAMESTATE_CLEAR) return;
 
 	g_player.nPatternAnimX = 0;
 	g_player.nPatternAnimY = 2;
 	g_player.bIsFlying = false;
 	StopSound(SOUND_LABEL_SE_JET);
+	PlaySound(SOUND_LABEL_SE_DEAD);
 	g_player.move = D3DXVECTOR3(0.0f, -g_player.fJumpPower, 0.0f);
 	SetPlayerState(PLAYERSTATE_DIED);
 }

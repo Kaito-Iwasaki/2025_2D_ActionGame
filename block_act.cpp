@@ -121,6 +121,8 @@ void BLOCK_Coin(BLOCK* pBlock)
 
 		PlaySound(SOUND_LABEL_SE_COIN);
 
+		AddScore(200);
+
 		pBlock->bUsed = false;
 	}
 }
@@ -188,6 +190,8 @@ void BLOCK_Goal(BLOCK* pBlock)
 			);
 
 			PlaySound(SOUND_LABEL_SE_CLEAR);
+			AddScore(1000);
+
 			SetGameState(GAMESTATE_CLEAR);
 		}
 	}
