@@ -29,6 +29,8 @@
 #define INIT_PLAYER_JUMPPOWER	(10.0f)
 #define INIT_PLAYER_CHARGE		PLAYER_CHARGE_MAX
 
+#define TIME_STATE_DIED			(30)
+
 //*********************************************************************
 // 
 // ***** グローバル変数 *****
@@ -68,6 +70,7 @@ void InitPlayer(void)
 	g_player.fJumpPower = INIT_PLAYER_JUMPPOWER;
 	g_player.fCharge = INIT_PLAYER_CHARGE;
 	g_player.bIsFlying = false;
+	g_player.bIsControlEnabled = true;
 
 	// テクスチャの読み込み
 	if (TEXTURE_FILENAME)
@@ -127,23 +130,15 @@ void UpdatePlayer(void)
 		g_player.fSpeed = INIT_PLAYER_SPEED;
 		g_player.nLife = INIT_PLAYER_LIFE;
 		g_player.fCharge = INIT_PLAYER_CHARGE;
+		g_player.bIsControlEnabled = true;
 		SetPlayerState(PLAYERSTATE_NORMAL);
 		break;
 
 	case PLAYERSTATE_NORMAL:
 		break;
 
-	case PLAYERSTATE_DAMAGED:
-		g_player.obj.bVisible ^= 1;
-		if (g_player.nCounterState > 120)
-		{
-			g_player.obj.bVisible ^= 1;
-			SetPlayerState(PLAYERSTATE_NORMAL);
-		}
-		break;
-
 	case PLAYERSTATE_DIED:
-		if (g_player.nCounterState > 30)
+		if (g_player.nCounterState > TIME_STATE_DIED)
 		{
 			SetGameState(GAMESTATE_END);
 		}
@@ -153,7 +148,9 @@ void UpdatePlayer(void)
 
 	case PLAYERSTATE_END:
 		StopSound(SOUND_LABEL_SE_JET);
-		return;
+		g_player.bIsControlEnabled = false;
+		g_player.bIsFlying = false;
+		break;
 	}
 
 	// 前回の位置を記録
@@ -161,54 +158,57 @@ void UpdatePlayer(void)
 
 	// プレイヤーの操作処理
 	g_player.move.x = 0;
-	if (INPUT_PRESS_LEFT)
-	{// 左
-		g_player.move.x -= g_player.fSpeed;
-	}
-	if (INPUT_PRESS_RIGHT)
-	{// 右
-		g_player.move.x += g_player.fSpeed;
-	}
-
-	if (GetKeyboardTrigger(DIK_SPACE) || GetJoypadTrigger(JOYKEY_A))
-	{// ジャンプ
-		if (g_player.bIsJumping == false)
-		{// 接地中にスペースキーが押された
-			EFFECTINFO infoWhite;
-			infoWhite.col = D3DXCOLOR(0.9f, 0.9f, 0.9f, 1.0f);
-			infoWhite.fMaxAlpha = 0.5f;
-			infoWhite.fMaxScale = 0.6f;
-			infoWhite.fRotSpeed = 0.01f;
-			infoWhite.fSpeed = 1.0f;
-			infoWhite.nMaxLife = 60;
-
-			SetParticle(
-				infoWhite,
-				g_player.obj.pos,
-				D3DX_PI,
-				D3DX_PI / 2,
-				1,
-				5
-			);
-
-			PlaySound(SOUND_LABEL_SE_JUMP);
-
-			g_player.bIsJumping = true;
-			g_player.move.y = -g_player.fJumpPower;
+	if (g_player.bIsControlEnabled)
+	{
+		if (INPUT_PRESS_LEFT)
+		{// 左
+			g_player.move.x -= g_player.fSpeed;
 		}
-		else
-		{// 空中でスペースキーが押された
-			if (g_player.fCharge > 0)
-			{
-				PlaySound(SOUND_LABEL_SE_JET, 0.1f);
-				g_player.bIsFlying = true;
+		if (INPUT_PRESS_RIGHT)
+		{// 右
+			g_player.move.x += g_player.fSpeed;
+		}
+
+		if (GetKeyboardTrigger(DIK_SPACE) || GetJoypadTrigger(JOYKEY_A))
+		{// ジャンプ
+			if (g_player.bIsJumping == false)
+			{// 接地中にスペースキーが押された
+				EFFECTINFO infoWhite;
+				infoWhite.col = D3DXCOLOR(0.9f, 0.9f, 0.9f, 1.0f);
+				infoWhite.fMaxAlpha = 0.5f;
+				infoWhite.fMaxScale = 0.6f;
+				infoWhite.fRotSpeed = 0.01f;
+				infoWhite.fSpeed = 1.0f;
+				infoWhite.nMaxLife = 60;
+
+				SetParticle(
+					infoWhite,
+					g_player.obj.pos,
+					D3DX_PI,
+					D3DX_PI / 2,
+					1,
+					5
+				);
+
+				PlaySound(SOUND_LABEL_SE_JUMP);
+
+				g_player.bIsJumping = true;
+				g_player.move.y = -g_player.fJumpPower;
+			}
+			else
+			{// 空中でスペースキーが押された
+				if (g_player.fCharge > 0)
+				{
+					PlaySound(SOUND_LABEL_SE_JET, 0.1f);
+					g_player.bIsFlying = true;
+				}
 			}
 		}
-	}
-	else if (GetKeyboardRelease(DIK_SPACE) || GetJoypadRelease(JOYKEY_A))
-	{// 空中でスペースキーが離された
-		StopSound(SOUND_LABEL_SE_JET);
-		g_player.bIsFlying = false;
+		else if (GetKeyboardRelease(DIK_SPACE) || GetJoypadRelease(JOYKEY_A))
+		{// 空中でスペースキーが離された
+			StopSound(SOUND_LABEL_SE_JET);
+			g_player.bIsFlying = false;
+		}
 	}
 
 	// 空中での挙動

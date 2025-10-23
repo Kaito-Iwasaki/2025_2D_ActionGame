@@ -48,6 +48,7 @@
 MAPINFO g_map[NUM_BLOCK_Y][NUM_BLOCK_X] = {};
 int g_nCurrentStage = 0;
 GAMESTATE g_gameState = GAMESTATE_NORMAL;
+int g_nCounterGameState = 0;
 bool g_bIsPause = false;
 FONT* g_pFontInfo = NULL;
 DWORD g_dwTimer = timeGetTime();
@@ -93,6 +94,7 @@ void InitGame(void)
 	);
 
 	// 値の初期化
+	g_nCounterGameState = 0;
 	g_bIsPause = false;
 	g_dwStart = timeGetTime();
 	SetGameState(GAMESTATE_NORMAL);
@@ -161,6 +163,7 @@ void UpdateGame(void)
 		UpdateFuelBar();
 
 		// 現在のゲーム状態別の処理
+		g_nCounterGameState++;
 		switch (g_gameState)
 		{
 		case GAMESTATE_NORMAL:	// 通常
@@ -168,14 +171,17 @@ void UpdateGame(void)
 			break;
 
 		case GAMESTATE_CLEAR:	// クリア
-			// 次のステージに設定
-			SetStage(g_nCurrentStage + 1);
-
 			// プレイヤーを終了状態に移行
 			SetPlayerState(PLAYERSTATE_END);
 
-			// ゲームを終了状態に移行
-			SetGameState(GAMESTATE_END);
+			if (g_nCounterGameState > 60)
+			{
+				// 次のステージに設定
+				SetStage(g_nCurrentStage + 1);
+
+				// ゲームを終了状態に移行
+				SetGameState(GAMESTATE_END);
+			}
 
 			break;
 
@@ -234,6 +240,7 @@ void DrawGame(void)
 void SetGameState(GAMESTATE newState)
 {
 	g_gameState = newState;
+	g_nCounterGameState = 0;
 }
 
 //=====================================================================

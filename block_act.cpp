@@ -132,8 +132,10 @@ void BLOCK_Goal(BLOCK* pBlock)
 {
 	PLAYER* pPlayer = GetPlayer();
 
+	if (GetGameState() == GAMESTATE_CLEAR) return;
 	if (pPlayer->state == PLAYERSTATE_INIT) return;
 	if (pPlayer->state == PLAYERSTATE_DIED) return;
+	if (pPlayer->state == PLAYERSTATE_END) return;
 
 	D3DXVECTOR3 posBlockCenter = pBlock->obj.pos + D3DXVECTOR3(BLOCK_SIZE / 2, BLOCK_SIZE / 2, 0);
 
@@ -146,6 +148,45 @@ void BLOCK_Goal(BLOCK* pBlock)
 	{
 		if (GetGameState() == GAMESTATE_NORMAL)
 		{
+			EFFECTINFO info;
+			info.col = D3DXCOLOR(1.0f, 0.3f, 0.0f, 1.0f);
+			info.fMaxAlpha = 1.0f;
+			info.fMaxScale = 0.5f;
+			info.fRotSpeed = 0.5f;
+			info.fSpeed = 1.0f;
+			info.nMaxLife = 50;
+
+			SetParticle(
+				info,
+				posBlockCenter,
+				0.0f,
+				D3DX_PI * 2,
+				1,
+				10
+			);
+
+			info.col = D3DXCOLOR(0.8f, 0.8f, 1.0f, 1.0f);
+
+			SetParticle(
+				info,
+				posBlockCenter,
+				0.0f,
+				D3DX_PI * 2,
+				1,
+				10
+			);
+
+			info.col = D3DXCOLOR(0.9f, 1.0f, 0.9f, 1.0f);
+
+			SetParticle(
+				info,
+				posBlockCenter,
+				0.0f,
+				D3DX_PI * 2,
+				1,
+				10
+			);
+
 			SetGameState(GAMESTATE_CLEAR);
 		}
 	}

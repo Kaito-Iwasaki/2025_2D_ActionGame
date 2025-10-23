@@ -36,6 +36,7 @@ typedef enum
 	PLAYERSTATE_NORMAL,
 	PLAYERSTATE_DAMAGED,
 	PLAYERSTATE_DIED,
+	PLAYERSTATE_CLEAR,
 	PLAYERSTATE_END,
 	PLAYERSTATE_MAX
 }PLAYERSTATE;
@@ -62,6 +63,7 @@ typedef struct
 	bool bIsJumping;
 	float fCharge;
 	bool bIsFlying;
+	bool bIsControlEnabled;
 	BLOCK* pBlock;
 	D3DXVECTOR3 startPos;
 }PLAYER;
