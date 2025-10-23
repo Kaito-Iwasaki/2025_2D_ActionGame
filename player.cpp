@@ -19,7 +19,7 @@
 //*********************************************************************
 #define TEXTURE_FILENAME		"data\\TEXTURE\\player000.png"
 #define TEXTURE_MAX_X			(4)
-#define TEXTURE_MAX_Y			(2)
+#define TEXTURE_MAX_Y			(3)
 #define INIT_POS				D3DXVECTOR3(100.0f, 640.0f, 0.0f)
 #define INIT_SIZE				D3DXVECTOR3(75.0f, 75.0f, 0.0f) * 0.7f
 #define INIT_COLOR				D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f)
@@ -142,6 +142,26 @@ void UpdatePlayer(void)
 		{
 			SetGameState(GAMESTATE_END);
 		}
+
+		{
+			EFFECTINFO info = {};
+			info.col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+			info.fMaxAlpha = 0.5f;
+			info.fMaxScale = 0.5f;
+			info.fRotSpeed = 0.5f;
+			info.fSpeed = 4.0f;
+			info.nMaxLife = 30;
+
+			SetParticle(
+				info,
+				g_player.obj.pos + D3DXVECTOR3(0, -2, 0),
+				0.0f,
+				0.6f,
+				1,
+				1
+			);
+		}
+
 		g_player.move.y += GAME_GRAVITY;	// 重力を加算
 		g_player.obj.pos += g_player.move;
 		return;
@@ -150,6 +170,10 @@ void UpdatePlayer(void)
 		StopSound(SOUND_LABEL_SE_JET);
 		g_player.bIsControlEnabled = false;
 		g_player.bIsFlying = false;
+
+		g_player.nPatternAnimX = 2;
+		g_player.nPatternAnimY = 2;
+
 		break;
 	}
 
@@ -334,28 +358,31 @@ void UpdatePlayer(void)
 	g_player.nCounterAnim++;
 
 	// アニメーションの更新
-	if (g_player.bIsJumping)
-	{// ジャンプ
-		g_player.nPatternAnimX = 0;
-		g_player.nPatternAnimY = 1;
-	}
-	else if (abs((long)g_player.move.x) > 0.01f)
-	{// 移動
-		g_player.nPatternAnimY = 1;
-	}
-	else
-	{// 停止
-		g_player.nPatternAnimY = 0;
-	}
+	if (g_player.state != PLAYERSTATE_END)
+	{
+		if (g_player.bIsJumping)
+		{// ジャンプ
+			g_player.nPatternAnimX = 0;
+			g_player.nPatternAnimY = 1;
+		}
+		else if (abs((long)g_player.move.x) > 0.01f)
+		{// 移動
+			g_player.nPatternAnimY = 1;
+		}
+		else
+		{// 停止
+			g_player.nPatternAnimY = 0;
+		}
 
-	// アニメーションの向きを設定
-	if (g_player.move.x < 0)
-	{// 左
-		g_player.obj.bInversed = true;
-	}
-	else if (g_player.move.x > 0)
-	{// 右
-		g_player.obj.bInversed = false;
+		// アニメーションの向きを設定
+		if (g_player.move.x < 0)
+		{// 左
+			g_player.obj.bInversed = true;
+		}
+		else if (g_player.move.x > 0)
+		{// 右
+			g_player.obj.bInversed = false;
+		}
 	}
 
 	if (IsObjectOutOfScreen(g_player.obj, OOS_BOTTOM))
@@ -386,7 +413,7 @@ void DrawPlayer(void)
 	);
 	SetVertexRHW(pVtx, 1.0f);
 	SetVertexColor(pVtx, g_player.obj.color);
-	SetVertexTexturePos(pVtx, g_player.nPatternAnimX, g_player.nPatternAnimY, 4, 2, g_player.obj.bInversed);
+	SetVertexTexturePos(pVtx, g_player.nPatternAnimX, g_player.nPatternAnimY, TEXTURE_MAX_X, TEXTURE_MAX_Y, g_player.obj.bInversed);
 
 	// 頂点バッファをアンロック
 	g_pVtxBuffPlayer->Unlock();
@@ -456,6 +483,8 @@ void KillPlayer(void)
 	if (g_player.state == PLAYERSTATE_DIED) return;
 	if (GetGameState() == GAMESTATE_CLEAR) return;
 
+	g_player.nPatternAnimX = 0;
+	g_player.nPatternAnimY = 2;
 	g_player.bIsFlying = false;
 	StopSound(SOUND_LABEL_SE_JET);
 	g_player.move = D3DXVECTOR3(0.0f, -g_player.fJumpPower, 0.0f);
