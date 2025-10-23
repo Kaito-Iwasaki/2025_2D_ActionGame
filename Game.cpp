@@ -32,6 +32,7 @@
 // 
 //*********************************************************************
 #define MAX_LEVEL	(10)
+#define INIT_TIMER	(60 * 120)
 
 //*********************************************************************
 // 
@@ -51,8 +52,10 @@ GAMESTATE g_gameState = GAMESTATE_NORMAL;
 int g_nCounterGameState = 0;
 bool g_bIsPause = false;
 FONT* g_pFontInfo = NULL;
-DWORD g_dwTimer = timeGetTime();
+DWORD g_dwTimer = 120;
 DWORD g_dwStart = timeGetTime();
+DWORD g_dwLast = timeGetTime();
+int g_nTimer = INIT_TIMER;
 
 //=====================================================================
 // 初期化処理
@@ -140,8 +143,6 @@ void UninitGame(void)
 //=====================================================================
 void UpdateGame(void)
 {
-	g_dwTimer = timeGetTime();
-
 	if (INPUT_TRIGGER_PAUSE)
 	{// ポーズメニュー
 		TogglePause(!g_bIsPause);
@@ -167,7 +168,13 @@ void UpdateGame(void)
 		switch (g_gameState)
 		{
 		case GAMESTATE_NORMAL:	// 通常
-			sprintf(&g_pFontInfo->aText[0], "Level %02d\nTime %.2f", g_nCurrentStage + 1, (float)(g_dwTimer - g_dwStart) / 1000.0f);
+			sprintf(&g_pFontInfo->aText[0], "Level %02d\nTime %d", g_nCurrentStage + 1, (g_nTimer) / 10);
+
+			if (GetFade() == FADE_NONE && GetPlayer()->state != PLAYERSTATE_END)
+			{
+				g_nTimer--;
+			}
+
 			break;
 
 		case GAMESTATE_CLEAR:	// クリア
@@ -249,6 +256,12 @@ void SetGameState(GAMESTATE newState)
 GAMESTATE GetGameState(void)
 {
 	return g_gameState;
+}
+
+void ResetGame(void)
+{
+	SetStage(0);
+	g_nTimer = INIT_TIMER;
 }
 
 //=====================================================================

@@ -68,7 +68,7 @@ void UpdateTitle(void)
 {
 	if (INPUT_TRIGGER_ACCEPT)
 	{// ゲームスタート
-		SetStage(0);
+		ResetGame();
 		SetFade(SCENE_GAME);
 	}
 }

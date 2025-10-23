@@ -158,7 +158,7 @@ void BLOCK_Goal(BLOCK* pBlock)
 
 			SetParticle(
 				info,
-				posBlockCenter,
+				pPlayer->obj.pos,
 				0.0f,
 				D3DX_PI * 2,
 				1,
@@ -169,7 +169,7 @@ void BLOCK_Goal(BLOCK* pBlock)
 
 			SetParticle(
 				info,
-				posBlockCenter,
+				pPlayer->obj.pos,
 				0.0f,
 				D3DX_PI * 2,
 				1,
@@ -180,7 +180,7 @@ void BLOCK_Goal(BLOCK* pBlock)
 
 			SetParticle(
 				info,
-				posBlockCenter,
+				pPlayer->obj.pos,
 				0.0f,
 				D3DX_PI * 2,
 				1,

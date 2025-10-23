@@ -47,6 +47,7 @@ void UpdateGame(void);
 void DrawGame(void);
 void SetGameState(GAMESTATE newState);
 GAMESTATE GetGameState(void);
+void ResetGame(void);
 void TogglePause(bool bIsPause);
 void SetMap(MAPINFO* map);
 MAPINFO* GetMap(void);

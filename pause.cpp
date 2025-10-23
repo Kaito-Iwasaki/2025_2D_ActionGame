@@ -117,6 +117,7 @@ void UpdatePause(void)
 			break;
 
 		case PAUSE_MENU_RETRY:
+			ResetGame();
 			SetFade(SCENE_GAME);
 			break;
 

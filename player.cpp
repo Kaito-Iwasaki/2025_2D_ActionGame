@@ -29,7 +29,7 @@
 #define INIT_PLAYER_JUMPPOWER	(10.0f)
 #define INIT_PLAYER_CHARGE		PLAYER_CHARGE_MAX
 
-#define TIME_STATE_DIED			(30)
+#define TIME_STATE_DIED			(60)
 
 //*********************************************************************
 // 
@@ -132,6 +132,48 @@ void UpdatePlayer(void)
 		g_player.fCharge = INIT_PLAYER_CHARGE;
 		g_player.bIsControlEnabled = true;
 		SetPlayerState(PLAYERSTATE_NORMAL);
+
+		{
+			EFFECTINFO info;
+			info.col = D3DXCOLOR(1.0f, 0.3f, 0.0f, 1.0f);
+			info.fMaxAlpha = 1.0f;
+			info.fMaxScale = 0.5f;
+			info.fRotSpeed = 0.5f;
+			info.fSpeed = 1.0f;
+			info.nMaxLife = 70;
+
+			SetParticle(
+				info,
+				g_player.obj.pos,
+				0.0f,
+				D3DX_PI * 2,
+				1,
+				10
+			);
+
+			info.col = D3DXCOLOR(0.8f, 0.8f, 1.0f, 1.0f);
+
+			SetParticle(
+				info,
+				g_player.obj.pos,
+				0.0f,
+				D3DX_PI * 2,
+				1,
+				10
+			);
+
+			info.col = D3DXCOLOR(0.9f, 1.0f, 0.9f, 1.0f);
+
+			SetParticle(
+				info,
+				g_player.obj.pos,
+				0.0f,
+				D3DX_PI * 2,
+				1,
+				10
+			);
+		}
+
 		break;
 
 	case PLAYERSTATE_NORMAL:
@@ -140,7 +182,8 @@ void UpdatePlayer(void)
 	case PLAYERSTATE_DIED:
 		if (g_player.nCounterState > TIME_STATE_DIED)
 		{
-			SetGameState(GAMESTATE_END);
+			//SetGameState(GAMESTATE_END);
+			SetPlayerState(PLAYERSTATE_INIT);
 		}
 
 		{
@@ -182,7 +225,7 @@ void UpdatePlayer(void)
 
 	// ƒvƒŒƒCƒ„[‚Ì‘€ìˆ—
 	g_player.move.x = 0;
-	if (g_player.bIsControlEnabled)
+	if (g_player.bIsControlEnabled && GetFade() == FADE_NONE)
 	{
 		if (INPUT_PRESS_LEFT)
 		{// ¶
