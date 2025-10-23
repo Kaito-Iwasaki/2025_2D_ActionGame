@@ -43,6 +43,24 @@
     <Filter Include="ヘッダー ファイル\GameObject\UI">
       <UniqueIdentifier>{75d643db-39d3-4a90-9161-eb5c7fd9b7d9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\GameObject\Editor">
+      <UniqueIdentifier>{03a8f7c5-ae5c-4ef8-9d44-5930cf04666c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\GameObject\Base">
+      <UniqueIdentifier>{d8eb0a88-438a-4225-9904-0863cebc115f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\GameObject\Base">
+      <UniqueIdentifier>{6d057101-1c1d-43ab-a30a-3e68e41f0aa5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\GameObject\Editor">
+      <UniqueIdentifier>{52205276-7d40-42f9-af0a-631e427d9299}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Scene\Base">
+      <UniqueIdentifier>{d9daaac1-e8d9-4ab6-89cc-725be01798b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Scene\Base">
+      <UniqueIdentifier>{da84f03a-c47f-4243-8e52-ca4c7ad1d316}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="sound.cpp">
@@ -53,12 +71,6 @@
     </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>ソース ファイル\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="baseObject.cpp">
-      <Filter>ソース ファイル\GameObject</Filter>
-    </ClCompile>
-    <ClCompile Include="baseScene.cpp">
-      <Filter>ソース ファイル\Scene</Filter>
     </ClCompile>
     <ClCompile Include="util.cpp">
       <Filter>ソース ファイル\Component</Filter>
@@ -87,9 +99,6 @@
     <ClCompile Include="block.cpp">
       <Filter>ソース ファイル\GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="block_act.cpp">
-      <Filter>ソース ファイル\Component</Filter>
-    </ClCompile>
     <ClCompile Include="enemy.cpp">
       <Filter>ソース ファイル\GameObject</Filter>
     </ClCompile>
@@ -99,14 +108,8 @@
     <ClCompile Include="Editor.cpp">
       <Filter>ソース ファイル\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="editorblock.cpp">
-      <Filter>ソース ファイル\GameObject</Filter>
-    </ClCompile>
     <ClCompile Include="Result.cpp">
       <Filter>ソース ファイル\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="effect.cpp">
-      <Filter>ソース ファイル\GameObject</Filter>
     </ClCompile>
     <ClCompile Include="particle.cpp">
       <Filter>ソース ファイル\Component</Filter>
@@ -116,6 +119,21 @@
     </ClCompile>
     <ClCompile Include="pause.cpp">
       <Filter>ソース ファイル\GameObject\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="editorblock.cpp">
+      <Filter>ソース ファイル\GameObject\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="baseObject.cpp">
+      <Filter>ソース ファイル\GameObject\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="effect.cpp">
+      <Filter>ソース ファイル\GameObject\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="block_act.cpp">
+      <Filter>ソース ファイル\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="baseScene.cpp">
+      <Filter>ソース ファイル\Scene\Base</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -127,12 +145,6 @@
     </ClInclude>
     <ClInclude Include="main.h">
       <Filter>ヘッダー ファイル\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="baseScene.h">
-      <Filter>ヘッダー ファイル\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="baseObject.h">
-      <Filter>ヘッダー ファイル\GameObject</Filter>
     </ClInclude>
     <ClInclude Include="util.h">
       <Filter>ヘッダー ファイル\Component</Filter>
@@ -161,9 +173,6 @@
     <ClInclude Include="block.h">
       <Filter>ヘッダー ファイル\GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="block_act.h">
-      <Filter>ヘッダー ファイル\Component</Filter>
-    </ClInclude>
     <ClInclude Include="enemy.h">
       <Filter>ヘッダー ファイル\GameObject</Filter>
     </ClInclude>
@@ -173,23 +182,32 @@
     <ClInclude Include="Editor.h">
       <Filter>ヘッダー ファイル\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="editorblock.h">
-      <Filter>ヘッダー ファイル\GameObject</Filter>
-    </ClInclude>
     <ClInclude Include="Result.h">
       <Filter>ヘッダー ファイル\Scene</Filter>
     </ClInclude>
     <ClInclude Include="particle.h">
       <Filter>ヘッダー ファイル\Component</Filter>
     </ClInclude>
-    <ClInclude Include="effect.h">
-      <Filter>ヘッダー ファイル\GameObject</Filter>
-    </ClInclude>
     <ClInclude Include="pause.h">
       <Filter>ヘッダー ファイル\GameObject\UI</Filter>
     </ClInclude>
     <ClInclude Include="fuelbar.h">
       <Filter>ヘッダー ファイル\GameObject\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="block_act.h">
+      <Filter>ヘッダー ファイル\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="editorblock.h">
+      <Filter>ヘッダー ファイル\GameObject\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="baseObject.h">
+      <Filter>ヘッダー ファイル\GameObject\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="effect.h">
+      <Filter>ヘッダー ファイル\GameObject\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="baseScene.h">
+      <Filter>ヘッダー ファイル\Scene\Base</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

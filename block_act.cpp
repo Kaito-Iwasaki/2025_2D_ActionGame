@@ -154,7 +154,7 @@ void BLOCK_Goal(BLOCK* pBlock)
 			info.fMaxScale = 0.5f;
 			info.fRotSpeed = 0.5f;
 			info.fSpeed = 1.0f;
-			info.nMaxLife = 50;
+			info.nMaxLife = 70;
 
 			SetParticle(
 				info,
@@ -187,6 +187,7 @@ void BLOCK_Goal(BLOCK* pBlock)
 				10
 			);
 
+			PlaySound(SOUND_LABEL_SE_CLEAR);
 			SetGameState(GAMESTATE_CLEAR);
 		}
 	}

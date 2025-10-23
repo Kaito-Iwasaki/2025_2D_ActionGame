@@ -38,6 +38,7 @@ SOUNDINFO g_aSoundInfo[SOUND_LABEL_MAX] = {
 	{"data\\SE\\jump.wav", 0},
 	{"data\\SE\\jet.wav", -1},
 	{"data\\SE\\coin.wav", 0},
+	{"data\\SE\\clear.wav", 0},
 };
 
 //=============================================================================
