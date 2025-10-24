@@ -42,5 +42,6 @@ void InitBackground(void);
 void UninitBackground(void);
 void UpdateBackground(void);
 void DrawBackground(void);
+void SetBackgroundColor(D3DXCOLOR color);
 
 #endif

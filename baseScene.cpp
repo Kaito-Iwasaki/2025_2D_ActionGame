@@ -29,6 +29,7 @@
 // 
 //*********************************************************************
 SCENE g_currentScene = SCENE_TITLE;		// 現在のシーン
+SCENE g_previousScene = SCENE_TITLE;	// 直前のシーン
 
 //*********************************************************************
 // 各シーンの処理関数
@@ -99,14 +100,17 @@ void DrawScene(void)
 //=====================================================================
 SCENE SetScene(SCENE nextScene, bool bStopSound)
 {
+	// 直前のシーンを記録
+	g_previousScene = g_currentScene;
+
 	// 現在のシーンを終了
 	g_scenes[g_currentScene].Uninit();
 
-	// 新規シーンを初期化
-	g_scenes[nextScene].Init();
-
 	// 新規シーンを現在のシーンに設定
 	g_currentScene = nextScene;
+
+	// 新規シーンを初期化
+	g_scenes[nextScene].Init();
 
 	return g_currentScene;
 }
@@ -117,4 +121,12 @@ SCENE SetScene(SCENE nextScene, bool bStopSound)
 SCENE GetCurrentScene(void)
 {
 	return g_currentScene;
+}
+
+//=====================================================================
+// 直前のシーンを取得する処理
+//=====================================================================
+SCENE GetPreviousScene(void)
+{
+	return g_previousScene;
 }

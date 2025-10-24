@@ -178,3 +178,12 @@ void DrawBackground(void)
 		}
 	}
 }
+
+void SetBackgroundColor(D3DXCOLOR color)
+{
+	BACKGROUND* pBG = &g_bg[0];
+	for (int nCount = 0; nCount < NUM_BG; nCount++, pBG++)
+	{
+		pBG->obj.color = pBG->obj.color = color;
+	}
+}

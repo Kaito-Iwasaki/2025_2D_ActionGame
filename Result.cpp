@@ -17,6 +17,7 @@
 #include "fade.h"
 #include "font.h"
 #include "Game.h"
+#include "background.h"
 
 //*********************************************************************
 // 
@@ -33,7 +34,6 @@
 typedef enum
 {
 	RESULTSTATE_COUNTUP = 0,
-
 	RESULTSTATE_END,
 	RESULTSTATE_MAX
 }RESULTSTATE;
@@ -51,6 +51,7 @@ typedef enum
 // 
 //*********************************************************************
 RESULTSTATE g_stateResult = RESULTSTATE_COUNTUP;
+FONT* g_pFontResultInfo = NULL;
 FONT* g_pFontResultScore = NULL;
 int g_nCounterState = 0;
 int g_nCounterScore = 0;
@@ -63,19 +64,26 @@ void InitResult(void)
 {
 	InitFont();
 	InitDecal();
+	InitBackground();
 
 	g_stateResult = RESULTSTATE_COUNTUP;
 	g_nCounterState = 0;
 	g_nCounterScore = GetScore();
 	g_nTimeLeft = GetGameTimeLeft() / 10;
 
-	//SetDecal(
-	//	DECAL_LABEL_RESULT_BG000,
-	//	D3DXVECTOR3(SCREEN_CENTER, SCREEN_VCENTER, 0),
-	//	D3DXVECTOR3(SCREEN_WIDTH, SCREEN_HEIGHT, 0),
-	//	D3DXVECTOR3_ZERO,
-	//	D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f)
-	//);
+	SetBackgroundColor(D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f));
+
+	g_pFontResultInfo = SetFont(
+		FONT_LABEL_DONGURI,
+		D3DXVECTOR3_ZERO,
+		D3DXVECTOR3(SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f),
+		D3DXVECTOR3_ZERO,
+		D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
+		30,
+		"",
+		DT_CENTER
+	);
+
 
 	g_pFontResultScore = SetFont(
 		FONT_LABEL_DONGURI,
@@ -87,6 +95,8 @@ void InitResult(void)
 		"",
 		DT_CENTER | DT_VCENTER
 	);
+
+	PlaySound(SOUND_LABEL_BGM_RESULT00);
 }
 
 //=====================================================================
@@ -96,6 +106,7 @@ void UninitResult(void)
 {
 	UninitFont();
 	UninitDecal();
+	UninitBackground();
 }
 
 //=====================================================================
@@ -103,6 +114,8 @@ void UninitResult(void)
 //=====================================================================
 void UpdateResult(void)
 {
+	UpdateBackground();
+
 	g_nCounterState++;
 	switch (g_stateResult)
 	{
@@ -116,6 +129,7 @@ void UpdateResult(void)
 		if (g_nTimeLeft < 1 )
 		{
 			g_stateResult = RESULTSTATE_END;
+			g_nCounterState = 0;
 		}
 		else
 		{
@@ -127,13 +141,14 @@ void UpdateResult(void)
 		break;
 
 	case RESULTSTATE_END:
-		if (INPUT_TRIGGER_ACCEPT)
+		if (INPUT_TRIGGER_ACCEPT  || g_nCounterState > 60 * 5)
 		{
 			SetFade(SCENE_TITLE);
 		}
 		break;
 	}
 
+	sprintf(&g_pFontResultInfo->aText[0], "Level %02d | Time %03d | Score | %06d", GetStage(), g_nTimeLeft, g_nCounterScore);
 	sprintf(&g_pFontResultScore->aText[0], "%06d", g_nCounterScore);
 }
 
@@ -142,6 +157,7 @@ void UpdateResult(void)
 //=====================================================================
 void DrawResult(void)
 {
+	DrawBackground();
 	DrawDecal();
 	DrawFont();
 }

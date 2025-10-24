@@ -15,7 +15,10 @@
 //*****************************************************************************
 typedef enum
 {
-	SOUND_LABEL_SE_CURSOR = 0,
+	SOUND_LABEL_BGM_TITLE00 = 0,
+	SOUND_LABEL_BGM_GAME00,
+	SOUND_LABEL_BGM_RESULT00,
+	SOUND_LABEL_SE_CURSOR,
 	SOUND_LABEL_SE_JUMP,
 	SOUND_LABEL_SE_JET,
 	SOUND_LABEL_SE_COIN,

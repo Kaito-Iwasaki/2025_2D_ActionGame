@@ -15,6 +15,7 @@
 #include "input.h"
 #include "fade.h"
 #include "Game.h"
+#include "sound.h"
 
 //*********************************************************************
 // 
@@ -51,6 +52,9 @@ void InitTitle(void)
 		D3DXVECTOR3_ZERO,
 		D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f)
 	);
+
+	StopSound();
+	PlaySound(SOUND_LABEL_BGM_TITLE00);
 }
 
 //=====================================================================

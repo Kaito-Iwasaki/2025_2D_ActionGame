@@ -96,6 +96,12 @@ void InitGame(void)
 	SetGameState(GAMESTATE_NORMAL);
 	sprintf(&g_pFontInfo->aText[0], "Level %02d", g_nCurrentStage  + 1);
 
+	if (GetPreviousScene() == SCENE_TITLE)
+	{
+		StopSound();
+		PlaySound(SOUND_LABEL_BGM_GAME00);
+	}
+
 	// 現在のステージ情報のファイル名を取得
 	GetStageName(g_nCurrentStage, &aStageFileName[0]);
 
@@ -199,7 +205,7 @@ void UpdateGame(void)
 			// 画面遷移処理
 			if (g_nCurrentStage == MAX_LEVEL)
 			{// 次のレベルがなければリザルト画面へ遷移
-				SetFade(SCENE_RESULT, false);
+				SetFade(SCENE_RESULT);
 			}
 			else
 			{
