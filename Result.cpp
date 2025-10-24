@@ -33,7 +33,8 @@
 //*********************************************************************
 typedef enum
 {
-	RESULTSTATE_COUNTUP = 0,
+	RESULTSTATE_COUNTREADY = 0,
+	RESULTSTATE_COUNTUP,
 	RESULTSTATE_END,
 	RESULTSTATE_MAX
 }RESULTSTATE;
@@ -50,7 +51,7 @@ typedef enum
 // ***** ƒOƒ[ƒoƒ‹•Ï” *****
 // 
 //*********************************************************************
-RESULTSTATE g_stateResult = RESULTSTATE_COUNTUP;
+RESULTSTATE g_stateResult = RESULTSTATE_COUNTREADY;
 FONT* g_pFontResultInfo = NULL;
 FONT* g_pFontResultScore = NULL;
 int g_nCounterState = 0;
@@ -66,7 +67,7 @@ void InitResult(void)
 	InitDecal();
 	InitBackground();
 
-	g_stateResult = RESULTSTATE_COUNTUP;
+	g_stateResult = RESULTSTATE_COUNTREADY;
 	g_nCounterState = 0;
 	g_nCounterScore = GetScore();
 	g_nTimeLeft = GetGameTimeLeft() / 10;
@@ -119,6 +120,13 @@ void UpdateResult(void)
 	g_nCounterState++;
 	switch (g_stateResult)
 	{
+	case RESULTSTATE_COUNTREADY:
+		if (g_nCounterState > 60)
+		{
+			g_stateResult = RESULTSTATE_COUNTUP;
+		}
+		break;
+
 	case RESULTSTATE_COUNTUP:
 		if (INPUT_TRIGGER_ACCEPT)
 		{
@@ -141,7 +149,7 @@ void UpdateResult(void)
 		break;
 
 	case RESULTSTATE_END:
-		if (INPUT_TRIGGER_ACCEPT  || g_nCounterState > 60 * 5)
+		if (INPUT_TRIGGER_ACCEPT  || g_nCounterState > 360)
 		{
 			SetFade(SCENE_TITLE);
 		}
@@ -149,7 +157,7 @@ void UpdateResult(void)
 	}
 
 	sprintf(&g_pFontResultInfo->aText[0], "Level %02d | Time %03d | Score | %06d", GetStage(), g_nTimeLeft, g_nCounterScore);
-	sprintf(&g_pFontResultScore->aText[0], "%06d", g_nCounterScore);
+	sprintf(&g_pFontResultScore->aText[0], "YOUR SCORE\n%06d", g_nCounterScore);
 }
 
 //=====================================================================
