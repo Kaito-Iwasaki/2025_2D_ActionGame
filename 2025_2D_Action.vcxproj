@@ -138,6 +138,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="background.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="baseObject.h" />
     <ClInclude Include="baseScene.h" />
     <ClInclude Include="block.h" />
@@ -190,6 +194,10 @@
     <ClInclude Include="util.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="background.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="baseObject.cpp" />
     <ClCompile Include="baseScene.cpp" />
     <ClCompile Include="block.cpp" />

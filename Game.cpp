@@ -25,6 +25,7 @@
 #include "pause.h"
 #include "fuelbar.h"
 #include "font.h"
+#include "background.h"
 
 //*********************************************************************
 // 
@@ -75,15 +76,7 @@ void InitGame(void)
 	InitParticle();
 	InitPause();
 	InitFuelBar();
-
-	// 背景画像の設置
-	SetDecal(
-		DECAL_LABEL_BG000,
-		D3DXVECTOR3(SCREEN_CENTER, SCREEN_VCENTER, 0),
-		D3DXVECTOR3(SCREEN_WIDTH, SCREEN_HEIGHT, 0),
-		D3DXVECTOR3_ZERO,
-		D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f)
-	);
+	InitBackground();
 
 	g_pFontInfo = SetFont(
 		FONT_LABEL_DONGURI,
@@ -136,6 +129,7 @@ void UninitGame(void)
 	UninitEffect();
 	UninitPause();
 	UninitFuelBar();
+	UninitBackground();
 }
 
 //=====================================================================
@@ -162,6 +156,7 @@ void UpdateGame(void)
 		UpdateParticle();
 		UpdateEffect();
 		UpdateFuelBar();
+		UpdateBackground();
 
 		// 現在のゲーム状態別の処理
 		g_nCounterGameState++;
@@ -234,6 +229,7 @@ void UpdateGame(void)
 void DrawGame(void)
 {
 	// 各オブジェクトの描画処理
+	DrawBackground();
 	DrawDecal();
 	DrawBlock();
 	DrawItem();
