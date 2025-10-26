@@ -14,11 +14,12 @@
 // ***** ƒ}ƒNƒ’è‹` *****
 // 
 //*********************************************************************
-#define INIT_SIZE_X			(36.0f)
-#define INIT_SIZE_Y			(10.0f)
+#define INIT_SIZE_X				(36.0f)
+#define INIT_SIZE_Y				(10.0f)
 
-#define COLOR_REMAIN		D3DXCOLOR(1.0f, 0.75f, 0.0f, 1.0f)
-#define COLOR_EMPTY			D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.0f)
+#define COLOR_REMAIN			D3DXCOLOR(1.0f, 0.75f, 0.0f, 1.0f)
+#define COLOR_REMAIN_DANGER		D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f)
+#define COLOR_EMPTY				D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.0f)
 
 #define BAR_POS_OFFSET		D3DXVECTOR3(-INIT_SIZE_X / 2, -65.0, 0)
 
@@ -134,6 +135,16 @@ void UpdateFuelBar(void)
 		case FUELBAR_TYPE_REMAIN:
 			pFuelBar->obj.size.x = INIT_SIZE_X * pPlayer->fCharge;
 			Clampf(&pFuelBar->obj.size.x, 0.0f, pFuelBar->obj.size.x);
+
+			if (pPlayer->fCharge < 0.4f)
+			{
+				pFuelBar->obj.color = COLOR_REMAIN_DANGER;
+			}
+			else
+			{
+				pFuelBar->obj.color = COLOR_REMAIN;
+			}
+
 			break;
 		}
 	}

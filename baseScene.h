@@ -21,6 +21,8 @@
 //*********************************************************************
 #define INPUT_TRIGGER_ACCEPT	GetKeyboardTrigger(DIK_RETURN) || GetJoypadTrigger(JOYKEY_START)
 #define INPUT_TRIGGER_PAUSE		GetKeyboardTrigger(DIK_P) || GetJoypadTrigger(JOYKEY_START)
+#define INPUT_REPEAT_UP			GetKeyboardRepeat(DIK_W) || GetJoypadRepeat(JOYKEY_UP) || GetJoystickRepeat(JOYSTICK_L_UP)
+#define INPUT_REPEAT_DOWN		GetKeyboardRepeat(DIK_S) || GetJoypadRepeat(JOYKEY_DOWN) || GetJoystickRepeat(JOYSTICK_L_DOWN)
 #define INPUT_PRESS_LEFT		GetKeyboardPress(DIK_A) || GetJoypadPress(JOYKEY_LEFT) || GetJoystickPress(JOYSTICK_L_LEFT)
 #define INPUT_PRESS_RIGHT		GetKeyboardPress(DIK_D) || GetJoypadPress(JOYKEY_RIGHT) || GetJoystickPress(JOYSTICK_L_RIGHT)
 
