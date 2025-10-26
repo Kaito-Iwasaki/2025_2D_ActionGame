@@ -47,7 +47,7 @@ void Clamp(int* pNum, int nMin, int nMax)
 //=====================================================================
 // ¬”‚ğ”ÍˆÍ“à‚Éû‚ß‚éˆ—
 //=====================================================================
-int Clampf(float fNum, float fMin, float fMax)
+float Clampf(float fNum, float fMin, float fMax)
 {
 	if (fNum < fMin)
 	{

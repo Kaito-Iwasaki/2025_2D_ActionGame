@@ -21,7 +21,7 @@
 //*********************************************************************
 int Clamp(int nNum, int nMin, int nMax);
 void Clamp(int* pNum, int nMin, int nMax);
-int Clampf(float fNum, float fMin, float fMax);
+float Clampf(float fNum, float fMin, float fMax);
 void Clampf(float* pNum, float fMin, float fMax);
 int RandRange(int nMin, int nMax);
 float Dot(D3DXVECTOR2 vectorA, D3DXVECTOR2 vectorB);
