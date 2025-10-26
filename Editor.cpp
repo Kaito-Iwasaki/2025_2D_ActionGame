@@ -19,6 +19,7 @@
 #include "fade.h"
 #include "font.h"
 #include "Game.h"
+#include "background.h"
 
 //*********************************************************************
 // 
@@ -49,17 +50,10 @@ int g_nOutputLevel = 0;
 //=====================================================================
 void InitEditor(void)
 {
+	InitBackground();
 	InitDecal();
 	InitFont();
 	InitEditorBlock();
-
-	SetDecal(
-		DECAL_LABEL_BG000,
-		D3DXVECTOR3(SCREEN_CENTER, SCREEN_VCENTER, 0),
-		D3DXVECTOR3(SCREEN_WIDTH, SCREEN_HEIGHT, 0),
-		D3DXVECTOR3_ZERO,
-		D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f)
-	);
 
 	g_nCurrentBlock = 1;
 	g_nOutputLevel = GetStage();
@@ -90,6 +84,7 @@ void InitEditor(void)
 //=====================================================================
 void UninitEditor(void)
 {
+	UninitBackground();
 	UninitDecal();
 	UninitFont();
 	UninitEditorBlock();
@@ -182,6 +177,7 @@ void UpdateEditor(void)
 //=====================================================================
 void DrawEditor(void)
 {
+	DrawBackground();
 	DrawDecal();
 	DrawEditorBlock();
 	DrawFont();
