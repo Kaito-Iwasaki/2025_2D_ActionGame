@@ -244,12 +244,13 @@ void BLOCK_Goal(BLOCK* pBlock)
 {
 	PLAYER* pPlayer = GetPlayer();
 
-	if (GetGameState() == GAMESTATE_CLEAR) return;
-	if (pPlayer->state == PLAYERSTATE_INIT) return;
-	if (pPlayer->state == PLAYERSTATE_DIED) return;
-	if (pPlayer->state == PLAYERSTATE_END) return;
-
 	D3DXVECTOR3 posBlockCenter = pBlock->obj.pos + D3DXVECTOR3(BLOCK_SIZE / 2, BLOCK_SIZE / 2, 0);
+
+	pBlock->nCounterState++;
+	if (pBlock->nCounterState % 10 == 0)
+	{
+		pBlock->nPatternAnimX = (pBlock->nPatternAnimX + 1) % 4;
+	}
 
 	if (BoxCollision(
 		posBlockCenter,
@@ -258,6 +259,11 @@ void BLOCK_Goal(BLOCK* pBlock)
 		pPlayer->hitBoxSize
 	))
 	{
+		if (GetGameState() == GAMESTATE_CLEAR) return;
+		if (pPlayer->state == PLAYERSTATE_INIT) return;
+		if (pPlayer->state == PLAYERSTATE_DIED) return;
+		if (pPlayer->state == PLAYERSTATE_END) return;
+
 		if (GetGameState() == GAMESTATE_NORMAL)
 		{
 			EFFECTINFO info;
@@ -306,11 +312,7 @@ void BLOCK_Goal(BLOCK* pBlock)
 		}
 	}
 
-	pBlock->nCounterState++;
-	if (pBlock->nCounterState % 10 == 0)
-	{
-		pBlock->nPatternAnimX = (pBlock->nPatternAnimX + 1) % 4;
-	}
+
 }
 
 //=====================================================================
