@@ -18,6 +18,7 @@
 #include "font.h"
 #include "Game.h"
 #include "background.h"
+#include "Ranking.h"
 
 //*********************************************************************
 // 
@@ -72,13 +73,12 @@ void InitResult(void)
 	g_nCounterScore = GetScore();
 	g_nTimeLeft = GetGameTimeLeft() / 10;
 
-	SetBackgroundColor(D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f));
+	SetBackgroundColor(D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f));
 
 	g_pFontResultInfo = SetFont(
 		FONT_LABEL_DONGURI,
 		D3DXVECTOR3_ZERO,
 		D3DXVECTOR3(SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f),
-		D3DXVECTOR3_ZERO,
 		D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
 		30,
 		"",
@@ -90,13 +90,15 @@ void InitResult(void)
 		FONT_LABEL_DONGURI,
 		D3DXVECTOR3_ZERO,
 		D3DXVECTOR3(SCREEN_WIDTH, SCREEN_HEIGHT, 0),
-		D3DXVECTOR3_ZERO,
 		D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
 		100,
 		"",
 		DT_CENTER | DT_VCENTER
 	);
 
+	SaveScore(GetScore() + GetGameTimeLeft() / 10 * 10);
+
+	StopSound();
 	PlaySound(SOUND_LABEL_BGM_RESULT00);
 }
 
@@ -151,7 +153,7 @@ void UpdateResult(void)
 	case RESULTSTATE_END:
 		if (INPUT_TRIGGER_ACCEPT  || g_nCounterState > 360)
 		{
-			SetFade(SCENE_TITLE);
+			SetFade(SCENE_RANKING);
 		}
 		break;
 	}

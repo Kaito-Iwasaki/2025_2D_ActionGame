@@ -135,7 +135,6 @@ FONT* SetFont(
 	FONT_LABEL type,		// 使用するフォント
 	D3DXVECTOR3 pos,		// 位置
 	D3DXVECTOR3 size,		// サイズ
-	D3DXVECTOR3 rot,		// 回転
 	D3DXCOLOR col,			// 色
 	int nScale,				// テキストのサイズ4
 	const char* aText,		// 表示するテキスト

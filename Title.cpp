@@ -26,6 +26,7 @@
 // 
 //*********************************************************************
 #define TIME_STATE_INTRO	(60)
+#define TIME_STATE_START	(60)
 
 #define LOGO_POS_X			SCREEN_CENTER
 #define LOGO_POS_Y			SCREEN_VCENTER - 200
@@ -48,13 +49,14 @@ typedef enum
 {
 	TITLESTATE_INTRO = 0,
 	TITLESTATE_NORMAL,
-	TITLESTATE_START,
+	TITLESTATE_PRESSED,
 	TITLESTATE_MAX
 }TITLESTATE;
 
 typedef enum
 {
 	TITLESELECTION_START = 0,
+	TITLESELECTION_RANKING,
 	TITLESELECTION_CREDIT,
 	TITLESELECTION_QUIT,
 	TITLESELECTION_MAX
@@ -74,6 +76,7 @@ int g_nSelectTitle = 0;
 
 const char* g_aTitleSelection[TITLESELECTION_MAX] = {
 	"Start",
+	"RANKING",
 	"Credit",
 	"Quit"
 };
@@ -104,14 +107,14 @@ void InitTitle(void)
 	{
 		g_pFontTitleSelection[i] = SetFont(
 			FONT_LABEL_DONGURI,
-			D3DXVECTOR3(0, SCREEN_VCENTER + i * 100, 0),
+			D3DXVECTOR3(0, (SCREEN_VCENTER + 100) + i * 50, 0),
 			D3DXVECTOR3(SCREEN_WIDTH, 50, 0),
-			D3DXVECTOR3_ZERO,
 			D3DXCOLOR_BLACK,
 			50,
 			g_aTitleSelection[i],
 			DT_CENTER
 		);
+		g_pFontTitleSelection[i]->obj.bVisible = false;
 	}
 
 	StopSound();
@@ -155,6 +158,11 @@ void UpdateTitle(void)
 			g_pDecalLogo->obj.color.a = 1.0f;
 			g_pDecalLogo->obj.size = LOGO_SIZE;
 
+			for (int i = 0; i < TITLESELECTION_MAX; i++)
+			{
+				g_pFontTitleSelection[i]->obj.bVisible = true;
+			}
+
 			g_stateTitle = TITLESTATE_NORMAL;
 			g_nCounterStateTitle = 0;
 		}
@@ -164,9 +172,10 @@ void UpdateTitle(void)
 
 	case TITLESTATE_NORMAL:
 		if (INPUT_TRIGGER_ACCEPT)
-		{// ゲームスタート
-			ResetGame();
-			SetFade(SCENE_GAME);
+		{// 
+			g_stateTitle = TITLESTATE_PRESSED;
+			g_nCounterStateTitle = 0;
+			break;
 		}
 
 		if (INPUT_REPEAT_UP)
@@ -193,13 +202,47 @@ void UpdateTitle(void)
 
 		break;
 
-	case TITLESTATE_START:
+	case TITLESTATE_PRESSED:
+		if (g_nCounterStateTitle % 5 == 0)
+		{
+			g_pFontTitleSelection[g_nSelectTitle]->obj.bVisible ^= 1;
+		}
 
+		if (g_nCounterStateTitle == TIME_STATE_INTRO)
+		{
+			switch (g_nSelectTitle)
+			{
+			case TITLESELECTION_START:
+				ResetGame();
+				SetFade(SCENE_GAME);
+				break;
+
+			case TITLESELECTION_RANKING:
+				SetFade(SCENE_RANKING);
+				break;
+
+			case TITLESELECTION_CREDIT:
+				g_stateTitle = TITLESTATE_NORMAL;
+				break;
+
+			case TITLESELECTION_QUIT:
+				g_stateTitle = TITLESTATE_NORMAL;
+				break;
+			}
+		}
 		break;
 	}
 
 	g_pDecalLogo->obj.pos = D3DXVECTOR3(LOGO_POS_X + sinf(g_nElapsedTimeTitle * 0.025f) * 10.0f, LOGO_POS_Y + cosf(g_nElapsedTimeTitle * 0.05f) * 10.0f, 0);
 	g_pDecalLogo->obj.rot.z = sinf(g_nElapsedTimeTitle * 0.01f) * 0.075f;
+
+#ifdef _DEBUG
+	if (GetKeyboardTrigger(DIK_F1))
+	{
+		SetFade(SCENE_RANKING);
+	}
+#endif
+
 }
 
 //=====================================================================

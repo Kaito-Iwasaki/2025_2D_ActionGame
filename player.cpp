@@ -132,7 +132,7 @@ void UpdatePlayer(void)
 		g_player.nLife = INIT_PLAYER_LIFE;
 		g_player.fCharge = INIT_PLAYER_CHARGE;
 		g_player.bIsControlEnabled = true;
-		SetPlayerState(PLAYERSTATE_NORMAL);
+		SetPlayerState(PLAYERSTATE_APPEAR);
 		PlaySound(SOUND_LABEL_SE_APPEAR);
 
 		{
@@ -176,6 +176,16 @@ void UpdatePlayer(void)
 			);
 		}
 
+		break;
+
+	case PLAYERSTATE_APPEAR:
+		g_player.obj.bVisible ^= 1;
+
+		if (g_player.nCounterState > 90)
+		{
+			g_player.obj.bVisible = true;
+			SetPlayerState(PLAYERSTATE_NORMAL);
+		}
 		break;
 
 	case PLAYERSTATE_NORMAL:
@@ -529,6 +539,7 @@ void KillPlayer(void)
 	if (g_player.state == PLAYERSTATE_END) return;
 	if (GetGameState() == GAMESTATE_CLEAR) return;
 
+	g_player.obj.bVisible = true;
 	g_player.nPatternAnimX = 0;
 	g_player.nPatternAnimY = 2;
 	g_player.bIsFlying = false;
