@@ -55,8 +55,13 @@ const char* g_aEditorBlockFileName[BLOCK_TYPE_MAX] = {
 	"data\\TEXTURE\\grass011.png",
 	"data\\TEXTURE\\grass012.png",
 	"data\\TEXTURE\\needle000.png",
+	"data\\TEXTURE\\needle001.png",
+	"data\\TEXTURE\\needle002.png",
+	"data\\TEXTURE\\needle003.png",
 	"data\\TEXTURE\\grass012.png",
 	"data\\TEXTURE\\item000.png",
+	"data\\TEXTURE\\item001.png",
+	"data\\TEXTURE\\item002.png",
 	"data\\TEXTURE\\flag000.png",
 	"data\\TEXTURE\\player.png",
 };
