@@ -75,10 +75,10 @@ int g_nElapsedTimeTitle = 0;
 int g_nSelectTitle = 0;
 
 const char* g_aTitleSelection[TITLESELECTION_MAX] = {
-	"Start",
+	"START",
 	"RANKING",
-	"Credit",
-	"Quit"
+	"CREDITS",
+	"QUIT"
 };
 
 //=====================================================================
@@ -171,20 +171,15 @@ void UpdateTitle(void)
 	}
 
 	case TITLESTATE_NORMAL:
-		if (INPUT_TRIGGER_ACCEPT)
-		{// 
-			g_stateTitle = TITLESTATE_PRESSED;
-			g_nCounterStateTitle = 0;
-			break;
-		}
-
 		if (INPUT_REPEAT_UP)
 		{
 			g_nSelectTitle--;
+			PlaySound(SOUND_LABEL_SE_CURSOR);
 		}
 		else if (INPUT_REPEAT_DOWN)
 		{
 			g_nSelectTitle++;
+			PlaySound(SOUND_LABEL_SE_CURSOR);
 		}
 		g_nSelectTitle = (g_nSelectTitle + TITLESELECTION_MAX) % TITLESELECTION_MAX;
 
@@ -198,6 +193,13 @@ void UpdateTitle(void)
 			{
 				g_pFontTitleSelection[i]->obj.color = COLOR_DESELECTED;
 			}
+		}
+
+		if (INPUT_TRIGGER_ACCEPT)
+		{// ë±çsÉLÅ[âüâ∫
+			g_stateTitle = TITLESTATE_PRESSED;
+			g_nCounterStateTitle = 0;
+			PlaySound(SOUND_LABEL_SE_JUMP);
 		}
 
 		break;
@@ -240,6 +242,10 @@ void UpdateTitle(void)
 	if (GetKeyboardTrigger(DIK_F1))
 	{
 		SetFade(SCENE_RANKING);
+	}
+	if (GetKeyboardTrigger(DIK_F2))
+	{
+		SetFade(SCENE_TUTORIAL);
 	}
 #endif
 

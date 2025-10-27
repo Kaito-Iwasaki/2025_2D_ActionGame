@@ -32,8 +32,9 @@
 // ***** マクロ定義 *****
 // 
 //*********************************************************************
-#define MAX_LEVEL	(10)
-#define INIT_TIMER	(60 * 120)
+#define MAX_LEVEL			(10)
+#define INIT_TIMER			(60 * 120)
+#define TIME_STATE_READY	(4)
 
 //*********************************************************************
 // 
@@ -48,15 +49,16 @@
 // 
 //*********************************************************************
 MAPINFO g_map[NUM_BLOCK_Y][NUM_BLOCK_X] = {};
+GAMESTATE g_gameState = GAMESTATE_READY;
 int g_nCurrentStage = 0;
-GAMESTATE g_gameState = GAMESTATE_NORMAL;
 int g_nCounterGameState = 0;
-bool g_bIsPause = false;
-FONT* g_pFontInfo = NULL;
-DWORD g_dwStart = timeGetTime();
-DWORD g_dwLast = timeGetTime();
 int g_nTimer = INIT_TIMER;
 int g_nScore;
+bool g_bIsPause = false;
+FONT* g_pFontInfo = NULL;
+FONT* g_pFontPauseMenuTitle = NULL;
+FONT* g_pFontCountDown = NULL;
+DECAL* g_pDecalPauseMenuBg = NULL;
 
 //=====================================================================
 // 初期化処理
@@ -88,12 +90,50 @@ void InitGame(void)
 		DT_CENTER
 	);
 
+	g_pFontPauseMenuTitle = SetFont(
+		FONT_LABEL_DONGURI,
+		D3DXVECTOR3(0, 130, 0),
+		D3DXVECTOR3(SCREEN_WIDTH, 100, 0.0f),
+		D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
+		60,
+		"- PAUSE -",
+		DT_CENTER
+	);
+	g_pFontPauseMenuTitle->obj.bVisible = false;
+
+	g_pFontCountDown = SetFont(
+		FONT_LABEL_DONGURI,
+		D3DXVECTOR3_ZERO,
+		D3DXVECTOR3(SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f),
+		D3DXCOLOR(1.0f, 1.0f, 0.0f, 0.0f),
+		200,
+		"",
+		DT_CENTER | DT_VCENTER
+	);
+
+	g_pDecalPauseMenuBg = SetDecal(
+		DECAL_LABEL_NULL,
+		D3DXVECTOR3(SCREEN_CENTER, SCREEN_VCENTER, 0),
+		D3DXVECTOR3(700, 500, 0),
+		D3DXVECTOR3_ZERO,
+		D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.6f)
+	);
+	g_pDecalPauseMenuBg->obj.bVisible = false;
+
 	// 値の初期化
 	g_nCounterGameState = 0;
 	g_bIsPause = false;
-	g_dwStart = timeGetTime();
-	SetGameState(GAMESTATE_NORMAL);
-	sprintf(&g_pFontInfo->aText[0], "Level %02d", g_nCurrentStage  + 1);
+	sprintf(&g_pFontInfo->aText[0], "Level %02d | Time %03d | Score | %06d", g_nCurrentStage + 1, (g_nTimer) / 10, g_nScore);
+
+	if (g_nCurrentStage == 0)
+	{
+		g_nTimer = TIME_STATE_READY;
+		SetGameState(GAMESTATE_READY);
+	}
+	else
+	{
+		SetGameState(GAMESTATE_NORMAL);
+	}
 
 	if (GetPreviousScene() == SCENE_TITLE)
 	{
@@ -167,11 +207,37 @@ void UpdateGame(void)
 		g_nCounterGameState++;
 		switch (g_gameState)
 		{
+		case GAMESTATE_READY:
+			if (g_nCounterGameState % 60 == 0)
+			{
+				g_pFontCountDown->obj.color.a = 1.0f;
+				g_nTimer--;
+				PlaySound(SOUND_LABEL_SE_CURSOR);
+			}
+
+			g_pFontCountDown->obj.color.a = Clampf(g_pFontCountDown->obj.color.a - 0.01f, 0.0f, 1.0f);
+
+			if (g_nTimer < 1)
+			{
+				sprintf(&g_pFontCountDown->aText[0], "START");
+				SetGameState(GAMESTATE_NORMAL);
+				g_nTimer = INIT_TIMER;
+				PlaySound(SOUND_LABEL_SE_COIN);
+			}
+			else
+			{
+				sprintf(&g_pFontCountDown->aText[0], "%d", g_nTimer);
+			}
+
+			break;
+
 		case GAMESTATE_NORMAL:	// 通常
 			if (GetFade() == FADE_NONE && GetPlayer()->state != PLAYERSTATE_END)
 			{
 				g_nTimer--;
 			}
+
+			g_pFontCountDown->obj.color.a = Clampf(g_pFontCountDown->obj.color.a - 0.01f, 0.0f, 1.0f);
 
 			sprintf(&g_pFontInfo->aText[0], "Level %02d | Time %03d | Score | %06d", g_nCurrentStage + 1, (g_nTimer) / 10, g_nScore);
 
@@ -235,13 +301,13 @@ void DrawGame(void)
 {
 	// 各オブジェクトの描画処理
 	DrawBackground();
-	DrawDecal();
 	DrawBlock();
 	DrawItem();
 	DrawEnemy();
 	DrawEffect();
 	DrawPlayer();
 	DrawFuelBar();
+	DrawDecal();
 	DrawFont();
 
 	if (g_bIsPause)
@@ -273,7 +339,7 @@ GAMESTATE GetGameState(void)
 void ResetGame(void)
 {
 	SetStage(0);
-	g_nTimer = INIT_TIMER;
+	g_nTimer = TIME_STATE_READY;
 	g_nScore = 0;
 }
 
@@ -284,11 +350,13 @@ void TogglePause(bool bIsPause)
 {
 	if (GetFade() != FADE_NONE) return;
 
-	SetPauseMenuCursor(0);
 	g_bIsPause = bIsPause;
+	g_pFontPauseMenuTitle->obj.bVisible = bIsPause;
+	g_pDecalPauseMenuBg->obj.bVisible = bIsPause;
 
 	if (bIsPause)
 	{
+		SetPauseMenuCursor(0);
 		PausePlayer();
 	}
 	else

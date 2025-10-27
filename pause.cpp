@@ -15,6 +15,7 @@
 #include "input.h"
 #include "fade.h"
 #include "game.h"
+#include "decal.h"
 
 //*********************************************************************
 // 
@@ -27,8 +28,8 @@
 #define TEXTURE_SCALE_X			(500)
 #define TEXTURE_SCALE_Y			(100)
 
-#define COLOR_SELECTED			D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f)
-#define COLOR_DESELECTED		D3DXCOLOR(0.25f, 0.25f, 0.25f, 1.0f)
+#define COLOR_SELECTED			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f)
+#define COLOR_DESELECTED		D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f)
 
 //*********************************************************************
 // 
@@ -106,9 +107,7 @@ void UpdatePause(void)
 {
 	if (GetFade() != FADE_NONE) return;	// フェード中は処理しない
 
-	if (GetKeyboardTrigger(DIK_RETURN) ||
-		GetJoypadTrigger(JOYKEY_A)
-		)
+	if (GetKeyboardTrigger(DIK_RETURN) || GetJoypadTrigger(JOYKEY_A))
 	{
 		switch (g_menu.nSelect)
 		{
@@ -135,11 +134,8 @@ void UpdatePause(void)
 	{
 		g_menu.nSelect++;
 	}
-	g_menu.nSelect %= 3;
-	if (g_menu.nSelect < 0)
-	{
-		g_menu.nSelect = PAUSE_MENU_MAX - 1;
-	}
+
+	g_menu.nSelect = (g_menu.nSelect + PAUSE_MENU_MAX) % PAUSE_MENU_MAX;
 }
 
 //=====================================================================

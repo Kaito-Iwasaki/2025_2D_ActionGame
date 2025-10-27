@@ -145,8 +145,8 @@ void UpdateResult(void)
 		{
 			g_nCounterScore += 10;
 			g_nTimeLeft--;
+			PlaySound(SOUND_LABEL_SE_COIN);
 		}
-		PlaySound(SOUND_LABEL_SE_COIN);
 
 		break;
 

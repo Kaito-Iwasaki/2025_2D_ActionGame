@@ -237,7 +237,7 @@ void UpdatePlayer(void)
 
 	// ÉvÉåÉCÉÑÅ[ÇÃëÄçÏèàóù
 	g_player.move.x = 0;
-	if (g_player.bIsControlEnabled && GetFade() == FADE_NONE)
+	if (g_player.bIsControlEnabled && GetFade() == FADE_NONE && GetGameState() != GAMESTATE_READY)
 	{
 		if (INPUT_PRESS_LEFT)
 		{// ç∂
@@ -520,15 +520,22 @@ void SetPlayerState(PLAYERSTATE state)
 
 void PausePlayer(void)
 {
-	PauseSound(SOUND_LABEL_SE_JET);
+	if (g_player.bIsFlying)
+	{
+		PauseSound(SOUND_LABEL_SE_JET);
+	}
 }
 
 void UnPausePlayer(void)
 {
-	UnPauseSound(SOUND_LABEL_SE_JET);
+	if (g_player.bIsFlying)
+	{
+		UnPauseSound(SOUND_LABEL_SE_JET);
+	}
 
 	if (GetKeyboardPress(DIK_SPACE) == false && GetJoypadRelease(JOYKEY_A) == false)
 	{
+		StopSound(SOUND_LABEL_SE_JET);
 		g_player.bIsFlying = false;
 	}
 }
