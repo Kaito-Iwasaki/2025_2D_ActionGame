@@ -305,6 +305,12 @@ void BLOCK_Goal(BLOCK* pBlock)
 			SetGameState(GAMESTATE_CLEAR);
 		}
 	}
+
+	pBlock->nCounterState++;
+	if (pBlock->nCounterState % 10 == 0)
+	{
+		pBlock->nPatternAnimX = (pBlock->nPatternAnimX + 1) % 4;
+	}
 }
 
 //=====================================================================

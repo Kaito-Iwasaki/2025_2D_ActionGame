@@ -81,6 +81,9 @@ typedef struct BLOCK
 	int nCounterState;
 	bool bCollidable;
 	void (*Update)(BLOCK* pBlock);
+	int nCounterAnim;
+	int nPatternAnimX;
+	int nPatternAnimY;
 }BLOCK;
 
 typedef struct
@@ -88,6 +91,8 @@ typedef struct
 	D3DXCOLOR color;
 	bool bCollidable;
 	void (*Update)(BLOCK* pBlock);
+	int nMaxPatternX;
+	int nMaxPatternY;
 }BLOCK_INFO;
 
 //*********************************************************************

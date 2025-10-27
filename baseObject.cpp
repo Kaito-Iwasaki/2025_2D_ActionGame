@@ -156,16 +156,16 @@ void SetVertexTexturePos(VERTEX_2D* pVtx, int nTextureX, int nTextureY, int nSiz
 {
 	if (bInversed)
 	{// îΩì]
-		pVtx[0].tex = D3DXVECTOR2((1.0f / nSizeX) * (nTextureX + 1), (1.0f / nSizeY) * nTextureY);
+		pVtx[0].tex = D3DXVECTOR2((1.0f / nSizeX) * (nTextureX + 1) + 0.01f, (1.0f / nSizeY) * nTextureY);
 		pVtx[1].tex = D3DXVECTOR2((1.0f / nSizeX) * nTextureX, (1.0f / nSizeY) * nTextureY);
-		pVtx[2].tex = D3DXVECTOR2((1.0f / nSizeX) * (nTextureX + 1), (1.0f / nSizeY) * (nTextureY + 1));
+		pVtx[2].tex = D3DXVECTOR2((1.0f / nSizeX) * (nTextureX + 1) + 0.01f, (1.0f / nSizeY) * (nTextureY + 1));
 		pVtx[3].tex = D3DXVECTOR2((1.0f / nSizeX) * nTextureX, (1.0f / nSizeY) * (nTextureY + 1));
 	}
 	else
 	{// í èÌ
-		pVtx[0].tex = D3DXVECTOR2((1.0f / nSizeX) * nTextureX, (1.0f / nSizeY) * nTextureY);
-		pVtx[1].tex = D3DXVECTOR2((1.0f / nSizeX) * (nTextureX + 1), (1.0f / nSizeY) * nTextureY);
-		pVtx[2].tex = D3DXVECTOR2((1.0f / nSizeX) * nTextureX, (1.0f / nSizeY) * (nTextureY + 1));
+		pVtx[0].tex = D3DXVECTOR2((1.0f / nSizeX) * nTextureX + 0.01f, (1.0f / nSizeY) * nTextureY + 0.01f);
+		pVtx[1].tex = D3DXVECTOR2((1.0f / nSizeX) * (nTextureX + 1), (1.0f / nSizeY) * nTextureY + 0.01f);
+		pVtx[2].tex = D3DXVECTOR2((1.0f / nSizeX) * nTextureX + 0.01f, (1.0f / nSizeY) * (nTextureY + 1));
 		pVtx[3].tex = D3DXVECTOR2((1.0f / nSizeX) * (nTextureX + 1), (1.0f / nSizeY) * (nTextureY + 1));
 	}
 }

@@ -62,7 +62,7 @@ const char* g_aBlockFileName[BLOCK_TYPE_MAX] = {
 	"data\\TEXTURE\\item000.png",
 	"data\\TEXTURE\\item001.png",
 	"data\\TEXTURE\\item002.png",
-	"data\\TEXTURE\\flag000.png",
+	"data\\TEXTURE\\flag001.png",
 	"data\\TEXTURE\\player.png",
 };
 
@@ -90,7 +90,7 @@ BLOCK_INFO g_aBlockInfo[BLOCK_TYPE_MAX] = {
 	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), false, BLOCK_Coin},
 	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), false, BLOCK_RedCoin},
 	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), false, BLOCK_Energey},
-	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), false, BLOCK_Goal},
+	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), false, BLOCK_Goal, 4, 1},
 	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), false, BLOCK_StartBlock},
 };
 
@@ -109,6 +109,12 @@ void InitBlock(void)
 		pBlock->obj.pos = D3DXVECTOR3_ZERO;
 		pBlock->obj.size = D3DXVECTOR3_ZERO;
 		pBlock->obj.color = INIT_COLOR;
+	}
+
+	for (int nCount = 0; nCount < BLOCK_TYPE_MAX; nCount++)
+	{
+		Clamp(&g_aBlockInfo[nCount].nMaxPatternX, 1, g_aBlockInfo[nCount].nMaxPatternX + 1);
+		Clamp(&g_aBlockInfo[nCount].nMaxPatternY, 1, g_aBlockInfo[nCount].nMaxPatternY + 1);
 	}
 
 	// テクスチャの読み込み
@@ -203,6 +209,12 @@ void DrawBlock(void)
 			D3DXVECTOR2(0.01f, 1.0f),
 			D3DXVECTOR2(1.0f, 1.0f)
 		);
+		SetVertexTexturePos(pVtx, 
+			pBlock->nPatternAnimX,
+			pBlock->nPatternAnimY, 
+			g_aBlockInfo[pBlock->type].nMaxPatternX, 
+			g_aBlockInfo[pBlock->type].nMaxPatternY,
+			pBlock->obj.bInversed);
 	}
 
 	// 頂点バッファをアンロック
