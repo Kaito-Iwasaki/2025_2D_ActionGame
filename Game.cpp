@@ -123,7 +123,7 @@ void InitGame(void)
 	// 値の初期化
 	g_nCounterGameState = 0;
 	g_bIsPause = false;
-	sprintf(&g_pFontInfo->aText[0], "Level %02d | Time %03d | Score | %06d", g_nCurrentStage + 1, (g_nTimer) / 10, g_nScore);
+	sprintf(&g_pFontInfo->aText[0], "Level %02d | Time %03d | Score %06d", g_nCurrentStage + 1, (INIT_TIMER) / 10, g_nScore);
 
 	if (g_nCurrentStage == 0)
 	{
@@ -149,11 +149,17 @@ void InitGame(void)
 	LoadBin(&aStageFileName[0], &g_map[0][0], sizeof(MAPINFO), MAX_BLOCK);
 
 	// ステージ情報に基づいてブロックを配置
+	BLOCK* pBlock;
 	for (int y = 0; y < NUM_BLOCK_Y; y++)
 	{
 		for (int x = 0; x < NUM_BLOCK_X; x++)
 		{
-			SetBlock(g_map[y][x].type, x, y);
+			pBlock = SetBlock(g_map[y][x].type, x, y);
+
+			for (int i = 0; i < MAX_BLOCK_PARAM; i++)
+			{
+				pBlock->nParam[i] = g_map[y][x].nParam[i];
+			}
 		}
 	}
 }
@@ -182,7 +188,7 @@ void UninitGame(void)
 //=====================================================================
 void UpdateGame(void)
 {
-	if ((INPUT_TRIGGER_PAUSE) && g_gameState != GAMESTATE_READY)
+	if (INPUT_TRIGGER_PAUSE)
 	{// ポーズメニュー
 		TogglePause(!g_bIsPause);
 	}
@@ -239,7 +245,7 @@ void UpdateGame(void)
 
 			g_pFontCountDown->obj.color.a = Clampf(g_pFontCountDown->obj.color.a - 0.01f, 0.0f, 1.0f);
 
-			sprintf(&g_pFontInfo->aText[0], "Level %02d | Time %03d | Score | %06d", g_nCurrentStage + 1, (g_nTimer) / 10, g_nScore);
+			sprintf(&g_pFontInfo->aText[0], "Level %02d | Time %03d | Score %06d", g_nCurrentStage + 1, (g_nTimer) / 10, g_nScore);
 
 			if (g_nTimer <= 0)
 			{
@@ -253,7 +259,7 @@ void UpdateGame(void)
 			// プレイヤーを終了状態に移行
 			SetPlayerState(PLAYERSTATE_END);
 
-			sprintf(&g_pFontInfo->aText[0], "Level %02d | Time %03d | Score | %06d", g_nCurrentStage + 1, (g_nTimer) / 10, g_nScore);
+			sprintf(&g_pFontInfo->aText[0], "Level %02d | Time %03d | Score %06d", g_nCurrentStage + 1, (g_nTimer) / 10, g_nScore);
 
 			if (g_nCounterGameState > 60)
 			{
@@ -349,10 +355,13 @@ void ResetGame(void)
 void TogglePause(bool bIsPause)
 {
 	if (GetFade() != FADE_NONE) return;
+	if (GetCurrentScene() != SCENE_GAME) return;
+	if (g_gameState == GAMESTATE_READY) return;
 
 	g_bIsPause = bIsPause;
 	g_pFontPauseMenuTitle->obj.bVisible = bIsPause;
 	g_pDecalPauseMenuBg->obj.bVisible = bIsPause;
+	g_pFontCountDown->obj.bVisible = !bIsPause;
 
 	if (bIsPause)
 	{
@@ -375,6 +384,10 @@ void SetMap(MAPINFO* map)
 		for (int x = 0; x < NUM_BLOCK_X; x++, map++)
 		{
 			g_map[y][x].type = map->type;
+			for (int i = 0; i < MAX_BLOCK_PARAM; i++)
+			{
+				g_map[y][x].nParam[i] = map->nParam[i];
+			}
 		}
 	}
 }

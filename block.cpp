@@ -264,6 +264,7 @@ BLOCK* SetBlock(BLOCK_TYPE type, int x, int y)
 	pBlock->obj.bVisible = true;
 	pBlock->bCollidable = g_aBlockInfo[type].bCollidable;
 	pBlock->Update = g_aBlockInfo[type].Update;
+	pBlock->startPos = pBlock->obj.pos;
 
 	if (type == BLOCK_TYPE_AIR)
 	{

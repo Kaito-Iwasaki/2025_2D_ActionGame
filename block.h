@@ -20,16 +20,18 @@
 // ***** É}ÉNÉçíËã` *****
 // 
 //*********************************************************************
-#define BLOCK_SIZE		(40)
-#define NUM_BLOCK_X		(SCREEN_WIDTH / BLOCK_SIZE)
-#define NUM_BLOCK_Y		(SCREEN_HEIGHT / BLOCK_SIZE)
-#define MAX_BLOCK		(NUM_BLOCK_X * NUM_BLOCK_Y)
+#define BLOCK_SIZE				(40)
+#define NUM_BLOCK_X				(SCREEN_WIDTH / BLOCK_SIZE)
+#define NUM_BLOCK_Y				(SCREEN_HEIGHT / BLOCK_SIZE)
+#define MAX_BLOCK				(NUM_BLOCK_X * NUM_BLOCK_Y)
+#define MAX_BLOCK_PARAM			(4)
+#define MAX_BLOCK_PARAM_VALUE	(640)
 
-#define BLOCK_HIT_NONE		(0x0000)
-#define BLOCK_HIT_TOP		(0x0001)
-#define BLOCK_HIT_BOTTOM	(0x0002)
-#define BLOCK_HIT_LEFT		(0x0004)
-#define BLOCK_HIT_RIGHT		(0x0008)
+#define BLOCK_HIT_NONE			(0x0000)
+#define BLOCK_HIT_TOP			(0x0001)
+#define BLOCK_HIT_BOTTOM		(0x0002)
+#define BLOCK_HIT_LEFT			(0x0004)
+#define BLOCK_HIT_RIGHT			(0x0008)
 
 //*********************************************************************
 // 
@@ -84,6 +86,8 @@ typedef struct BLOCK
 	int nCounterAnim;
 	int nPatternAnimX;
 	int nPatternAnimY;
+	int nParam[MAX_BLOCK_PARAM];
+	D3DXVECTOR3 startPos;
 }BLOCK;
 
 typedef struct

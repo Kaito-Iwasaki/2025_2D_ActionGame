@@ -86,6 +86,11 @@ void InitEditorBlock(void)
 			pEditorBlock->obj.color = GetBlockInfo()[pMap->type].color;
 			pEditorBlock->obj.bVisible = true;
 			pEditorBlock->type = pMap->type;
+
+			for (int i = 0; i < MAX_BLOCK_PARAM; i++)
+			{
+				pEditorBlock->nParam[i] = pMap->nParam[i];
+			}
 		}
 	}
 
@@ -210,6 +215,10 @@ EDITORBLOCK* SetEditorBlock(BLOCK_TYPE type, int x, int y)
 
 	pEditorBlock->type = type;
 	pEditorBlock->obj.color = GetBlockInfo()[type].color;
+	for (int i = 0; i < MAX_BLOCK_PARAM; i++)
+	{
+		pEditorBlock->nParam[i] = 0;
+	}
 
 	return pEditorBlock;
 }
@@ -217,12 +226,18 @@ EDITORBLOCK* SetEditorBlock(BLOCK_TYPE type, int x, int y)
 bool SaveEditorBlock(const char* pFileName)
 {
 	MAPINFO MapInfo[NUM_BLOCK_Y][NUM_BLOCK_X];
+	memset(&MapInfo[0][0], 0, sizeof(MAPINFO) * MAX_BLOCK);
 
 	for (int y = 0; y < NUM_BLOCK_Y; y++)
 	{
 		for (int x = 0; x < NUM_BLOCK_X; x++)
 		{
 			MapInfo[y][x].type = g_aEditorBlock[y][x].type;
+
+			for (int i = 0; i < MAX_BLOCK_PARAM; i++)
+			{
+				MapInfo[y][x].nParam[i] = g_aEditorBlock[y][x].nParam[i];
+			}
 		}
 	}
 

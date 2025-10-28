@@ -20,6 +20,7 @@
 #include "particle.h"
 #include "sound.h"
 #include "input.h"
+#include "util.h"
 
 //*********************************************************************
 // 
@@ -70,18 +71,20 @@ void BLOCK_Needle(BLOCK* pBlock)
 //=====================================================================
 void BLOCK_Platform(BLOCK* pBlock)
 {
-	if (pBlock->nCounterState == 0)
-	{
-		pBlock->move.x = 1.0f;
-	}
-	pBlock->obj.pos.x += pBlock->move.x;
-
-	if (pBlock->nCounterState % 180 == 0)
-	{
-		pBlock->move.x *= -1;
-	}
-
 	pBlock->nCounterState++;
+
+	if (pBlock->nCounterState == 1)
+	{
+		pBlock->move.x = pBlock->nParam[0];
+		pBlock->move.y = pBlock->nParam[1];
+	}
+	pBlock->obj.pos += pBlock->move;
+
+	if (pBlock->nCounterState % Clamp(pBlock->nParam[2], 1, MAX_BLOCK_PARAM_VALUE) == 0)
+	{
+		pBlock->move *= -1;
+	}
+
 }
 
 //=====================================================================

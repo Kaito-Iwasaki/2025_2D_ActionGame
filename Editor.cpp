@@ -20,6 +20,7 @@
 #include "font.h"
 #include "Game.h"
 #include "background.h"
+#include "util.h"
 
 //*********************************************************************
 // 
@@ -44,6 +45,7 @@ DECAL* g_pCursor = NULL;
 FONT* g_pFont = NULL;
 int g_nCurrentBlock = 1;
 int g_nOutputLevel = 0;
+int g_nSelectedParam = 0;
 
 //=====================================================================
 // 初期化処理
@@ -97,6 +99,7 @@ void UpdateEditor(void)
 	UpdateEditorBlock();
 
 	char aFileName[MAX_PATH] = {};
+	EDITORBLOCK* pEditorBlock = GetEditorBlock();
 
 	D3DXVECTOR2 posMouse = GetMousePos();
 	D3DXVECTOR3 posBlock = D3DXVECTOR3(
@@ -104,6 +107,8 @@ void UpdateEditor(void)
 		floorf(posMouse.y / BLOCK_SIZE) * BLOCK_SIZE + BLOCK_SIZE / 2,
 		0.0f
 	);
+	int nBlockX = Clamp((int)posMouse.x / BLOCK_SIZE, 0, NUM_BLOCK_X - 1);
+	int nBlockY = Clamp((int)posMouse.y / BLOCK_SIZE, 0, NUM_BLOCK_Y - 1);
 	g_pCursor->obj.pos = posBlock;
 	g_pCursor->obj.bVisible = true;
 
@@ -132,22 +137,48 @@ void UpdateEditor(void)
 	}
 	g_nOutputLevel = (g_nOutputLevel + MAX_LEVEL) % MAX_LEVEL;
 
-	sprintf(&g_pFont->aText[0], "ブロック:%d\n出力ファイル名：data\\MAP\\level%02d.bin", g_nCurrentBlock, g_nOutputLevel);
+	if (GetKeyboardRepeat(DIK_A))
+	{
+		g_nSelectedParam--;
+	}
+	if (GetKeyboardRepeat(DIK_D))
+	{
+		g_nSelectedParam++;
+	}
+	g_nSelectedParam = (g_nSelectedParam + MAX_BLOCK_PARAM) % MAX_BLOCK_PARAM;
+
+	if (GetKeyboardRepeat(DIK_W))
+	{
+		pEditorBlock[nBlockY * NUM_BLOCK_X + nBlockX].nParam[g_nSelectedParam]++;
+	}
+	if (GetKeyboardRepeat(DIK_S))
+	{
+		pEditorBlock[nBlockY * NUM_BLOCK_X + nBlockX].nParam[g_nSelectedParam]--;
+	}
+
+	if (pEditorBlock[nBlockY * NUM_BLOCK_X + nBlockX].nParam[g_nSelectedParam] > MAX_BLOCK_PARAM_VALUE)
+	{
+		pEditorBlock[nBlockY * NUM_BLOCK_X + nBlockX].nParam[g_nSelectedParam] = -MAX_BLOCK_PARAM_VALUE;
+	}
+	else if (pEditorBlock[nBlockY * NUM_BLOCK_X + nBlockX].nParam[g_nSelectedParam] < -MAX_BLOCK_PARAM_VALUE)
+	{
+		pEditorBlock[nBlockY * NUM_BLOCK_X + nBlockX].nParam[g_nSelectedParam] = MAX_BLOCK_PARAM_VALUE;
+	}
 
 	if (GetMousePress(MOUSE_LEFT))
 	{
 		SetEditorBlock(
 			(BLOCK_TYPE)(g_nCurrentBlock),
-			(int)posMouse.x / BLOCK_SIZE,
-			(int)posMouse.y / BLOCK_SIZE
+			nBlockX,
+			nBlockY
 		);
 	}
 	else if (GetMousePress(MOUSE_RIGHT))
 	{
 		SetEditorBlock(
 			BLOCK_TYPE_AIR,
-			(int)posMouse.x / BLOCK_SIZE,
-			(int)posMouse.y / BLOCK_SIZE
+			nBlockX,
+			nBlockY
 		);
 	}
 
@@ -158,6 +189,19 @@ void UpdateEditor(void)
 		SaveEditorBlock(&aFileName[0]);
 	}
 
+	sprintf(&g_pFont->aText[0],
+		"ブロック:%d\n"
+		"パラメータ(%d) [ %d | %d | %d | %d ]\n"
+		"出力ファイル名:data\\MAP\\level%02d.bin\n"
+		"ファイル出力:[F2]",
+		g_nCurrentBlock,
+		g_nSelectedParam,
+		pEditorBlock[nBlockY * NUM_BLOCK_X + nBlockX].nParam[0],
+		pEditorBlock[nBlockY * NUM_BLOCK_X + nBlockX].nParam[1],
+		pEditorBlock[nBlockY * NUM_BLOCK_X + nBlockX].nParam[2],
+		pEditorBlock[nBlockY * NUM_BLOCK_X + nBlockX].nParam[3],
+		g_nOutputLevel
+	);
 
 	if (GetKeyboardTrigger(DIK_F5))
 	{

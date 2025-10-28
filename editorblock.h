@@ -21,7 +21,6 @@
 // ***** É}ÉNÉçíËã` *****
 // 
 //*********************************************************************
-#define MAX_BLOCK_PARAM		(4)
 
 //*********************************************************************
 // 
@@ -38,6 +37,7 @@ typedef struct
 {
 	BASEOBJECT obj;
 	BLOCK_TYPE type;
+	int nParam[MAX_BLOCK_PARAM];
 }EDITORBLOCK;
 
 typedef struct

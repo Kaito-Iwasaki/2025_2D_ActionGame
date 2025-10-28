@@ -49,6 +49,7 @@ typedef enum
 {
 	TITLESTATE_INTRO = 0,
 	TITLESTATE_NORMAL,
+	TITLESTATE_CREDIT,
 	TITLESTATE_PRESSED,
 	TITLESTATE_MAX
 }TITLESTATE;
@@ -80,6 +81,8 @@ const char* g_aTitleSelection[TITLESELECTION_MAX] = {
 	"CREDITS",
 	"QUIT"
 };
+
+FONT* g_pFontCredits = NULL;
 
 //=====================================================================
 // èâä˙âªèàóù
@@ -116,6 +119,20 @@ void InitTitle(void)
 		);
 		g_pFontTitleSelection[i]->obj.bVisible = false;
 	}
+
+	g_pFontCredits = SetFont(
+		FONT_LABEL_DONGURI,
+		D3DXVECTOR3(0, (SCREEN_VCENTER - 100), 0),
+		D3DXVECTOR3(SCREEN_WIDTH, 500, 0),
+		COLOR_DESELECTED,
+		50,
+		"(C) 2025 IWASAKI KAITO\n\n"
+		"Background music from PlayOnLoop.com\n"
+		"Licensed under Creative Commons by Attribution 4.0\n\n"
+		"PRESS [ENTER] OR [A] TO RETURN",
+		DT_CENTER | DT_VCENTER
+	);
+	g_pFontCredits->obj.bVisible = false;
 
 	StopSound();
 	PlaySound(SOUND_LABEL_BGM_TITLE00);
@@ -224,13 +241,36 @@ void UpdateTitle(void)
 				break;
 
 			case TITLESELECTION_CREDIT:
-				g_stateTitle = TITLESTATE_NORMAL;
+				for (int i = 0; i < TITLESELECTION_MAX; i++)
+				{
+					g_pFontTitleSelection[i]->obj.bVisible = false;
+				}
+				g_pFontCredits->obj.bVisible = true;
+				g_stateTitle = TITLESTATE_CREDIT;
 				break;
 
 			case TITLESELECTION_QUIT:
-				g_stateTitle = TITLESTATE_NORMAL;
+				DestroyWindow(GetMainWindow());
 				break;
 			}
+		}
+		break;
+
+	case TITLESTATE_CREDIT:
+
+
+		if (INPUT_TRIGGER_ACCEPT)
+		{// ë±çsÉLÅ[âüâ∫
+			for (int i = 0; i < TITLESELECTION_MAX; i++)
+			{
+				g_pFontTitleSelection[i]->obj.bVisible = true;
+			}
+			g_pFontCredits->obj.bVisible = false;
+
+			g_stateTitle = TITLESTATE_NORMAL;
+
+			PlaySound(SOUND_LABEL_SE_CURSOR);
+
 		}
 		break;
 	}
