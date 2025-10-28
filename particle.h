@@ -44,6 +44,7 @@ typedef struct
 	float fRange;
 	int nLife;
 	int nNumEffect;
+	D3DXVECTOR3* pPosParent;
 }PARTICLE;
 
 //*********************************************************************
@@ -55,5 +56,6 @@ void InitParticle(void);
 void UninitParticle(void);
 void UpdateParticle(void);
 void SetParticle(EFFECTINFO info, D3DXVECTOR3 pos, float fAngle, float fRange, int nLife, int nNumEffect);
+void SetParticle(EFFECTINFO info, D3DXVECTOR3* pPos, float fAngle, float fRange, int nLife, int nNumEffect);
 
 #endif

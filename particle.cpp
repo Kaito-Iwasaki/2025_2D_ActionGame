@@ -71,7 +71,7 @@ void UpdateParticle(void)
 		for (int nCntEffect = 0; nCntEffect < pParticle->nNumEffect; nCntEffect++)
 		{
 			SetEffect(
-				pParticle->obj.pos,
+				*pParticle->pPosParent,
 				pParticle->info.fSpeed,
 				pParticle->info.fRotSpeed,
 				RandRange(
@@ -107,6 +107,29 @@ void SetParticle(EFFECTINFO info, D3DXVECTOR3 pos, float fAngle, float fRange, i
 		pParticle->fRange = fRange;
 		pParticle->nLife = nLife;
 		pParticle->nNumEffect = nNumEffect;
+		pParticle->pPosParent = &pParticle->obj.pos;
+
+		break;
+	}
+}
+
+void SetParticle(EFFECTINFO info, D3DXVECTOR3* pPos, float fAngle, float fRange, int nLife, int nNumEffect)
+{
+	PARTICLE* pParticle = &g_aParticle[0];
+
+	for (int nCntParticle = 0; nCntParticle < MAX_PARTICLE; nCntParticle++, pParticle++)
+	{
+		if (pParticle->bUsed == true) continue;
+
+		pParticle->bUsed = true;
+
+		pParticle->obj.pos = *pPos;
+		pParticle->info = info;
+		pParticle->fAngle = fAngle;
+		pParticle->fRange = fRange;
+		pParticle->nLife = nLife;
+		pParticle->nNumEffect = nNumEffect;
+		pParticle->pPosParent = pPos;
 
 		break;
 	}
