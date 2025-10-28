@@ -90,7 +90,7 @@ BLOCK_INFO g_aBlockInfo[BLOCK_TYPE_MAX] = {
 	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), false, BLOCK_Coin},
 	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), false, BLOCK_RedCoin},
 	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), false, BLOCK_Energey},
-	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), false, BLOCK_Goal, 4, 1},
+	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), false, BLOCK_Goal, 4, 2},
 	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), false, BLOCK_StartBlock},
 };
 

@@ -19,7 +19,7 @@
 //*********************************************************************
 #define TEXTURE_FILENAME		"data\\TEXTURE\\player000.png"
 #define TEXTURE_MAX_X			(4)
-#define TEXTURE_MAX_Y			(3)
+#define TEXTURE_MAX_Y			(4)
 #define INIT_POS				D3DXVECTOR3(100.0f, 640.0f, 0.0f)
 #define INIT_SIZE				D3DXVECTOR3(75.0f, 75.0f, 0.0f) * 0.7f
 #define INIT_COLOR				D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f)
@@ -226,8 +226,7 @@ void UpdatePlayer(void)
 		g_player.bIsControlEnabled = false;
 		g_player.bIsFlying = false;
 
-		g_player.nPatternAnimX = 2;
-		g_player.nPatternAnimY = 2;
+		g_player.nPatternAnimY = 3;
 
 		break;
 	}

@@ -182,7 +182,7 @@ void UninitGame(void)
 //=====================================================================
 void UpdateGame(void)
 {
-	if (INPUT_TRIGGER_PAUSE)
+	if ((INPUT_TRIGGER_PAUSE) && g_gameState != GAMESTATE_READY)
 	{// ポーズメニュー
 		TogglePause(!g_bIsPause);
 	}

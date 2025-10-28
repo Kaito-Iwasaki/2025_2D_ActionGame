@@ -307,6 +307,7 @@ void BLOCK_Goal(BLOCK* pBlock)
 
 			PlaySound(SOUND_LABEL_SE_CLEAR);
 			AddScore(1000);
+			pBlock->nPatternAnimY = 1;
 
 			SetGameState(GAMESTATE_CLEAR);
 		}
