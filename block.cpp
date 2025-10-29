@@ -64,34 +64,42 @@ const char* g_aBlockFileName[BLOCK_TYPE_MAX] = {
 	"data\\TEXTURE\\item002.png",
 	"data\\TEXTURE\\flag001.png",
 	"data\\TEXTURE\\player.png",
+	"data\\TEXTURE\\wood000.png",
+	"data\\TEXTURE\\wood001.png",
+	"data\\TEXTURE\\wood002.png",
+	"data\\TEXTURE\\wood003.png"
 };
 
 BLOCK_INFO g_aBlockInfo[BLOCK_TYPE_MAX] = {
-	{D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f), false},
-	{D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f), true},
-	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), true},
-	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), true},
-	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), true},
-	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), true},
-	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), true},
-	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), true},
-	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), true},
-	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), true},
-	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), true},
-	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), true},
-	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), true},
-	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), true},
-	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), true},
-	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), false, BLOCK_Needle},
-	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), false, BLOCK_Needle},
-	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), false, BLOCK_Needle},
-	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), false, BLOCK_Needle},
-	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), true, BLOCK_Platform},
-	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), false, BLOCK_Coin},
-	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), false, BLOCK_RedCoin},
-	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), false, BLOCK_Energey},
-	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), false, BLOCK_Goal, 4, 2},
-	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), false, BLOCK_StartBlock},
+	{D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f), BLOCK_HIT_NONE},
+	{D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f), BLOCK_HIT_ALL},
+	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), BLOCK_HIT_ALL},
+	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), BLOCK_HIT_ALL},
+	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), BLOCK_HIT_ALL},
+	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), BLOCK_HIT_ALL},
+	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), BLOCK_HIT_ALL},
+	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), BLOCK_HIT_ALL},
+	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), BLOCK_HIT_ALL},
+	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), BLOCK_HIT_ALL},
+	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), BLOCK_HIT_ALL},
+	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), BLOCK_HIT_ALL},
+	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), BLOCK_HIT_ALL},
+	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), BLOCK_HIT_ALL},
+	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), BLOCK_HIT_ALL},
+	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), BLOCK_HIT_NONE, BLOCK_Needle},
+	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), BLOCK_HIT_NONE, BLOCK_Needle},
+	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), BLOCK_HIT_NONE, BLOCK_Needle},
+	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), BLOCK_HIT_NONE, BLOCK_Needle},
+	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), BLOCK_HIT_ALL, BLOCK_Platform},
+	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), BLOCK_HIT_NONE, BLOCK_Coin},
+	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), BLOCK_HIT_NONE, BLOCK_RedCoin},
+	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), BLOCK_HIT_NONE, BLOCK_Gas},
+	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), BLOCK_HIT_NONE, BLOCK_Goal, 4, 2},
+	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), BLOCK_HIT_NONE, BLOCK_StartBlock},
+	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), BLOCK_HIT_TOP},
+	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), BLOCK_HIT_TOP},
+	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), BLOCK_HIT_TOP},
+	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), BLOCK_HIT_TOP},
 };
 
 //=====================================================================
@@ -262,13 +270,13 @@ BLOCK* SetBlock(BLOCK_TYPE type, int x, int y)
 	pBlock->obj.color = g_aBlockInfo[type].color;
 	pBlock->type = type;
 	pBlock->obj.bVisible = true;
-	pBlock->bCollidable = g_aBlockInfo[type].bCollidable;
+	pBlock->dwCollisionType = g_aBlockInfo[type].dwCollisionType;
 	pBlock->Update = g_aBlockInfo[type].Update;
 	pBlock->startPos = pBlock->obj.pos;
 
 	if (type == BLOCK_TYPE_AIR)
 	{
-		pBlock->bCollidable = false;
+		pBlock->dwCollisionType = BLOCK_HIT_NONE;
 		pBlock->obj.bVisible = false;
 	}
 
@@ -297,10 +305,9 @@ DWORD CollisionBlock(
 	for (int nCount = 0; nCount < MAX_BLOCK; nCount++, pBlock++)
 	{
 		if (pBlock->bUsed == false) continue;
-		if (pBlock->bCollidable == false) continue;
 
-		if (
-			pPosOld->y <= pBlock->posOld.y
+		if (pBlock->dwCollisionType & BLOCK_HIT_TOP
+			&& pPosOld->y <= pBlock->posOld.y
 			&& pPos->y > pBlock->obj.pos.y
 			&& pPosOld->x + size.x / 2 > pBlock->obj.pos.x
 			&& pPosOld->x - size.x / 2 < pBlock->obj.pos.x + pBlock->obj.size.x
@@ -315,8 +322,8 @@ DWORD CollisionBlock(
 				*dpBlock = pBlock;
 			}
 		}
-		else if (
-			pPosOld->y - size.y >= pBlock->posOld.y + pBlock->obj.size.y
+		if (pBlock->dwCollisionType & BLOCK_HIT_BOTTOM
+			&& pPosOld->y - size.y >= pBlock->posOld.y + pBlock->obj.size.y
 			&& pPos->y - size.y < pBlock->obj.pos.y + pBlock->obj.size.y
 			&& pPosOld->x + size.x / 2 > pBlock->obj.pos.x
 			&& pPosOld->x - size.x / 2 < pBlock->obj.pos.x + pBlock->obj.size.x
@@ -328,16 +335,15 @@ DWORD CollisionBlock(
 		}
 	}
 
-	pBlock = &g_aBlock[0][0];
-
 	// ç∂âEÇÃè’ìÀîªíË
+	pBlock = &g_aBlock[0][0];
 	for (int nCount = 0; nCount < MAX_BLOCK; nCount++, pBlock++)
 	{
 		if (pBlock->bUsed == false) continue;
-		if (pBlock->bCollidable == false) continue;
 
 		if (
-			pPosOld->x + size.x / 2 <= pBlock->posOld.x
+			pBlock->dwCollisionType & BLOCK_HIT_LEFT
+			&& pPosOld->x + size.x / 2 <= pBlock->posOld.x
 			&& pPos->x + size.x / 2 > pBlock->obj.pos.x
 			&& pPos->y > pBlock->obj.pos.y
 			&& pPos->y - size.y < pBlock->obj.pos.y + pBlock->obj.size.y
@@ -346,8 +352,8 @@ DWORD CollisionBlock(
 			dwHit |= BLOCK_HIT_LEFT;
 			pPos->x = pBlock->obj.pos.x - size.x / 2;
 		}
-		else if (
-			pPosOld->x - size.x / 2 >= pBlock->posOld.x + pBlock->obj.size.x
+		 if (pBlock->dwCollisionType & BLOCK_HIT_RIGHT
+			&& pPosOld->x - size.x / 2 >= pBlock->posOld.x + pBlock->obj.size.x
 			&& pPos->x - size.x / 2 < pBlock->obj.pos.x + pBlock->obj.size.x
 			&& pPos->y > pBlock->obj.pos.y
 			&& pPos->y - size.y < pBlock->obj.pos.y + pBlock->obj.size.y

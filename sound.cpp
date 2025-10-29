@@ -54,6 +54,7 @@ SOUNDINFO g_aSoundInfo[SOUND_LABEL_MAX] = {
 	{"data\\SE\\clear.wav", 0},
 	{"data\\SE\\appear.wav", 0},
 	{"data\\SE\\dead.wav", 0},
+	{"data\\SE\\boost.wav", 0},
 };
 
 //=============================================================================

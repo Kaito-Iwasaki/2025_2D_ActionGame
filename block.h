@@ -32,6 +32,7 @@
 #define BLOCK_HIT_BOTTOM		(0x0002)
 #define BLOCK_HIT_LEFT			(0x0004)
 #define BLOCK_HIT_RIGHT			(0x0008)
+#define BLOCK_HIT_ALL			BLOCK_HIT_TOP | BLOCK_HIT_BOTTOM | BLOCK_HIT_LEFT | BLOCK_HIT_RIGHT
 
 //*********************************************************************
 // 
@@ -65,6 +66,10 @@ typedef enum
 	BLOCK_TYPE_ITEM002,
 	BLOCK_TYPE_FLAG000,
 	BLOCK_TYPE_STARTBLOCK,
+	BLOCK_TYPE_WOOD000,
+	BLOCK_TYPE_WOOD001,
+	BLOCK_TYPE_WOOD002,
+	BLOCK_TYPE_WOOD003,
 	BLOCK_TYPE_MAX
 } BLOCK_TYPE;
 
@@ -81,7 +86,7 @@ typedef struct BLOCK
 	bool bUsed;
 	BLOCK_TYPE type;
 	int nCounterState;
-	bool bCollidable;
+	DWORD dwCollisionType;
 	void (*Update)(BLOCK* pBlock);
 	int nCounterAnim;
 	int nPatternAnimX;
@@ -93,7 +98,7 @@ typedef struct BLOCK
 typedef struct
 {
 	D3DXCOLOR color;
-	bool bCollidable;
+	DWORD dwCollisionType;
 	void (*Update)(BLOCK* pBlock);
 	int nMaxPatternX;
 	int nMaxPatternY;
