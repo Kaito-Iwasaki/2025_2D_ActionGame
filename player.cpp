@@ -343,6 +343,7 @@ void UpdatePlayer(void)
 		g_player.move.y += GAME_GRAVITY;	// 重力を加算
 	}
 	g_player.obj.pos += g_player.move;
+	Clampf(&g_player.obj.pos.x, 0 + g_player.obj.size.x / 2, SCREEN_WIDTH - g_player.obj.size.x / 2);
 
 	// ブロックとの衝突判定
 	DWORD dwHit = CollisionBlock(&g_player.obj.pos, &g_player.posOld, &g_player.move, g_player.hitBoxSize, &g_player.pBlock);

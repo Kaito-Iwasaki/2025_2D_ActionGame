@@ -184,7 +184,7 @@ void BLOCK_Gas(BLOCK* pBlock)
 	EFFECTINFO info;
 	info.col = D3DXCOLOR(1.0f, 0.6f, 0.0f, 1.0f);
 	info.fMaxAlpha = 1.0f;
-	info.fMaxScale = 0.3f;
+	info.fMaxScale = 0.6f;
 	info.fRotSpeed = 0.5f;
 	info.fSpeed = 2.0f;
 	info.nMaxLife = 30;
@@ -261,7 +261,7 @@ void BLOCK_Energy(BLOCK* pBlock)
 			EFFECTINFO info;
 			info.col = D3DXCOLOR(1.0f, 0.6f, 0.0f, 1.0f);
 			info.fMaxAlpha = 1.0f;
-			info.fMaxScale = 0.3f;
+			info.fMaxScale = 0.6f;
 			info.fRotSpeed = 0.5f;
 			info.fSpeed = 2.0f;
 			info.nMaxLife = 30;
@@ -316,7 +316,7 @@ void BLOCK_Energy(BLOCK* pBlock)
 			1
 		);
 
-		PlaySound(SOUND_LABEL_SE_BOOST);
+		PlaySound(SOUND_LABEL_SE_BOOST, 0.5f);
 
 		pPlayer->fCharge = 0.0f;
 		pPlayer->bIsFlying = false;
