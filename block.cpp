@@ -62,6 +62,7 @@ const char* g_aBlockFileName[BLOCK_TYPE_MAX] = {
 	"data\\TEXTURE\\item000.png",
 	"data\\TEXTURE\\item001.png",
 	"data\\TEXTURE\\item002.png",
+	"data\\TEXTURE\\item003.png",
 	"data\\TEXTURE\\flag001.png",
 	"data\\TEXTURE\\player.png",
 	"data\\TEXTURE\\wood000.png",
@@ -72,7 +73,7 @@ const char* g_aBlockFileName[BLOCK_TYPE_MAX] = {
 
 BLOCK_INFO g_aBlockInfo[BLOCK_TYPE_MAX] = {
 	{D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f), BLOCK_HIT_NONE},
-	{D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f), BLOCK_HIT_ALL},
+	{D3DXCOLOR(0.4f, 0.2f, 0.0f, 1.0f), BLOCK_HIT_ALL},
 	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), BLOCK_HIT_ALL},
 	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), BLOCK_HIT_ALL},
 	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), BLOCK_HIT_ALL},
@@ -94,6 +95,7 @@ BLOCK_INFO g_aBlockInfo[BLOCK_TYPE_MAX] = {
 	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), BLOCK_HIT_NONE, BLOCK_Coin},
 	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), BLOCK_HIT_NONE, BLOCK_RedCoin},
 	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), BLOCK_HIT_NONE, BLOCK_Gas},
+	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), BLOCK_HIT_NONE, BLOCK_Energy},
 	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), BLOCK_HIT_NONE, BLOCK_Goal, 4, 2},
 	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), BLOCK_HIT_NONE, BLOCK_StartBlock},
 	{D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), BLOCK_HIT_TOP},

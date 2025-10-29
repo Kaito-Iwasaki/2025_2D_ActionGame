@@ -32,7 +32,6 @@
 // ***** マクロ定義 *****
 // 
 //*********************************************************************
-#define MAX_LEVEL			(10)
 #define INIT_TIMER			(60 * 120)
 #define TIME_STATE_READY	(4)
 
@@ -139,6 +138,12 @@ void InitGame(void)
 	{
 		StopSound();
 		PlaySound(SOUND_LABEL_BGM_GAME00);
+	}
+	else if (GetPreviousScene() == SCENE_EDITOR)
+	{
+		SetGameState(GAMESTATE_NORMAL);
+		g_nTimer = INIT_TIMER;
+		g_nScore = 0;
 	}
 
 	// 現在のステージ情報のファイル名を取得
