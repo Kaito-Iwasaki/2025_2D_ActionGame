@@ -85,7 +85,7 @@ void InitGame(void)
 		D3DXVECTOR3_ZERO,
 		D3DXVECTOR3(SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f),
 		D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
-		30,
+		35,
 		"",
 		DT_CENTER
 	);

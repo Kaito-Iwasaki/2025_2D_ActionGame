@@ -240,7 +240,8 @@ void TogglePauseTutorial(bool bIsPause)
 {
 	if (GetFade() != FADE_NONE) return;
 	if (GetCurrentScene() != SCENE_TUTORIAL) return;
-
+	if (g_stateTutorial == TUTORIALSTATE_CLEAR) return;
+	if (g_stateTutorial == TUTORIALSTATE_END) return;
 
 	g_bIsPausedTutorial = bIsPause;
 	g_pFontPauseMenuTitleTutorial->obj.bVisible = bIsPause;
