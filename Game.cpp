@@ -33,7 +33,7 @@
 // ***** マクロ定義 *****
 // 
 //*********************************************************************
-#define INIT_TIMER			(60 * 120)
+#define INIT_TIMER			(60 * 150)
 #define TIME_STATE_READY	(4)
 
 //*********************************************************************
@@ -289,7 +289,7 @@ void UpdateGame(void)
 
 		case GAMESTATE_END:		// 終了
 			// 画面遷移処理
-			if (g_nCurrentStage == MAX_LEVEL)
+			if (g_nCurrentStage == MAX_LEVEL - 1)
 			{// 次のレベルがなければリザルト画面へ遷移
 				SetFade(SCENE_RESULT);
 			}
