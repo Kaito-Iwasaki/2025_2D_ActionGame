@@ -289,7 +289,7 @@ void UpdateGame(void)
 
 		case GAMESTATE_END:		// 終了
 			// 画面遷移処理
-			if (g_nCurrentStage == MAX_LEVEL - 1)
+			if (g_nCurrentStage == MAX_LEVEL)
 			{// 次のレベルがなければリザルト画面へ遷移
 				SetFade(SCENE_RESULT);
 			}
