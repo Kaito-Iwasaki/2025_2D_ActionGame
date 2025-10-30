@@ -555,4 +555,5 @@ void KillPlayer(void)
 	PlaySound(SOUND_LABEL_SE_DEAD);
 	g_player.move = D3DXVECTOR3(0.0f, -g_player.fJumpPower, 0.0f);
 	SetPlayerState(PLAYERSTATE_DIED);
+	DecreaseTime(100);
 }

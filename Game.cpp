@@ -33,8 +33,9 @@
 // ***** マクロ定義 *****
 // 
 //*********************************************************************
-#define INIT_TIMER			(60 * 150)
+#define INIT_TIMER			(60 * 180)
 #define TIME_STATE_READY	(4)
+#define TIMER_DANGER		(60 * 30)
 
 //*********************************************************************
 // 
@@ -114,7 +115,14 @@ void InitGame(void)
 	// 値の初期化
 	g_nCounterGameState = 0;
 	g_bIsPause = false;
-	sprintf(&g_pFontInfo->aText[0], "Level %02d | Time %03d | Score %06d", g_nCurrentStage + 1, (INIT_TIMER) / 10, g_nScore);
+	sprintf(
+		&g_pFontInfo->aText[0],
+		"Level %02d/%02d | Time %03d | Score %06d",
+		g_nCurrentStage + 1,
+		MAX_LEVEL,
+		(INIT_TIMER) / 10,
+		g_nScore
+	);
 	GetPlayer()->bIsControlEnabled = false;
 
 	if (g_nCurrentStage == 0)
@@ -127,7 +135,7 @@ void InitGame(void)
 		SetGameState(GAMESTATE_NORMAL);
 	}
 
-	if (GetPreviousScene() != SCENE_GAME)
+	if (GetPreviousScene() == SCENE_TITLE)
 	{
 		StopSound();
 		PlaySound(SOUND_LABEL_BGM_GAME00);
@@ -249,16 +257,38 @@ void UpdateGame(void)
 
 			g_pFontCountDown->obj.color.a = Clampf(g_pFontCountDown->obj.color.a - 0.01f, 0.0f, 1.0f);
 
-			sprintf(&g_pFontInfo->aText[0], "Level %02d | Time %03d | Score %06d", g_nCurrentStage + 1, (g_nTimer) / 10, g_nScore);
+			sprintf(
+				&g_pFontInfo->aText[0],
+				"Level %02d/%02d | Time %03d | Score %06d",
+				g_nCurrentStage + 1,
+				MAX_LEVEL,
+				(g_nTimer) / 10,
+				g_nScore
+			);
 
 			if (g_nTimer <= 0)
 			{
+				g_nTimer = 0;
 				KillPlayer();
 				SetFade(SCENE_RESULT);
 			}
-			else if (g_nTimer < 1000 && g_nTimer % 20 == 0)
+			else if (g_nTimer < TIMER_DANGER)
 			{
-				if (g_pFontInfo->obj.color == D3DXCOLOR_WHITE)
+				if (g_nTimer % 20 == 0)
+				{
+					if (g_pFontInfo->obj.color == D3DXCOLOR_WHITE)
+					{
+						g_pFontInfo->obj.color = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);
+					}
+					else
+					{
+						g_pFontInfo->obj.color = D3DXCOLOR_WHITE;
+					}
+				}
+			}
+			else
+			{
+				if (GetPlayer()->state == PLAYERSTATE_DIED)
 				{
 					g_pFontInfo->obj.color = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);
 				}
@@ -274,7 +304,14 @@ void UpdateGame(void)
 			// プレイヤーを終了状態に移行
 			SetPlayerState(PLAYERSTATE_END);
 
-			sprintf(&g_pFontInfo->aText[0], "Level %02d | Time %03d | Score %06d", g_nCurrentStage + 1, (g_nTimer) / 10, g_nScore);
+			sprintf(
+				&g_pFontInfo->aText[0],
+				"Level %02d/%02d | Time %03d | Score %06d",
+				g_nCurrentStage + 1,
+				MAX_LEVEL,
+				(g_nTimer) / 10,
+				g_nScore
+			);
 
 			if (g_nCounterGameState > 60)
 			{
@@ -454,4 +491,13 @@ int GetScore(void)
 int GetGameTimeLeft(void)
 {
 	return g_nTimer;
+}
+
+void DecreaseTime(int nTime)
+{
+	if (g_gameState != GAMESTATE_NORMAL) return;
+
+	g_nTimer -= nTime;
+	Clamp(&g_nTimer, 0, g_nTimer);
+	g_pFontInfo->obj.color = D3DXCOLOR(1, 0, 0, 1);
 }

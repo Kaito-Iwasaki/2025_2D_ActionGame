@@ -59,5 +59,6 @@ int GetStage(void);
 void AddScore(int nScore);
 int GetScore(void);
 int GetGameTimeLeft(void);
+void DecreaseTime(int nTime);
 
 #endif
