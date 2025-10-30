@@ -256,6 +256,17 @@ void UpdateGame(void)
 				KillPlayer();
 				SetFade(SCENE_RESULT);
 			}
+			else if (g_nTimer < 1000 && g_nTimer % 20 == 0)
+			{
+				if (g_pFontInfo->obj.color == D3DXCOLOR_WHITE)
+				{
+					g_pFontInfo->obj.color = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);
+				}
+				else
+				{
+					g_pFontInfo->obj.color = D3DXCOLOR_WHITE;
+				}
+			}
 
 			break;
 
