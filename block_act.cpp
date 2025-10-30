@@ -28,7 +28,9 @@
 // ***** ƒ}ƒNƒ’è‹` *****
 // 
 //*********************************************************************
-
+#define SCORE_COIN		(200)
+#define SCORE_REDCOIN	(600)
+#define SCORE_GOAL		(2000)
 
 //*********************************************************************
 // 
@@ -126,7 +128,7 @@ void BLOCK_Coin(BLOCK* pBlock)
 
 		PlaySound(SOUND_LABEL_SE_COIN);
 
-		AddScore(200);
+		AddScore(SCORE_COIN);
 
 		pBlock->bUsed = false;
 	}
@@ -167,7 +169,7 @@ void BLOCK_RedCoin(BLOCK* pBlock)
 
 		PlaySound(SOUND_LABEL_SE_COIN);
 
-		AddScore(400);
+		AddScore(SCORE_REDCOIN);
 
 		pBlock->bUsed = false;
 	}
@@ -394,7 +396,7 @@ void BLOCK_Goal(BLOCK* pBlock)
 		);
 
 		PlaySound(SOUND_LABEL_SE_CLEAR);
-		AddScore(1000);
+		AddScore(SCORE_GOAL);
 		pBlock->nPatternAnimY = 1;
 
 		if (GetCurrentScene() == SCENE_GAME)

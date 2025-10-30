@@ -192,7 +192,7 @@ void UpdateBlock(void)
 
 		if (BoxCollision(
 			posBlockCenter,
-			D3DXVECTOR3(BLOCK_SIZE * 0.25f, BLOCK_SIZE * 0.25f, 0.0f),
+			D3DXVECTOR3(BLOCK_SIZE * 0.4f, BLOCK_SIZE * 0.4f, 0.0f),
 			pPlayer->obj.pos + D3DXVECTOR3(0, -pPlayer->obj.size.y / 2, 0),
 			pPlayer->hitBoxSize
 		))
@@ -349,6 +349,11 @@ DWORD CollisionBlock(
 			dwHit |= BLOCK_HIT_BOTTOM;
 			pPos->y = pBlock->obj.pos.y + pBlock->obj.size.y + size.y;
 			pMove->y = 0;
+
+			if (pBlock->move.y > 0)
+			{
+				pMove->y = pBlock->move.y;
+			}
 		}
 	}
 
