@@ -29,7 +29,7 @@
 #define TEXTURE_SCALE_X			(500)
 #define TEXTURE_SCALE_Y			(100)
 
-#define COLOR_SELECTED			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f)
+#define COLOR_SELECTED			D3DXCOLOR(1.0f, 0.7f, 0.3f, 1.0f)
 #define COLOR_DESELECTED		D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f)
 
 //*********************************************************************

@@ -23,6 +23,18 @@
 
 //*********************************************************************
 // 
+// ***** óÒãìå^ *****
+// 
+//*********************************************************************
+typedef enum
+{
+	RANKINGSTATE_INTRO = 0,
+	RANKINGSTATE_NORMAL,
+	RANKINGSTATE_MAX
+}RANKINGSTATE;
+
+//*********************************************************************
+// 
 // ***** É}ÉNÉçíËã` *****
 // 
 //*********************************************************************
@@ -46,6 +58,8 @@ int compare(const void* arg1, const void* arg2);
 // 
 //*********************************************************************
 int g_aRanking[MAX_PLACE] = INIT_RANKING;
+
+RANKINGSTATE g_stateRanking = RANKINGSTATE_INTRO;
 int g_nCountStateRanking = 0;
 int g_nHighlight = -1;
 FONT* g_apFontNum[MAX_PLACE] = {};
@@ -57,11 +71,13 @@ FONT* g_apFontNumEasy[MAX_PLACE] = {};
 void InitRanking(void)
 {
 	char aString[MAX_PATH] = {};
-	g_nCountStateRanking = 0;
-	memset(g_apFontNum, 0, sizeof(g_apFontNum));
 
 	InitBackground();
 	InitFont();
+
+	g_stateRanking = RANKINGSTATE_INTRO;
+	g_nCountStateRanking = 0;
+	memset(g_apFontNum, 0, sizeof(g_apFontNum));
 
 	SetBackgroundColor(D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f));
 
@@ -82,10 +98,20 @@ void InitRanking(void)
 	for (int nCount = 0; nCount < MAX_PLACE; nCount++)
 	{
 		sprintf(&aString[0], "%2d, %06d", nCount + 1, g_aRanking[nCount]);
+		float posX;
+
+		if (nCount % 2 == 0)
+		{
+			posX = 0 - SCREEN_WIDTH / 2;
+		}
+		else
+		{
+			posX = SCREEN_WIDTH - SCREEN_WIDTH / 2;
+		}
 
 		g_apFontNum[nCount] = SetFont(
 			FONT_LABEL_DONGURI,
-			D3DXVECTOR3(0, 150.0f + (nCount * 100.0f), 0.0f),
+			D3DXVECTOR3(posX, 150.0f + (nCount * 100.0f), 0.0f),
 			D3DXVECTOR3(SCREEN_WIDTH, 100.0f, 0.0f),
 			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
 			100,
@@ -119,6 +145,20 @@ void UninitRanking(void)
 void UpdateRanking(void)
 {
 	UpdateBackground();
+
+	for (int nCount = 0; nCount < MAX_PLACE; nCount++)
+	{
+		if (nCount % 2 == 0)
+		{
+			g_apFontNum[nCount]->obj.pos.x += 15.0f;
+			Clampf(&g_apFontNum[nCount]->obj.pos.x, g_apFontNum[nCount]->obj.pos.x, 0.0f);
+		}
+		else
+		{
+			g_apFontNum[nCount]->obj.pos.x -= 15.0f;
+			Clampf(&g_apFontNum[nCount]->obj.pos.x, 0.0f, g_apFontNum[nCount]->obj.pos.x);
+		}
+	}
 
 	if (g_nHighlight != -1 && g_nCountStateRanking % 5 == 0)
 	{

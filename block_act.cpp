@@ -127,7 +127,7 @@ void BLOCK_Coin(BLOCK* pBlock)
 		);
 
 		PlaySound(SOUND_LABEL_SE_COIN);
-
+		SetVibration(10000, 10000, 10);
 		AddScore(SCORE_COIN);
 
 		pBlock->bUsed = false;
@@ -168,7 +168,7 @@ void BLOCK_RedCoin(BLOCK* pBlock)
 		);
 
 		PlaySound(SOUND_LABEL_SE_COIN);
-
+		SetVibration(10000, 10000, 10);
 		AddScore(SCORE_REDCOIN);
 
 		pBlock->bUsed = false;
@@ -236,6 +236,7 @@ void BLOCK_Gas(BLOCK* pBlock)
 		if (GetKeyboardPress(DIK_SPACE) || GetJoypadPress(JOYKEY_A))
 		{
 			PlaySound(SOUND_LABEL_SE_JET, 0.1f);
+			SetVibration(10000, 10000, 10);
 			pPlayer->bIsFlying = true;
 		}
 
@@ -320,6 +321,7 @@ void BLOCK_Energy(BLOCK* pBlock)
 		);
 
 		PlaySound(SOUND_LABEL_SE_BOOST, 0.5f);
+		SetVibration(50000, 50000, 50);
 
 		pPlayer->fCharge = 0.0f;
 		pPlayer->bIsFlying = false;
@@ -396,6 +398,7 @@ void BLOCK_Goal(BLOCK* pBlock)
 		);
 
 		PlaySound(SOUND_LABEL_SE_CLEAR);
+		SetVibration(10000, 10000, 10);
 		AddScore(SCORE_GOAL);
 		pBlock->nPatternAnimY = 1;
 

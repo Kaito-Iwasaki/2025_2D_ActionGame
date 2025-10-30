@@ -37,8 +37,8 @@
 #define LOGO_COLOR			D3DXCOLOR_WHITE
 #define LOGO_INIT_SCALE		(1.5f)
 
-#define COLOR_SELECTED			D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f)
-#define COLOR_DESELECTED		D3DXCOLOR(0.25f, 0.25f, 0.25f, 1.0f)
+#define COLOR_SELECTED			D3DXCOLOR(1.0f, 0.7f, 0.3f, 1.0f)
+#define COLOR_DESELECTED		D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f)
 
 //*********************************************************************
 // 
@@ -71,7 +71,9 @@ typedef enum
 //*********************************************************************
 TITLESTATE g_stateTitle = TITLESTATE_INTRO;
 DECAL* g_pDecalLogo = NULL;
+DECAL* g_pDecalTitleSelectionBg = NULL;
 FONT* g_pFontTitleSelection[TITLESELECTION_MAX] = {};
+FONT* g_pFontCredits = NULL;
 int g_nCounterStateTitle = 0;
 int g_nElapsedTimeTitle = 0;
 int g_nSelectTitle = 0;
@@ -84,7 +86,6 @@ const char* g_aTitleSelection[TITLESELECTION_MAX] = {
 	"QUIT"
 };
 
-FONT* g_pFontCredits = NULL;
 
 //=====================================================================
 // ‰Šú‰»ˆ—
@@ -107,6 +108,15 @@ void InitTitle(void)
 		D3DXVECTOR3_ZERO,
 		D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f)
 	);
+
+	g_pDecalTitleSelectionBg = SetDecal(
+		DECAL_LABEL_NULL,
+		D3DXVECTOR3(SCREEN_CENTER, SCREEN_VCENTER + 175, 0),
+		D3DXVECTOR3(250, 300, 0),
+		D3DXVECTOR3_ZERO,
+		D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.6f)
+	);
+	g_pDecalTitleSelectionBg->obj.bVisible = false;
 
 	for (int i = 0; i < TITLESELECTION_MAX; i++)
 	{
@@ -176,6 +186,7 @@ void UpdateTitle(void)
 		{
 			g_pDecalLogo->obj.color.a = 1.0f;
 			g_pDecalLogo->obj.size = LOGO_SIZE;
+			g_pDecalTitleSelectionBg->obj.bVisible = true;
 
 			for (int i = 0; i < TITLESELECTION_MAX; i++)
 			{
@@ -252,6 +263,7 @@ void UpdateTitle(void)
 					g_pFontTitleSelection[i]->obj.bVisible = false;
 				}
 				g_pFontCredits->obj.bVisible = true;
+				g_pDecalTitleSelectionBg->obj.bVisible = false;
 				g_stateTitle = TITLESTATE_CREDIT;
 				break;
 
@@ -269,6 +281,7 @@ void UpdateTitle(void)
 			{
 				g_pFontTitleSelection[i]->obj.bVisible = true;
 			}
+			g_pDecalTitleSelectionBg->obj.bVisible = true;
 			g_pFontCredits->obj.bVisible = false;
 
 			g_stateTitle = TITLESTATE_NORMAL;

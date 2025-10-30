@@ -547,6 +547,8 @@ void KillPlayer(void)
 	if (g_player.state == PLAYERSTATE_END) return;
 	if (GetGameState() == GAMESTATE_CLEAR) return;
 
+	SetVibration(50000, 50000, 20);
+
 	g_player.obj.bVisible = true;
 	g_player.nPatternAnimX = 0;
 	g_player.nPatternAnimY = 2;
