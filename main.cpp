@@ -16,6 +16,7 @@
 #include "sound.h"
 #include "baseScene.h"
 #include "Game.h"
+#include "Tutorial.h"
 
 //*********************************************************************
 // 
@@ -215,6 +216,7 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 	case WM_KILLFOCUS:
 		TogglePause(true);
+		TogglePauseTutorial(true);
 		break;
 	}
 

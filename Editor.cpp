@@ -182,7 +182,7 @@ void UpdateEditor(void)
 		);
 	}
 
-	if (GetKeyboardTrigger(DIK_R))
+	if (GetKeyboardPress(DIK_R))
 	{
 		for (int i = 0; i < MAX_BLOCK_PARAM; i++)
 		{
@@ -190,11 +190,31 @@ void UpdateEditor(void)
 		}
 	}
 
-	if (GetKeyboardTrigger(DIK_F2))
+	static bool bKeyPressed = false;
+	if (GetKeyboardTrigger(DIK_F2) && !bKeyPressed)
 	{
-		sprintf(&aFileName[0], "data\\MAP\\level%02d.bin", g_nOutputLevel);
+		bKeyPressed = true;
+		MessageBeep(MB_ICONASTERISK);
+		int nID = MessageBox(GetMainWindow(), "ファイル出力する？", "レベルデータ出力", MB_YESNO);
 
-		SaveEditorBlock(&aFileName[0]);
+		if (nID == IDYES)
+		{
+			sprintf(&aFileName[0], "data\\MAP\\level%02d.bin", g_nOutputLevel);
+
+			if (SaveEditorBlock(&aFileName[0]))
+			{
+				MessageBox(GetMainWindow(), "出力したよー", "成功", MB_OK);
+			}
+			else
+			{
+				MessageBox(GetMainWindow(), "失敗したよー", "失敗", MB_OK | MB_ICONERROR);
+			}
+
+		}
+	}
+	if (GetKeyboardPress(DIK_F2) == false)
+	{
+		bKeyPressed = false;
 	}
 
 	sprintf(&g_pFont->aText[0],
