@@ -236,7 +236,7 @@ void UpdatePlayer(void)
 
 	// ƒvƒŒƒCƒ„[‚Ì‘€ìˆ—
 	g_player.move.x = 0;
-	if (g_player.bIsControlEnabled && GetFade() == FADE_NONE && GetGameState() != GAMESTATE_READY)
+	if (g_player.bIsControlEnabled && GetFade() == FADE_NONE)
 	{
 		if (INPUT_PRESS_LEFT)
 		{// ¶

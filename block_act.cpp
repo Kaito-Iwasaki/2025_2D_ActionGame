@@ -21,6 +21,7 @@
 #include "sound.h"
 #include "input.h"
 #include "util.h"
+#include "Tutorial.h"
 
 //*********************************************************************
 // 
@@ -227,7 +228,7 @@ void BLOCK_Gas(BLOCK* pBlock)
 			10
 		);
 
-		PlaySound(SOUND_LABEL_SE_COIN);
+		PlaySound(SOUND_LABEL_SE_APPEAR);
 
 		pPlayer->fCharge = PLAYER_CHARGE_MAX;
 		if (GetKeyboardPress(DIK_SPACE) || GetJoypadPress(JOYKEY_A))
@@ -353,52 +354,56 @@ void BLOCK_Goal(BLOCK* pBlock)
 		if (pPlayer->state == PLAYERSTATE_DIED) return;
 		if (pPlayer->state == PLAYERSTATE_END) return;
 
-		if (GetGameState() == GAMESTATE_NORMAL)
+		EFFECTINFO info;
+		info.col = D3DXCOLOR(1.0f, 0.3f, 0.0f, 1.0f);
+		info.fMaxAlpha = 1.0f;
+		info.fMaxScale = 0.5f;
+		info.fRotSpeed = 0.5f;
+		info.fSpeed = 1.0f;
+		info.nMaxLife = 70;
+
+		SetParticle(
+			info,
+			pPlayer->obj.pos,
+			0.0f,
+			D3DX_PI * 2,
+			1,
+			10
+		);
+
+		info.col = D3DXCOLOR(0.8f, 0.8f, 1.0f, 1.0f);
+
+		SetParticle(
+			info,
+			pPlayer->obj.pos,
+			0.0f,
+			D3DX_PI * 2,
+			1,
+			10
+		);
+
+		info.col = D3DXCOLOR(0.9f, 1.0f, 0.9f, 1.0f);
+
+		SetParticle(
+			info,
+			pPlayer->obj.pos,
+			0.0f,
+			D3DX_PI * 2,
+			1,
+			10
+		);
+
+		PlaySound(SOUND_LABEL_SE_CLEAR);
+		AddScore(1000);
+		pBlock->nPatternAnimY = 1;
+
+		if (GetCurrentScene() == SCENE_GAME)
 		{
-			EFFECTINFO info;
-			info.col = D3DXCOLOR(1.0f, 0.3f, 0.0f, 1.0f);
-			info.fMaxAlpha = 1.0f;
-			info.fMaxScale = 0.5f;
-			info.fRotSpeed = 0.5f;
-			info.fSpeed = 1.0f;
-			info.nMaxLife = 70;
-
-			SetParticle(
-				info,
-				pPlayer->obj.pos,
-				0.0f,
-				D3DX_PI * 2,
-				1,
-				10
-			);
-
-			info.col = D3DXCOLOR(0.8f, 0.8f, 1.0f, 1.0f);
-
-			SetParticle(
-				info,
-				pPlayer->obj.pos,
-				0.0f,
-				D3DX_PI * 2,
-				1,
-				10
-			);
-
-			info.col = D3DXCOLOR(0.9f, 1.0f, 0.9f, 1.0f);
-
-			SetParticle(
-				info,
-				pPlayer->obj.pos,
-				0.0f,
-				D3DX_PI * 2,
-				1,
-				10
-			);
-
-			PlaySound(SOUND_LABEL_SE_CLEAR);
-			AddScore(1000);
-			pBlock->nPatternAnimY = 1;
-
 			SetGameState(GAMESTATE_CLEAR);
+		}
+		else if (GetCurrentScene() == SCENE_TUTORIAL)
+		{
+			SetTutorialState(TUTORIALSTATE_CLEAR);
 		}
 	}
 

@@ -18,8 +18,6 @@
 // ***** マクロ定義 *****
 // 
 //*********************************************************************
-#define REPEAT_START	(20)	// リピート開始までのカウント
-#define REPEAT_INTERVAL	(4)		// リピート毎のカウント
 
 //*********************************************************************
 // 
@@ -162,9 +160,9 @@ bool GetKeyboardRelease(int nKey)
 //=====================================================================
 // キーボードのリピート情報を取得
 //=====================================================================
-bool GetKeyboardRepeat(int nKey)
+bool GetKeyboardRepeat(int nKey, int nInterval)
 {
-	return (g_aKeyRepeatState[nKey] == 1 || g_aKeyRepeatState[nKey] >= REPEAT_START && g_aKeyRepeatState[nKey] % REPEAT_INTERVAL == 0) ? true : false;
+	return (g_aKeyRepeatState[nKey] == 1 || g_aKeyRepeatState[nKey] >= INPUT_REPEAT_START && g_aKeyRepeatState[nKey] % nInterval == 0) ? true : false;
 }
 
 //=====================================================================
@@ -491,12 +489,12 @@ bool GetJoypadRelease(JOYKEY key)
 //=====================================================================
 // ジョイパッドのリピート情報を取得
 //=====================================================================
-bool GetJoypadRepeat(JOYKEY key)
+bool GetJoypadRepeat(JOYKEY key, int nInterval)
 {
 	return (
 		g_aJoyKeyRepeatState[key] == 1 ||
-		g_aJoyKeyRepeatState[key] >= REPEAT_START &&
-		g_aJoyKeyRepeatState[key] % REPEAT_INTERVAL == 0
+		g_aJoyKeyRepeatState[key] >= INPUT_REPEAT_START &&
+		g_aJoyKeyRepeatState[key] % nInterval == 0
 		) ? true : false;
 }
 
@@ -511,12 +509,12 @@ bool GetJoystickPress(JOYSTICK stick)
 //=====================================================================
 // ジョイスティックのリピート情報を取得
 //=====================================================================
-bool GetJoystickRepeat(JOYSTICK stick)
+bool GetJoystickRepeat(JOYSTICK stick, int nInterval)
 {
 	return (
 		g_aJoystickState[stick] == 1 ||
-		g_aJoystickState[stick] >= REPEAT_START &&
-		g_aJoystickState[stick] % REPEAT_INTERVAL == 0
+		g_aJoystickState[stick] >= INPUT_REPEAT_START &&
+		g_aJoystickState[stick] % nInterval == 0
 		) ? true : false;
 }
 

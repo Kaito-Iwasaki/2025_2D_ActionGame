@@ -57,6 +57,7 @@ typedef enum
 typedef enum
 {
 	TITLESELECTION_START = 0,
+	TITLESELECTION_TUTORIAL,
 	TITLESELECTION_RANKING,
 	TITLESELECTION_CREDIT,
 	TITLESELECTION_QUIT,
@@ -77,6 +78,7 @@ int g_nSelectTitle = 0;
 
 const char* g_aTitleSelection[TITLESELECTION_MAX] = {
 	"START",
+	"TUTORIAL",
 	"RANKING",
 	"CREDITS",
 	"QUIT"
@@ -110,7 +112,7 @@ void InitTitle(void)
 	{
 		g_pFontTitleSelection[i] = SetFont(
 			FONT_LABEL_DONGURI,
-			D3DXVECTOR3(0, (SCREEN_VCENTER + 100) + i * 50, 0),
+			D3DXVECTOR3(0, (SCREEN_VCENTER + 50) + i * 50, 0),
 			D3DXVECTOR3(SCREEN_WIDTH, 50, 0),
 			D3DXCOLOR_BLACK,
 			50,
@@ -236,6 +238,10 @@ void UpdateTitle(void)
 				SetFade(SCENE_GAME);
 				break;
 
+			case TITLESELECTION_TUTORIAL:
+				SetFade(SCENE_TUTORIAL);
+				break;
+
 			case TITLESELECTION_RANKING:
 				SetFade(SCENE_RANKING);
 				break;
@@ -257,8 +263,6 @@ void UpdateTitle(void)
 		break;
 
 	case TITLESTATE_CREDIT:
-
-
 		if (INPUT_TRIGGER_ACCEPT)
 		{// ë±çsÉLÅ[âüâ∫
 			for (int i = 0; i < TITLESELECTION_MAX; i++)

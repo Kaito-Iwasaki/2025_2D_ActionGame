@@ -16,6 +16,7 @@
 #include "fade.h"
 #include "game.h"
 #include "decal.h"
+#include "Tutorial.h"
 
 //*********************************************************************
 // 
@@ -113,11 +114,20 @@ void UpdatePause(void)
 		{
 		case PAUSE_MENU_CONTINUE:
 			TogglePause(false);
+			TogglePauseTutorial(false);
 			break;
 
 		case PAUSE_MENU_RETRY:
-			ResetGame();
-			SetFade(SCENE_GAME);
+			if (GetCurrentScene() == SCENE_GAME)
+			{
+				ResetGame();
+				SetFade(SCENE_GAME);
+			}
+			else if (GetCurrentScene() == SCENE_TUTORIAL)
+			{
+				SetFade(SCENE_TUTORIAL);
+			}
+
 			break;
 
 		case PAUSE_MENU_QUIT:

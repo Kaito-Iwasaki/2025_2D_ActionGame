@@ -26,7 +26,13 @@
 // ***** —ñ‹“Œ^ *****
 // 
 //*********************************************************************
-
+typedef enum
+{
+	TUTORIALSTATE_NORMAL = 0,
+	TUTORIALSTATE_CLEAR,
+	TUTORIALSTATE_END,
+	TUTORIALSTATE_MAX
+}TUTORIALSTATE;
 
 //*********************************************************************
 // 
@@ -37,5 +43,7 @@ void InitTutorial(void);
 void UninitTutorial(void);
 void UpdateTutorial(void);
 void DrawTutorial(void);
+void SetTutorialState(TUTORIALSTATE state);
+void TogglePauseTutorial(bool bIsPause);
 
 #endif

@@ -162,6 +162,10 @@
     <ClInclude Include="item.h" />
     <ClInclude Include="particle.h" />
     <ClInclude Include="pause.h" />
+    <ClInclude Include="pauseBg.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="player.h">
       <SubType>
       </SubType>
@@ -222,6 +226,10 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="particle.cpp" />
     <ClCompile Include="pause.cpp" />
+    <ClCompile Include="pauseBg.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="player.cpp">
       <SubType>
       </SubType>

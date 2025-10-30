@@ -147,11 +147,11 @@ void UpdateEditor(void)
 	}
 	g_nSelectedParam = (g_nSelectedParam + MAX_BLOCK_PARAM) % MAX_BLOCK_PARAM;
 
-	if (GetKeyboardRepeat(DIK_W))
+	if (GetKeyboardRepeat(DIK_W, 1))
 	{
 		pEditorBlock[nBlockY * NUM_BLOCK_X + nBlockX].nParam[g_nSelectedParam]++;
 	}
-	if (GetKeyboardRepeat(DIK_S))
+	if (GetKeyboardRepeat(DIK_S, 1))
 	{
 		pEditorBlock[nBlockY * NUM_BLOCK_X + nBlockX].nParam[g_nSelectedParam]--;
 	}
@@ -182,6 +182,14 @@ void UpdateEditor(void)
 		);
 	}
 
+	if (GetKeyboardTrigger(DIK_R))
+	{
+		for (int i = 0; i < MAX_BLOCK_PARAM; i++)
+		{
+			pEditorBlock[nBlockY * NUM_BLOCK_X + nBlockX].nParam[i] = 0;
+		}
+	}
+
 	if (GetKeyboardTrigger(DIK_F2))
 	{
 		sprintf(&aFileName[0], "data\\MAP\\level%02d.bin", g_nOutputLevel);
@@ -190,10 +198,12 @@ void UpdateEditor(void)
 	}
 
 	sprintf(&g_pFont->aText[0],
+		"[ X: %d | Y: %d ] \n"
 		"ブロック:%d\n"
 		"パラメータ(%d) [ %d | %d | %d | %d ]\n"
 		"出力ファイル名:data\\MAP\\level%02d.bin\n"
 		"ファイル出力:[F2]",
+		nBlockX, nBlockY,
 		g_nCurrentBlock,
 		g_nSelectedParam,
 		pEditorBlock[nBlockY * NUM_BLOCK_X + nBlockX].nParam[0],

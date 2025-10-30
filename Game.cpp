@@ -26,6 +26,7 @@
 #include "fuelbar.h"
 #include "font.h"
 #include "background.h"
+#include "pauseBg.h"
 
 //*********************************************************************
 // 
@@ -57,7 +58,6 @@ bool g_bIsPause = false;
 FONT* g_pFontInfo = NULL;
 FONT* g_pFontPauseMenuTitle = NULL;
 FONT* g_pFontCountDown = NULL;
-DECAL* g_pDecalPauseMenuBg = NULL;
 
 //=====================================================================
 // 初期化処理
@@ -78,6 +78,7 @@ void InitGame(void)
 	InitPause();
 	InitFuelBar();
 	InitBackground();
+	InitPauseBg();
 
 	g_pFontInfo = SetFont(
 		FONT_LABEL_DONGURI,
@@ -110,19 +111,11 @@ void InitGame(void)
 		DT_CENTER | DT_VCENTER
 	);
 
-	g_pDecalPauseMenuBg = SetDecal(
-		DECAL_LABEL_NULL,
-		D3DXVECTOR3(SCREEN_CENTER, SCREEN_VCENTER, 0),
-		D3DXVECTOR3(700, 500, 0),
-		D3DXVECTOR3_ZERO,
-		D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.6f)
-	);
-	g_pDecalPauseMenuBg->obj.bVisible = false;
-
 	// 値の初期化
 	g_nCounterGameState = 0;
 	g_bIsPause = false;
 	sprintf(&g_pFontInfo->aText[0], "Level %02d | Time %03d | Score %06d", g_nCurrentStage + 1, (INIT_TIMER) / 10, g_nScore);
+	GetPlayer()->bIsControlEnabled = false;
 
 	if (g_nCurrentStage == 0)
 	{
@@ -134,12 +127,13 @@ void InitGame(void)
 		SetGameState(GAMESTATE_NORMAL);
 	}
 
-	if (GetPreviousScene() == SCENE_TITLE)
+	if (GetPreviousScene() != SCENE_GAME)
 	{
 		StopSound();
 		PlaySound(SOUND_LABEL_BGM_GAME00);
 	}
-	else if (GetPreviousScene() == SCENE_EDITOR)
+	
+	if (GetPreviousScene() == SCENE_EDITOR)
 	{
 		SetGameState(GAMESTATE_NORMAL);
 		g_nTimer = INIT_TIMER;
@@ -186,6 +180,7 @@ void UninitGame(void)
 	UninitPause();
 	UninitFuelBar();
 	UninitBackground();
+	UninitPauseBg();
 }
 
 //=====================================================================
@@ -219,6 +214,8 @@ void UpdateGame(void)
 		switch (g_gameState)
 		{
 		case GAMESTATE_READY:
+			GetPlayer()->bIsControlEnabled = false;
+
 			if (g_nCounterGameState % 60 == 0)
 			{
 				g_pFontCountDown->obj.color.a = 1.0f;
@@ -243,6 +240,8 @@ void UpdateGame(void)
 			break;
 
 		case GAMESTATE_NORMAL:	// 通常
+			GetPlayer()->bIsControlEnabled = true;
+
 			if (GetFade() == FADE_NONE && GetPlayer()->state != PLAYERSTATE_END)
 			{
 				g_nTimer--;
@@ -312,19 +311,21 @@ void DrawGame(void)
 {
 	// 各オブジェクトの描画処理
 	DrawBackground();
+	DrawDecal();
 	DrawBlock();
 	DrawItem();
 	DrawEnemy();
 	DrawEffect();
 	DrawPlayer();
 	DrawFuelBar();
-	DrawDecal();
-	DrawFont();
 
 	if (g_bIsPause)
 	{// ポーズメニュー描画
+		DrawPauseBg();
 		DrawPause();
 	}
+
+	DrawFont();
 }
 
 //=====================================================================
@@ -365,8 +366,8 @@ void TogglePause(bool bIsPause)
 
 	g_bIsPause = bIsPause;
 	g_pFontPauseMenuTitle->obj.bVisible = bIsPause;
-	g_pDecalPauseMenuBg->obj.bVisible = bIsPause;
 	g_pFontCountDown->obj.bVisible = !bIsPause;
+	GetPauseBg()->bVisible = bIsPause;
 
 	if (bIsPause)
 	{

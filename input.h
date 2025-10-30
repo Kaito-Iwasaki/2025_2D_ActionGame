@@ -19,9 +19,11 @@
 // ***** マクロ定義 *****
 // 
 //*********************************************************************
-#define NUM_KEY_MAX		(256)	// 最大キー数
+#define NUM_KEY_MAX				(256)	// 最大キー数
 #define INPUT_MAX_MAGNITUDE		(32767)		// スティックの最大移動量
 #define INPUT_DEADZONE			(10000)		// スティックのデッドゾーン（0～32767）
+#define INPUT_REPEAT_START		(20)	// リピート開始までのカウント
+#define INPUT_REPEAT_INTERVAL	(4)		// リピート毎のカウント
 
 //*********************************************************************
 // 
@@ -91,7 +93,7 @@ void UpdateKeyboard(void);
 bool GetKeyboardPress(int nKey);
 bool GetKeyboardTrigger(int nKey);
 bool GetKeyboardRelease(int nKey);
-bool GetKeyboardRepeat(int nKey);
+bool GetKeyboardRepeat(int nKey, int nInterval = INPUT_REPEAT_INTERVAL);
 BYTE* GetKeyState(void);
 //*********************************************************************
 // マウス
@@ -114,9 +116,9 @@ XINPUT_STATE* GetJoypad(void);
 bool GetJoypadPress(JOYKEY key);
 bool GetJoypadTrigger(JOYKEY key);
 bool GetJoypadRelease(JOYKEY key);
-bool GetJoypadRepeat(JOYKEY key);
+bool GetJoypadRepeat(JOYKEY key, int nInterval = INPUT_REPEAT_INTERVAL);
 bool GetJoystickPress(JOYSTICK stick);
-bool GetJoystickRepeat(JOYSTICK stick);
+bool GetJoystickRepeat(JOYSTICK stick, int nInterval = INPUT_REPEAT_INTERVAL);
 void SetVibration(WORD wLeftMotorSpeed, WORD wRightMotorSpeed, int nCountVibration = -1);
 
 #endif
