@@ -181,11 +181,26 @@ void UpdateBlock(void)
 	{
 		if (pBlock->bUsed == false) continue;
 
+		D3DXVECTOR3 posBlockCenter = pBlock->obj.pos + D3DXVECTOR3(BLOCK_SIZE / 2, BLOCK_SIZE / 2, 0);
+
 		pBlock->posOld = pBlock->obj.pos;
 
 		if (pBlock->Update != NULL)
 		{
 			pBlock->Update(pBlock);
+		}
+
+		if (BoxCollision(
+			posBlockCenter,
+			D3DXVECTOR3(BLOCK_SIZE * 0.25f, BLOCK_SIZE * 0.25f, 0.0f),
+			pPlayer->obj.pos + D3DXVECTOR3(0, -pPlayer->obj.size.y / 2, 0),
+			pPlayer->hitBoxSize
+		))
+		{
+			if (pBlock->dwCollisionType == BLOCK_HIT_ALL && pPlayer->state)
+			{
+				KillPlayer();
+			}
 		}
 	}
 }
@@ -354,7 +369,7 @@ DWORD CollisionBlock(
 			dwHit |= BLOCK_HIT_LEFT;
 			pPos->x = pBlock->obj.pos.x - size.x / 2;
 		}
-		 if (pBlock->dwCollisionType & BLOCK_HIT_RIGHT
+		if (pBlock->dwCollisionType & BLOCK_HIT_RIGHT
 			&& pPosOld->x - size.x / 2 >= pBlock->posOld.x + pBlock->obj.size.x
 			&& pPos->x - size.x / 2 < pBlock->obj.pos.x + pBlock->obj.size.x
 			&& pPos->y > pBlock->obj.pos.y
@@ -365,6 +380,7 @@ DWORD CollisionBlock(
 			pPos->x = pBlock->obj.pos.x + pBlock->obj.size.x + size.x / 2;
 		}
 	}
+
 
 	return dwHit;
 }

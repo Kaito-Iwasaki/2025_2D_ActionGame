@@ -32,7 +32,7 @@
 #define BLOCK_HIT_BOTTOM		(0x0002)
 #define BLOCK_HIT_LEFT			(0x0004)
 #define BLOCK_HIT_RIGHT			(0x0008)
-#define BLOCK_HIT_ALL			BLOCK_HIT_TOP | BLOCK_HIT_BOTTOM | BLOCK_HIT_LEFT | BLOCK_HIT_RIGHT
+#define BLOCK_HIT_ALL			(BLOCK_HIT_TOP | BLOCK_HIT_BOTTOM | BLOCK_HIT_LEFT | BLOCK_HIT_RIGHT)
 
 //*********************************************************************
 // 

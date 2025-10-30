@@ -542,6 +542,7 @@ void UnPausePlayer(void)
 
 void KillPlayer(void)
 {
+	if (g_player.state == PLAYERSTATE_INIT) return;
 	if (g_player.state == PLAYERSTATE_DIED) return;
 	if (g_player.state == PLAYERSTATE_END) return;
 	if (GetGameState() == GAMESTATE_CLEAR) return;
