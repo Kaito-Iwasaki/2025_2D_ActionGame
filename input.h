@@ -23,7 +23,7 @@
 #define INPUT_MAX_MAGNITUDE		(32767)		// スティックの最大移動量
 #define INPUT_DEADZONE			(10000)		// スティックのデッドゾーン（0～32767）
 #define INPUT_REPEAT_START		(20)	// リピート開始までのカウント
-#define INPUT_REPEAT_INTERVAL	(4)		// リピート毎のカウント
+#define INPUT_REPEAT_INTERVAL	(8)		// リピート毎のカウント
 
 //*********************************************************************
 // 
