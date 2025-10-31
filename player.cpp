@@ -139,9 +139,9 @@ void UpdatePlayer(void)
 			EFFECTINFO info;
 			info.col = D3DXCOLOR(1.0f, 0.3f, 0.0f, 1.0f);
 			info.fMaxAlpha = 1.0f;
-			info.fMaxScale = 0.5f;
-			info.fRotSpeed = 0.5f;
-			info.fSpeed = 1.0f;
+			info.fMaxScale = 1.0f;
+			info.fRotSpeed = 0.1f;
+			info.fSpeed = 2.0f;
 			info.nMaxLife = 70;
 
 			SetParticle(
@@ -547,7 +547,7 @@ void KillPlayer(void)
 	if (g_player.state == PLAYERSTATE_END) return;
 	if (GetGameState() == GAMESTATE_CLEAR) return;
 
-	SetVibration(50000, 50000, 20);
+	SetVibration(5000, 5000, 20);
 
 	g_player.obj.bVisible = true;
 	g_player.nPatternAnimX = 0;
