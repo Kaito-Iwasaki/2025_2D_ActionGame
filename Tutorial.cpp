@@ -181,7 +181,6 @@ void UpdateTutorial(void)
 		UpdateItem();
 		UpdateEffect();
 		UpdateParticle();
-		UpdatePause();
 		UpdateFuelBar();
 		UpdateBackground();
 
@@ -245,4 +244,14 @@ void TogglePauseTutorial(bool bIsPause)
 
 	g_bIsPausedTutorial = bIsPause;
 	g_pFontPauseMenuTitleTutorial->obj.bVisible = bIsPause;
+
+	if (bIsPause)
+	{
+		SetPauseMenuCursor(0);
+		PausePlayer();
+	}
+	else
+	{
+		UnPausePlayer();
+	}
 }
