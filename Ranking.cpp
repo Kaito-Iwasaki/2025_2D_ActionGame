@@ -41,7 +41,7 @@ typedef enum
 #define FILEPATH_RANKING		"data\\ranking.bin"
 #define MAX_PLACE				(5)
 
-#define INIT_RANKING			{ 20000, 18000, 17000, 15000, 13000 }
+#define INIT_RANKING			{ 50000, 40000, 30000, 20000, 10000 }
 
 #define FADE_START				(600)
 

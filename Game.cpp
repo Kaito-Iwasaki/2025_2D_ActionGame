@@ -33,7 +33,7 @@
 // ***** É}ÉNÉçíËã` *****
 // 
 //*********************************************************************
-#define INIT_TIMER			(60 * 180)
+#define INIT_TIMER			(15000)
 #define TIME_STATE_READY	(4)
 #define TIMER_DANGER		(60 * 30)
 
