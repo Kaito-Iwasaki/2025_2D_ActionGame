@@ -253,9 +253,65 @@ void BLOCK_Energy(BLOCK* pBlock)
 
 	D3DXVECTOR3 posBlockCenter = pBlock->obj.pos + D3DXVECTOR3(BLOCK_SIZE / 2, BLOCK_SIZE / 2, 0);
 
-	if (pBlock->obj.bVisible == false)
+	pBlock->nCounterState++;
+	switch (pBlock->nMode)
 	{
-		pBlock->nCounterState++;
+	case 0:
+		if (BoxCollision(
+			posBlockCenter,
+			D3DXVECTOR3(BLOCK_SIZE, BLOCK_SIZE, 0.0f),
+			pPlayer->obj.pos + D3DXVECTOR3(0, -pPlayer->obj.size.y / 2, 0),
+			pPlayer->hitBoxSize
+		))
+		{
+			EFFECTINFO infoRed;
+			infoRed.col = D3DXCOLOR(1.0f, 0.3f, 0.0f, 1.0f);
+			infoRed.fMaxAlpha = 0.5f;
+			infoRed.fMaxScale = 0.6f;
+			infoRed.fRotSpeed = 0.5f;
+			infoRed.fSpeed = 6.0f;
+			infoRed.nMaxLife = 30;
+
+			EFFECTINFO infoWhite = infoRed;
+			infoWhite.col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+			infoWhite.fMaxScale = 0.5f;
+
+			SetParticle(
+				infoRed,
+				&pPlayer->obj.pos,
+				0.0f,
+				0.6f,
+				50,
+				1
+			);
+
+			SetParticle(
+				infoWhite,
+				&pPlayer->obj.pos,
+				0.0f,
+				0.6f,
+				50,
+				1
+			);
+
+			PlaySound(SOUND_LABEL_SE_BOOST, 0.5f);
+			SetVibration(3000, 3000, 50);
+
+			pPlayer->fCharge = 0.0f;
+			pPlayer->bIsFlying = false;
+			pPlayer->move.y = -13.0f;
+
+			pBlock->obj.bVisible = false;
+			pBlock->nMode++;
+			pBlock->nCounterState = 0;
+		}
+		break;
+
+	case 1:
+		if (pBlock->nCounterState > 120)
+		{
+			pBlock->obj.bVisible ^= 1;
+		}
 
 		if (pBlock->nCounterState > 180)
 		{
@@ -278,56 +334,11 @@ void BLOCK_Energy(BLOCK* pBlock)
 				1,
 				10
 			);
+
+			pBlock->nMode = 0;
+			pBlock->nCounterState = 0;
 		}
-	}
-
-	if (BoxCollision(
-		posBlockCenter,
-		D3DXVECTOR3(BLOCK_SIZE, BLOCK_SIZE, 0.0f),
-		pPlayer->obj.pos + D3DXVECTOR3(0, -pPlayer->obj.size.y / 2, 0),
-		pPlayer->hitBoxSize
-	))
-	{
-		if (pBlock->obj.bVisible == false) return;
-
-		EFFECTINFO infoRed;
-		infoRed.col = D3DXCOLOR(1.0f, 0.3f, 0.0f, 1.0f);
-		infoRed.fMaxAlpha = 0.5f;
-		infoRed.fMaxScale = 0.6f;
-		infoRed.fRotSpeed = 0.5f;
-		infoRed.fSpeed = 6.0f;
-		infoRed.nMaxLife = 30;
-
-		EFFECTINFO infoWhite = infoRed;
-		infoWhite.col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-		infoWhite.fMaxScale = 0.5f;
-
-		SetParticle(
-			infoRed,
-			&pPlayer->obj.pos,
-			0.0f,
-			0.6f,
-			50,
-			1
-		);
-
-		SetParticle(
-			infoWhite,
-			&pPlayer->obj.pos,
-			0.0f,
-			0.6f,
-			50,
-			1
-		);
-
-		PlaySound(SOUND_LABEL_SE_BOOST, 0.5f);
-		SetVibration(3000, 3000, 50);
-
-		pPlayer->fCharge = 0.0f;
-		pPlayer->bIsFlying = false;
-		pPlayer->move.y = -13.0f;
-
-		pBlock->obj.bVisible = false;
+		break;
 	}
 }
 

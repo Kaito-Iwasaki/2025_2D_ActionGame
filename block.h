@@ -94,6 +94,7 @@ typedef struct BLOCK
 	int nPatternAnimY;
 	int nParam[MAX_BLOCK_PARAM];
 	D3DXVECTOR3 startPos;
+	int nMode;
 }BLOCK;
 
 typedef struct
