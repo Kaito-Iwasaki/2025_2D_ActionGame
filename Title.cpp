@@ -56,8 +56,8 @@ typedef enum
 
 typedef enum
 {
-	TITLESELECTION_START = 0,
-	TITLESELECTION_TUTORIAL,
+	TITLESELECTION_TUTORIAL = 0,
+	TITLESELECTION_START,
 	TITLESELECTION_RANKING,
 	TITLESELECTION_CREDIT,
 	TITLESELECTION_QUIT,
@@ -79,8 +79,8 @@ int g_nElapsedTimeTitle = 0;
 int g_nSelectTitle = 0;
 
 const char* g_aTitleSelection[TITLESELECTION_MAX] = {
-	"START",
 	"TUTORIAL",
+	"START",
 	"RANKING",
 	"CREDITS",
 	"QUIT"
